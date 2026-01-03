@@ -1,0 +1,135 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* === fonts === */
+  --FF: Arial, Helvetica, sans-serif;
+  /* === border raduis === */
+  --BR: 50%;
+  /* === backgrounds === */
+  --BACKGROUND-COLOR: black;
+  /* === opacity === */
+  --OPACITY-ZERO: 0;
+  --OPACITY-ONE: 1;
+}
+
+body {
+  font-family: var(--FF);
+}
+
+.splash-header {
+  display: grid;
+  height: 100dvh;
+  grid-template-rows: 1fr;
+  place-content: center;
+}
+
+.splash-header__app-name {
+  animation: change-color 1s ease-in-out;
+}
+
+.splash-header__logo {
+  background-color: rgba(128, 128, 128, 0.279);
+  height: 90px;
+  width: 90px;
+  border-radius: var(--BR);
+  margin: 4rem 0 0 3.4em;
+}
+
+.splash-header__title-container {
+  margin: 0 0 4rem 0;
+}
+
+.splash-header__checkmark-stem {
+  width: 10px;
+  height: 25px;
+  background-color: var(--BACKGROUND-COLOR);
+  transform: translate(20px, 33px) rotate(-40deg);
+  animation: join-from-top 1s ease-in-out;
+}
+
+.splash-header__checkmark-kick {
+  width: 10px;
+  height: 50px;
+  background-color: var(--BACKGROUND-COLOR);
+  transform: translate(46px, -5px) rotate(49deg);
+  animation: join-from-bottom 1s ease-in-out;
+}
+
+.splash-header__loader {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.splash-header__loader-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--BR);
+  background-color: var(--BACKGROUND-COLOR);
+  margin: 0.8rem 0 0 0;
+  animation: loading-indicator 1s ease-in-out;
+}
+
+@keyframes join-from-top {
+  from {
+    /* Stem flies in from top */
+    transform: translate(20px) rotate(100deg);
+    opacity: var(--OPACITY-ZERO);
+  }
+  to {
+    /* Settles into checkmark stem position */
+    transform: translate(20px, 33px) rotate(-40deg);
+    opacity: var(--OPACITY-ONE);
+  }
+}
+
+@keyframes join-from-bottom {
+  from {
+    /* Stem flies in from bottom */
+    transform: translate(20px) rotate(-100deg);
+    opacity: var(--OPACITY-ZERO);
+  }
+  to {
+    transform: translate(46px, -5px) rotate(49deg);
+    opacity: var(--OPACITY-ONE);
+  }
+}
+
+@keyframes change-color {
+  from {
+    opacity: var(--OPACITY-ZERO);
+  }
+  to {
+    color: blue;
+    opacity: var(--OPACITY-ONE);
+  }
+}
+
+@keyframes loading-indicator {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: var(--OPACITY-ONE);
+  }
+}
+
+.hide-splash-screen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}

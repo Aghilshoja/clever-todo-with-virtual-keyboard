@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Aghil Shoja" />
+    <title>Clever To Do</title>
+    <link rel="stylesheet" href="styles/launch-app-logo.css" />
+    <link rel="stylesheet" href="styles/main.page.css" />
+    <script
+      src="https://kit.fontawesome.com/713b912148.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="splash-header">
+      <div class="splash-header__logo">
+        <div class="splash-header__checkmark-stem" aria-hidden="true"></div>
+        <div class="splash-header__checkmark-kick" aria-hidden="true"></div>
+      </div>
+      <div class="splash-header__title-container">
+        <h1 class="splash-header__app-name">Clever To Do</h1>
+        <div
+          class="splash-header__loader"
+          role="status"
+          aria-label="Loading application"
+        >
+          <div
+            class="splash-header__loader-dot"
+            data-step="1"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="splash-header__loader-dot"
+            data-step="2"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="splash-header__loader-dot"
+            data-step="3"
+            aria-hidden="true"
+          ></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hidden-main-page" aria-label="Task categories">
+        <div class="hidden-main-page__container">
+          <ul
+            class="hidden-main-page__nav-list"
+            role="navigation"
+            aria-label="Task categories navigation"
+          >
+            <li class="hidden-main-page__nav-item">
+              <button
+                class="hidden-main-page__nav-button"
+                aria-label="Show My Day tasks - your focused list for today"
+              >
+                <i class="fa-regular fa-sun" aria-hidden="true"></i>
+                <span>&nbsp;My Day</span>
+              </button>
+            </li>
+
+            <li class="hidden-main-page__nav-item">
+              <button
+                class="hidden-main-page__nav-button"
+                aria-label="Your important tasks with highest priority"
+              >
+                <i class="fa-regular fa-star" aria-hidden="true"></i>
+                <span>&nbsp;Important</span>
+              </button>
+            </li>
+
+            <li class="hidden-main-page__nav-item">
+              <button
+                class="hidden-main-page__nav-button"
+                aria-label="Tasks you have planned for specific days"
+              >
+                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                <span>&nbsp;Planned</span>
+              </button>
+            </li>
+
+            <li class="hidden-main-page__nav-item">
+              <button
+                class="hidden-main-page__nav-button"
+                aria-label="All your default tasks"
+              >
+                <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                <span>&nbsp;Tasks</span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="main-page__new-list">
+            <button
+              class="hidden-main-page__new-list-action"
+              aria-label="Add a new custom list"
+            >
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+              <span>&nbsp; New List</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script
+      type="module"
+      src="close-splash-screen/hide-splash-screen.js"
+      defer
+    ></script>
+  </body>
+</html>
