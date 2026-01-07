@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Aghil Shoja" />
     <title>Clever To Do</title>
-    <link rel="stylesheet" href="styles/launch-app-logo.css" />
-    <link rel="stylesheet" href="styles/main.page.css" />
+    <link rel="stylesheet" href="styles/launch-splash-screen.css" />
+    <link rel="stylesheet" href="styles/main-page-view.css" />
     <script
       src="https://kit.fontawesome.com/713b912148.js"
       crossorigin="anonymous"
@@ -45,70 +45,81 @@
     </header>
 
     <main>
-      <section class="hidden-main-page" aria-label="Task categories">
-        <div class="hidden-main-page__container">
-          <ul
-            class="hidden-main-page__nav-list"
-            role="navigation"
-            aria-label="Task categories navigation"
-          >
-            <li class="hidden-main-page__nav-item">
-              <button
-                class="hidden-main-page__nav-button"
-                aria-label="Show My Day tasks - your focused list for today"
-              >
-                <i class="fa-regular fa-sun" aria-hidden="true"></i>
-                <span>&nbsp;My Day</span>
-              </button>
-            </li>
-
-            <li class="hidden-main-page__nav-item">
-              <button
-                class="hidden-main-page__nav-button"
-                aria-label="Your important tasks with highest priority"
-              >
-                <i class="fa-regular fa-star" aria-hidden="true"></i>
-                <span>&nbsp;Important</span>
-              </button>
-            </li>
-
-            <li class="hidden-main-page__nav-item">
-              <button
-                class="hidden-main-page__nav-button"
-                aria-label="Tasks you have planned for specific days"
-              >
-                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                <span>&nbsp;Planned</span>
-              </button>
-            </li>
-
-            <li class="hidden-main-page__nav-item">
-              <button
-                class="hidden-main-page__nav-button"
-                aria-label="All your default tasks"
-              >
-                <i class="fa-solid fa-list-check" aria-hidden="true"></i>
-                <span>&nbsp;Tasks</span>
-              </button>
-            </li>
-          </ul>
-
-          <div class="main-page__new-list">
-            <button
-              class="hidden-main-page__new-list-action"
-              aria-label="Add a new custom list"
-            >
-              <i class="fa-solid fa-plus" aria-hidden="true"></i>
-              <span>&nbsp; New List</span>
+      <nav class="hidden-main-page" aria-label="Task categories">
+        <div class="flex-container">
+          <h2 class="main-page__heading">Tasks</h2>
+          <div class="main-page__options">
+            <button class="main-page__trigger-options">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
           </div>
         </div>
-      </section>
+        <ul class="main-page__lists" aria-label="Task categories navigation">
+          <li class="main-page__default-item">
+            <button
+              class="main-page__default-button"
+              aria-label="All your default tasks"
+            >
+              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+              <span style="font-size: 1rem">&nbsp;Tasks</span>
+            </button>
+          </li>
+
+          <li class="main-page__my-day-item">
+            <button
+              class="main-page__my-day-button"
+              aria-label="Show My Day tasks - your focused list for today"
+            >
+              <i class="fa-regular fa-sun" aria-hidden="true"></i>
+              <span style="font-size: 1rem">&nbsp;My Day</span>
+            </button>
+          </li>
+
+          <li class="main-page__important-item">
+            <button
+              class="main-page__important-button"
+              aria-label="Your important tasks with highest priority"
+            >
+              <i class="fa-regular fa-star" aria-hidden="true"></i>
+              <span style="font-size: 1rem">&nbsp;Important</span>
+            </button>
+          </li>
+
+          <li class="main-page__planned-item">
+            <button
+              class="main-page__planned-button"
+              aria-label="Tasks you have planned for specific days"
+            >
+              <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+              <span style="font-size: 1rem">&nbsp;Planned</span>
+            </button>
+          </li>
+
+          <div class="main-page__new-task">
+            <button class="main-page__add-task">+</button>
+          </div>
+
+          <li class="main-page__new-list">
+            <button
+              class="main-page__new-list-action"
+              aria-label="Add a new custom list"
+            >
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+              <span style="font-size: 1rem">&nbsp; New List</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </main>
 
     <script
       type="module"
       src="close-splash-screen/hide-splash-screen.js"
+      defer
+    ></script>
+    <script
+      type="module"
+      src="default-list-controler/default-ltodo.js"
       defer
     ></script>
   </body>

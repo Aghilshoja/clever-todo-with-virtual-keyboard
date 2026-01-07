@@ -1,0 +1,71 @@
+:root {
+  /* === BORDERES === */
+  --BORDERS-NONE: none;
+  /* === BACKGROUND === */
+  --BACKGROUNDS: none;
+  /* === BORDER RADIUS === */
+  --BORDER-RADIUS: 30%;
+}
+
+.hidden-main-page {
+  display: none;
+}
+
+.main-page {
+  display: flex;
+  height: 100dvh;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem;
+  background-color: rgba(128, 128, 128, 0.043);
+}
+
+.main-page__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-page__lists {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(128, 128, 128, 0.112);
+  list-style: none;
+  padding: 0.4rem;
+}
+
+.main-page__my-day-button,
+.main-page__important-button,
+.main-page__planned-button,
+.main-page__default-button,
+.main-page__new-list-action,
+.main-page__trigger-options,
+.main-page__add-task {
+  display: flex;
+  flex-direction: column;
+  border: var(--BORDERS-NONE);
+  background: var(--BACKGROUNDS);
+  gap: 0.4rem;
+  font-size: 1.4rem;
+}
+
+.main-page__add-task {
+  color: white;
+}
+
+.main-page__new-task {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  height: 50px;
+  width: 50px;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--BORDER-RADIUS);
+}
