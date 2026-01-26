@@ -1,0 +1,146 @@
+:root {
+  /* === border === */
+  --BORDER-NONE: none;
+  /* === background === */
+  --BACKGROUND: none;
+  /* === primary color===  */
+  --PRIMARY-COLOR: white;
+  /*===  fonts === */
+  --FONT-SIZE: 1.2rem;
+}
+
+.keyboard-section {
+  position: absolute;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: scaleY(0);
+  width: 100%;
+  transform-origin: center;
+  transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+}
+
+.keyboard-section--active {
+  pointer-events: auto;
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: center;
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.721);
+  box-shadow: 20px 10px 3000px 20px rgba(0, 0, 0, 0.14);
+  z-index: 1;
+}
+
+.keyboard__row-0,
+.keyboard__row-1,
+.keyboard__row-2,
+.keyboard__row-3,
+.keyboard__row-4 {
+  display: flex;
+}
+
+.keys,
+.virtual-keyboard__container__delete-key,
+.keyboard-input-container__arrow-key,
+.keyboard-input-container__symbol-switcher,
+.keyboard-input-container__submit-button,
+.keyboard-input-container__space-button,
+.keyboard-input-container__english,
+.keyboard-input-container__persian,
+.Persian-alphabet,
+.symbols,
+.numbers,
+.keyboard-input-container__reverse-switcher,
+.keyboard-input-container__delete-key {
+  border: var(--BORDER-NONE);
+  background: var(--BACKGROUND);
+  flex-grow: 1;
+  background-color: var(--PRIMARY-COLOR);
+  height: 39px;
+  margin: 0.2rem;
+  font-size: var(--FONT-SIZE);
+  border-radius: 4px;
+}
+
+/* hover over */
+.keys:hover,
+.virtual-keyboard__container__delete-key:hover,
+.keyboard-input-container__arrow-key:hover,
+.keyboard-input-container__symbol-switcher:hover,
+.keyboard-input-container__submit-button:hover,
+.keyboard-input-container__space-button:hover,
+.keyboard-input-container__english:hover,
+.keyboard-input-container__persian:hover,
+.Persian-alphabet:hover,
+.symbols,
+.numbers:hover,
+.keyboard-input-container__reverse-switcher:hover,
+.keyboard-input-container__delete-key:hover,
+.keyboard-section__repeat-task:hover,
+.keyboard-section__remind-me-button:hover,
+.keyboard-section__due-date-button:hover {
+  background-color: whitesmoke;
+}
+
+.keyboard-section__repeat-task,
+.keyboard-section__remind-me-button,
+.keyboard-section__due-date-button {
+  border: var(--BORDER-NONE);
+  background: var(--BACKGROUND);
+  background-color: var(--PRIMARY-COLOR);
+  padding: 0.5rem;
+  flex-grow: 1;
+  font-size: var(--FONT-SIZE);
+}
+
+/* some properties' value are hardcoded becuase they are not going to change in the future */
+.keyboard-section__time-options {
+  display: flex;
+}
+
+.keyboard-input-container__input-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--PRIMARY-COLOR);
+}
+
+.keyboard-section__input-container {
+  display: flex;
+  gap: 0.6rem;
+  background-color: rgb(255, 255, 255);
+  align-items: center;
+  padding: 0.4rem;
+}
+
+.keyboard-section__task-input {
+  flex-grow: 1;
+  overflow: hidden;
+  max-height: 130px;
+  word-break: break-all;
+}
+
+.keyboard-section__circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+  align-self: flex-end;
+}
+
+.keyboard-section__submit-task {
+  border: var(--BORDER-NONE);
+  background: var(--BACKGROUND);
+  font-size: var(--FONT-SIZE);
+  background-color: black;
+  color: var(--PRIMARY-COLOR);
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+.keyboard-section__submit-task:hover {
+  background-color: grey;
+}
+
+.toggle-visiblity {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -2,7 +2,7 @@ import { getCachedElements } from "../cached-elements/get-cached-elements.js";
 
 const hideSplashHeader = () => {
   const elements = getCachedElements();
-  if (!elements) return;
+  if (!elements) throw new Error("required DOM wasn't found");
 
   setTimeout(() => {
     // Immediately stop animations and hide splash header from screen readers
