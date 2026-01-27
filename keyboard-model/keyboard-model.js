@@ -5,6 +5,9 @@ export class KeyboardApp {
   };
 
   constructor() {
+    this.currentPreviewKey = null;
+    this.clients = { clientX: null, clientY: null };
+    this.previewFeedbackTimer = null;
     this.listeners = {
       createRows: [],
       createKeys: [],

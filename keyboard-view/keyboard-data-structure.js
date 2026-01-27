@@ -7,7 +7,7 @@ export class KeyboardStructure {
           ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
           ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
           ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-          [" ", "z", "x", "c", "v", "b", "n", "m", "del"],
+          [" ", "z", "x", "c", "v", "b", "n", "m", ""],
           ["!#1", ",", "English (US)", "space", ".", "Done"],
         ],
         specialKeys: {
@@ -16,7 +16,7 @@ export class KeyboardStructure {
             label: "Shift key, capitalize letters",
           },
 
-          del: {
+          "": {
             class:
               "fa-solid fa-delete-left keyboard-input-container__delete-key",
             label: "backspace key",
