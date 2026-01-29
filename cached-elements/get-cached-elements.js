@@ -7,8 +7,9 @@ export const getCachedElements = () => {
     mainPageNewTaskCon: document.querySelector(".main-page__new-task"),
     keyboardSection: document.querySelector(".keyboard-section"),
     previewFeedback: document.querySelector(
-      ".keyboard-section__preview-feedback"
+      ".keyboard-section__preview-feedback",
     ),
+    loeaderDot: document.querySelector(".splash-header__loader-dot"),
   };
   return elements;
 };

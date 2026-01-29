@@ -68,7 +68,7 @@ body {
   border-radius: var(--BR);
   background-color: var(--BACKGROUND-COLOR);
   margin: 0.8rem 0 0 0;
-  animation: processing 1s ease-in-out;
+  animation: processing 2s ease-in-out;
 }
 
 @keyframes join-from-top {
