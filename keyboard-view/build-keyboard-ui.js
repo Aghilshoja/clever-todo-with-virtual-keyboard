@@ -5,6 +5,7 @@ export const keyboard = new KeyboardStructure();
 
 export const createKeys = (chars, langs) => {
   const buttons = document.createElement("button");
+  buttons.id = crypto.randomUUID();
 
   if (langs.specialKeys[chars]) {
     buttons.className = langs.specialKeys[chars].class;
@@ -36,7 +37,7 @@ export const createKeys = (chars, langs) => {
 
   document
     .querySelectorAll(
-      ".keyboard__row-0, .keyboard__row-1, .keyboard__row-2, .keyboard__row-3, .keyboard__row-4"
+      ".keyboard__row-0, .keyboard__row-1, .keyboard__row-2, .keyboard__row-3, .keyboard__row-4",
     )
     .forEach((each) => {
       each.appendChild(buttons);
@@ -46,9 +47,9 @@ export const createKeys = (chars, langs) => {
 
 export const createRows = (rows, index) => {
   const elements = getCachedElements();
-  if (!elements && !rows)
-    if (!elements) throw new Error("required DOM wasn't found");
+  if (!elements || !rows) throw new Error("required DOM wasn't found");
   const rowElement = document.createElement("div");
   rowElement.classList.add(`keyboard__row-${index}`);
+  if (crypto && crypto.randomUUID()) rowElement.id = crypto.randomUUID();
   elements.keyboardContainer.appendChild(rowElement);
 };

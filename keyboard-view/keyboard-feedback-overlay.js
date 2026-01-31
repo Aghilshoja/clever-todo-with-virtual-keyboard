@@ -32,6 +32,11 @@ export const hideKeyPreview = () => {
   virtualKeyboard.previewFeedbackTimer = setTimeout(() => {
     elements.previewFeedback.style.opacity = "0";
   }, 300);
+
+  if (virtualKeyboard.dragStartTimer && virtualKeyboard.currentPreviewKey) {
+    clearTimeout(virtualKeyboard.dragStartTimer);
+    virtualKeyboard.currentPreviewKey.draggable = false;
+  }
 };
 
 export const updatePreviewOnPointerMove = (pointerEvent) => {
@@ -39,7 +44,7 @@ export const updatePreviewOnPointerMove = (pointerEvent) => {
   if (pointerEvent.target.closest(".keys")) {
     const keyElement = document.elementFromPoint(
       pointerEvent.clientX,
-      pointerEvent.clientY
+      pointerEvent.clientY,
     );
 
     if (virtualKeyboard.previewFeedbackTimer) {
