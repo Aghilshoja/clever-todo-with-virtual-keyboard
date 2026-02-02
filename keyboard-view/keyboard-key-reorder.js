@@ -45,7 +45,7 @@ export const handleKeyDrop = (e) => {
   droppedkey.classList.remove("keyboard__keys--highlight");
   const droppedKeyIndex = Number(droppedkey.dataset.col);
   const rowIndex = Number(droppedkey.dataset.row);
-  const keyboardLayout = keyboard.keyboardStructure.en;
+  const keyboardLayout = virtualKeyboard.activelayout;
 
   [
     keyboardLayout.rows[rowIndex][droppedKeyIndex],

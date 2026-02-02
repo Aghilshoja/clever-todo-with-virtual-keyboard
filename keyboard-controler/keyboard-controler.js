@@ -31,7 +31,7 @@ virtualKeyboard.subscribe(KeyboardApp.EVENTS.CLEAR_KEYBOARD, () => {
 });
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_ROWS, createRows);
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_KEYS, createKeys);
-virtualKeyboard.toggleLanguageLayout(keyboard.keyboardStructure.en);
+virtualKeyboard.loadNewKeyboardlayout();
 
 const initApp = () => {
   if (!elements) throw new Error("required DOM wasn't found");
