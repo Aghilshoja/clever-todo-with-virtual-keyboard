@@ -2,27 +2,13 @@ import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import { keyboard } from "./build-keyboard-ui.js";
 
 export const handledraggeingKey = (e) => {
-  const target = e.target;
-  if (!target) return;
-  target.classList.add("keyboard__keys--dragging");
-  const targetParent = target.parentElement;
-  if (!targetParent) return;
-  const converRowToArray = Array.from(targetParent.children);
-  if (!converRowToArray) return;
-  const DraggedKeyIndex = converRowToArray.findIndex(
-    (row) => row.id === target.id,
-  );
+  const draggedKey = e.target.closest(".keys");
+  if (!draggedKey) return;
 
-  if (DraggedKeyIndex === -1) return;
-  const convertChildrenContainer = Array.from(e.currentTarget.children);
-  if (!convertChildrenContainer) return;
-  const rowIndex = convertChildrenContainer.findIndex(
-    (row) => row.id === targetParent.id,
-  );
-  if (rowIndex === -1) return;
-
+  const rowIndex = Number(draggedKey.dataset.row);
+  const draggedKeyIndex = Number(draggedKey.dataset.col);
   virtualKeyboard.indexs.rowIndex = rowIndex;
-  virtualKeyboard.indexs.btnIndex = DraggedKeyIndex;
+  virtualKeyboard.indexs.btnIndex = draggedKeyIndex;
 };
 
 export const handledragEnter = (e) => {
@@ -54,33 +40,23 @@ export const handledragEnd = (e) => {
 };
 
 export const handleKeyDrop = (e) => {
-  const target = e.target;
-  if (!target) return;
-  target.classList.remove("keyboard__keys--highlight");
-  const targetParent = target.parentElement;
-  if (!targetParent) return;
-  const convertedDOM = Array.from(e.currentTarget.children);
-  if (!convertedDOM) return;
-  const indexOfRow = convertedDOM.findIndex(
-    (row) => row.id === targetParent.id,
-  );
-  if (indexOfRow === -1) return;
-  const convertDOM = Array.from(targetParent.children);
-  if (!convertDOM) return;
-  const indexOfKey = convertDOM.findIndex((key) => key.id === e.target.id);
-  const languageLayout = keyboard.keyboardStructure.en;
-  if (indexOfKey === -1) return;
+  const droppedkey = e.target.closest(".keys");
+  if (!droppedkey) return;
+  droppedkey.classList.remove("keyboard__keys--highlight");
+  const droppedKeyIndex = Number(droppedkey.dataset.col);
+  const rowIndex = Number(droppedkey.dataset.row);
+  const keyboardLayout = keyboard.keyboardStructure.en;
 
   [
-    languageLayout.rows[indexOfRow][indexOfKey],
-    languageLayout.rows[virtualKeyboard.indexs.rowIndex][
+    keyboardLayout.rows[rowIndex][droppedKeyIndex],
+    keyboardLayout.rows[virtualKeyboard.indexs.rowIndex][
       virtualKeyboard.indexs.btnIndex
     ],
   ] = [
-    languageLayout.rows[virtualKeyboard.indexs.rowIndex][
+    keyboardLayout.rows[virtualKeyboard.indexs.rowIndex][
       virtualKeyboard.indexs.btnIndex
     ],
-    languageLayout.rows[indexOfRow][indexOfKey],
+    keyboardLayout.rows[rowIndex][droppedKeyIndex],
   ];
-  virtualKeyboard.toggleLanguageLayout(languageLayout);
+  virtualKeyboard.toggleLanguageLayout(keyboardLayout);
 };

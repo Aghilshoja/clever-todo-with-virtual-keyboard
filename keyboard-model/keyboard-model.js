@@ -10,13 +10,11 @@ export class KeyboardApp {
     this.clients = { clientX: null, clientY: null };
     this.previewFeedbackTimer = null;
     this.dragStartTimer = null;
+    this.currentPreviewKey = null;
     this.indexs = {
       rowIndex: null,
       btnIndex: null,
     };
-    this.keyboardContainer = document.querySelector(
-      ".keyboard-section__keyboard",
-    );
     this.listeners = {
       createRows: [],
       createKeys: [],
@@ -41,10 +39,16 @@ export class KeyboardApp {
   toggleLanguageLayout(langs) {
     if (!langs) throw new Error("The language wasn't found");
     this.emitChange(KeyboardApp.EVENTS.CLEAR_KEYBOARD);
-    langs.rows.forEach((rows, index) => {
-      this.emitChange(KeyboardApp.EVENTS.CREATE_ROWS, rows, index);
-      rows.forEach((key) => {
-        this.emitChange(KeyboardApp.EVENTS.CREATE_KEYS, key, langs);
+    langs.rows.forEach((row, rowIndex) => {
+      this.emitChange(KeyboardApp.EVENTS.CREATE_ROWS, rowIndex);
+      row.forEach((key, colIndex) => {
+        this.emitChange(
+          KeyboardApp.EVENTS.CREATE_KEYS,
+          key,
+          langs,
+          colIndex,
+          rowIndex,
+        );
       });
     });
   }
