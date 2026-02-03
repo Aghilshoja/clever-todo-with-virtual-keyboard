@@ -1,10 +1,6 @@
 import { getCachedElements } from "../cached-elements/get-cached-elements.js";
 import { KeyboardApp } from "../keyboard-model/keyboard-model.js";
-import {
-  createRows,
-  createKeys,
-  keyboard,
-} from "../keyboard-view/build-keyboard-ui.js";
+import { createRows, createKeys } from "../keyboard-view/build-keyboard-ui.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
 import { closeKeyboard } from "../keyboard-view/closeKeyboardOnBodyClick.js";
 import {
@@ -87,6 +83,24 @@ const initApp = () => {
   elements.keyboardContainer.addEventListener("dragleave", handledragLeave);
   elements.keyboardContainer.addEventListener("dragend", handledragEnd);
   elements.keyboardContainer.addEventListener("drop", handleKeyDrop);
+
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("keyboard-input-container__english"))
+      virtualKeyboard.setLang("fa");
+
+    if (e.target.classList.contains("keyboard-input-container__persian"))
+      virtualKeyboard.setLang("en");
+
+    if (
+      e.target.classList.contains("keyboard-input-container__symbol-switcher")
+    )
+      virtualKeyboard.setLang("symbols");
+
+    if (
+      e.target.classList.contains("keyboard-input-container__reverse-switcher")
+    )
+      virtualKeyboard.setLang("en");
+  });
 };
 
 initApp();

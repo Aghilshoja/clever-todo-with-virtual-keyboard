@@ -14,6 +14,7 @@ export class KeyboardApp {
     this.dragStartTimer = null;
     this.currentPreviewKey = null;
     this.activelayout = null;
+    this.activelang = "en";
     this.indexs = {
       rowIndex: null,
       btnIndex: null,
@@ -39,23 +40,28 @@ export class KeyboardApp {
     }
   }
 
-  saveNewLayout(layout) {
-    localStorage.setItem("keyboard-app", JSON.stringify(layout));
+  saveNewLayout(layout, activeLang) {
+    localStorage.setItem(`keyboard-${activeLang}`, JSON.stringify(layout));
   }
 
-  loadNewKeyboardlayout() {
+  loadNewKeyboardlayout(lang = this.activelang) {
+    this.activelang = lang;
     try {
-      const savedlayout = localStorage.getItem("keyboard-app");
+      const savedlayout = localStorage.getItem(`keyboard-${lang}`);
 
       if (savedlayout) {
         this.activelayout = JSON.parse(savedlayout);
       } else {
-        this.activelayout = structuredClone(keyboard.keyboardStructure.en);
+        this.activelayout = structuredClone(keyboard.keyboardStructure[lang]);
       }
-      this.toggleLanguageLayout(this.activelayout);
+      this.toggleLanguageLayout(this.activelayout, lang);
     } catch (error) {
       console.error("failed to laod new keyboard layout");
     }
+  }
+
+  setLang(lang) {
+    this.loadNewKeyboardlayout(lang);
   }
 
   toggleLanguageLayout(langs) {
@@ -74,6 +80,6 @@ export class KeyboardApp {
         );
       });
     });
-    this.saveNewLayout(langs);
+    this.saveNewLayout(this.activelayout, this.activelang);
   }
 }

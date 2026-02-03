@@ -103,7 +103,7 @@ export class KeyboardStructure {
             label: "space key",
           },
           Done: {
-            class: "keyboaord-input-container__submit-button",
+            class: "keyboard-input-container__submit-button",
             label: "Enter key, submit input",
           },
         },

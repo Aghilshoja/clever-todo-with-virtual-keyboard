@@ -1,5 +1,4 @@
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { keyboard } from "./build-keyboard-ui.js";
 
 export const handledraggeingKey = (e) => {
   const draggedKey = e.target.closest(".keys");

@@ -48,6 +48,7 @@
 
 .keys,
 .virtual-keyboard__container__delete-key,
+.keyboaord-input-container__submit-button,
 .keyboard-input-container__arrow-key,
 .keyboard-input-container__symbol-switcher,
 .keyboard-input-container__submit-button,
@@ -72,6 +73,7 @@
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none;
   touch-action: none;
+  cursor: pointer;
 }
 
 /* hover over */
