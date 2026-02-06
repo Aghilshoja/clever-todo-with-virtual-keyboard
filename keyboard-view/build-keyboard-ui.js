@@ -41,6 +41,7 @@ export const createKeys = (chars, langs, colIndex, rowIndex) => {
     buttons.setAttribute("aria-label", `key ${chars}`);
     buttons.classList.add("keys");
     buttons.textContent = chars;
+    buttons.setAttribute("data-base", `${chars}`);
   }
 
   const keysParent = document.querySelector(`.keyboard__row-${rowIndex}`);
@@ -56,4 +57,25 @@ export const createRows = (rowIndex) => {
   rowElement.classList.add(`keyboard__row-${rowIndex}`);
   rowElement.setAttribute("data-col", `${rowIndex}`);
   elements.keyboardContainer.appendChild(rowElement);
+};
+
+export const updateKeysText = (capsLock) => {
+  const keys = document.querySelectorAll(".keys");
+  if (!keys) return;
+
+  const shiftKey = document.querySelector(
+    ".keyboard-input-container__arrow-key",
+  );
+  if (!shiftKey) return;
+
+  if (capsLock === "lowercase") shiftKey.classList.remove("highlight-shift");
+  else shiftKey.classList.add("highlight-shift");
+
+  keys.forEach((key) => {
+    const keyText = key.dataset.base || key.textContent;
+
+    if (!/^[a-zA-Z]$/.test(keyText)) return keyText;
+    key.textContent =
+      capsLock === "lowercase" ? keyText.toLowerCase() : keyText.toUpperCase();
+  });
 };

@@ -5,6 +5,7 @@ export class KeyboardApp {
     CREATE_ROWS: "createRows",
     CREATE_KEYS: "createKeys",
     CLEAR_KEYBOARD: "clearKeyboard",
+    UPDATE_KEYS: "updateKeys",
   };
 
   constructor() {
@@ -15,6 +16,7 @@ export class KeyboardApp {
     this.currentPreviewKey = null;
     this.activelayout = null;
     this.activelang = "en";
+    this.capsLock = "lowercase";
     this.indexs = {
       rowIndex: null,
       btnIndex: null,
@@ -23,6 +25,7 @@ export class KeyboardApp {
       createRows: [],
       createKeys: [],
       clearKeyboard: [],
+      updateKeys: [],
     };
   }
 
@@ -54,14 +57,29 @@ export class KeyboardApp {
       } else {
         this.activelayout = structuredClone(keyboard.keyboardStructure[lang]);
       }
-      this.toggleLanguageLayout(this.activelayout, lang);
+      this.toggleLanguageLayout(this.activelayout);
     } catch (error) {
-      console.error("failed to laod new keyboard layout");
+      console.error("failed to laod new keyboard layout", error);
     }
   }
 
   setLang(lang) {
     this.loadNewKeyboardlayout(lang);
+  }
+
+  currentCapsLock() {
+    if (this.capsLock === "lowercase") this.capsLock = "cap";
+    else if (this.capsLock === "cap") this.capsLock = "uppercase";
+    else this.capsLock = "lowercase";
+
+    this.emitChange(KeyboardApp.EVENTS.UPDATE_KEYS, this.capsLock);
+  }
+
+  onKeyPressed() {
+    if (this.capsLock === "cap") {
+      this.capsLock = "lowercase";
+      this.emitChange(KeyboardApp.EVENTS.UPDATE_KEYS, this.capsLock);
+    }
   }
 
   toggleLanguageLayout(langs) {

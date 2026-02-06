@@ -76,26 +76,6 @@
   cursor: pointer;
 }
 
-/* hover over */
-.keys:hover,
-.virtual-keyboard__container__delete-key:hover,
-.keyboard-input-container__arrow-key:hover,
-.keyboard-input-container__symbol-switcher:hover,
-.keyboard-input-container__submit-button:hover,
-.keyboard-input-container__space-button:hover,
-.keyboard-input-container__english:hover,
-.keyboard-input-container__persian:hover,
-.Persian-alphabet:hover,
-.symbols,
-.numbers:hover,
-.keyboard-input-container__reverse-switcher:hover,
-.keyboard-input-container__delete-key:hover,
-.keyboard-section__repeat-task:hover,
-.keyboard-section__remind-me-button:hover,
-.keyboard-section__due-date-button:hover {
-  background-color: whitesmoke;
-}
-
 .keyboard-section__repeat-task,
 .keyboard-section__remind-me-button,
 .keyboard-section__due-date-button {
@@ -105,6 +85,27 @@
   padding: 0.5rem;
   flex-grow: 1;
   font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Virtual keyboard key press feedback
+   Using :active because hover doesn't work reliably on touch devices.
+   This ensures keys show visual feedback when tapped on phones and tablets.
+*/
+.keys:active,
+.virtual-keyboard__container__delete-key:active,
+.keyboard-input-container__symbol-switcher:active,
+.keyboard-input-container__submit-button:active,
+.keyboard-input-container__space-button:active,
+.keyboard-input-container__english:active,
+.keyboard-input-container__persian:active,
+.Persian-alphabet:active,
+.keyboard-input-container__reverse-switcher:active,
+.keyboard-input-container__delete-key:active,
+.keyboard-section__repeat-task:active,
+.keyboard-section__remind-me-button:active,
+.keyboard-section__due-date-button:active {
+  background-color: whitesmoke;
 }
 
 /* some properties' value are hardcoded becuase they are not going to change in the future */
@@ -148,6 +149,7 @@
   background-color: black;
   color: var(--PRIMARY-COLOR);
   padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
 }
 
 .keyboard-section__submit-task:hover {
@@ -183,4 +185,36 @@
 
 .keyboard__keys--highlight {
   outline: 2px solid #4da3ff;
+}
+
+.highlight-shift {
+  background-color: gold;
+}
+
+.highlight-shift:active {
+  background-color: rgb(218, 165, 32);
+}
+
+/* hover feedback for desktop with a mouse */
+@media (hover: hover) {
+  .keys:hover,
+  .virtual-keyboard__container__delete-key:hover,
+  .keyboard-input-container__symbol-switcher:hover,
+  .keyboard-input-container__submit-button:hover,
+  .keyboard-input-container__space-button:hover,
+  .keyboard-input-container__english:hover,
+  .keyboard-input-container__persian:hover,
+  .Persian-alphabet:hover,
+  .symbols,
+  .numbers:hover,
+  .keyboard-input-container__reverse-switcher:hover,
+  .keyboard-input-container__delete-key:hover,
+  .keyboard-section__repeat-task:hover,
+  .keyboard-section__remind-me-button:hover,
+  .keyboard-section__due-date-button:hover {
+    background-color: whitesmoke;
+  }
+  .highlight-shift:hover {
+    background-color: rgb(218, 165, 32);
+  }
 }

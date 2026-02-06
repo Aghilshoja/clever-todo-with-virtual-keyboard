@@ -1,6 +1,10 @@
 import { getCachedElements } from "../cached-elements/get-cached-elements.js";
 import { KeyboardApp } from "../keyboard-model/keyboard-model.js";
-import { createRows, createKeys } from "../keyboard-view/build-keyboard-ui.js";
+import {
+  createRows,
+  createKeys,
+  updateKeysText,
+} from "../keyboard-view/build-keyboard-ui.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
 import { closeKeyboard } from "../keyboard-view/closeKeyboardOnBodyClick.js";
 import {
@@ -15,7 +19,6 @@ import {
   handledragLeave,
   handledragEnd,
 } from "../keyboard-view/keyboard-key-reorder.js";
-
 export const virtualKeyboard = new KeyboardApp();
 
 const elements = getCachedElements();
@@ -27,6 +30,7 @@ virtualKeyboard.subscribe(KeyboardApp.EVENTS.CLEAR_KEYBOARD, () => {
 });
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_ROWS, createRows);
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_KEYS, createKeys);
+virtualKeyboard.subscribe(KeyboardApp.EVENTS.UPDATE_KEYS, updateKeysText);
 virtualKeyboard.loadNewKeyboardlayout();
 
 const initApp = () => {
@@ -100,6 +104,15 @@ const initApp = () => {
       e.target.classList.contains("keyboard-input-container__reverse-switcher")
     )
       virtualKeyboard.setLang("en");
+
+    if (e.target.classList.contains("keyboard-input-container__arrow-key")) {
+      e.target.classList.add("highlight-shift");
+      virtualKeyboard.currentCapsLock();
+    }
+
+    if (e.target.closest(".keys")) {
+      virtualKeyboard.onKeyPressed();
+    }
   });
 };
 
