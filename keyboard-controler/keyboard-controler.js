@@ -4,6 +4,8 @@ import {
   createRows,
   createKeys,
   updateKeysText,
+  typeIntoInput,
+  ensurePlaceholder,
 } from "../keyboard-view/build-keyboard-ui.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
 import { closeKeyboard } from "../keyboard-view/closeKeyboardOnBodyClick.js";
@@ -19,6 +21,7 @@ import {
   handledragLeave,
   handledragEnd,
 } from "../keyboard-view/keyboard-key-reorder.js";
+import { backspaceFunctionality } from "../keyboard-view/build-keyboard-ui.js";
 export const virtualKeyboard = new KeyboardApp();
 
 const elements = getCachedElements();
@@ -36,6 +39,7 @@ virtualKeyboard.loadNewKeyboardlayout();
 const initApp = () => {
   if (!elements) throw new Error("required DOM wasn't found");
 
+  ensurePlaceholder(elements.inputElement);
   elements.mainPageNewTask.addEventListener("click", toggleKeyboard);
 
   elements.keyboardContainer.addEventListener("pointerdown", (e) => {
@@ -111,7 +115,12 @@ const initApp = () => {
     }
 
     if (e.target.closest(".keys")) {
+      typeIntoInput(e);
       virtualKeyboard.onKeyPressed();
+    }
+
+    if (e.target.classList.contains("keyboard-input-container__delete-key")) {
+      backspaceFunctionality();
     }
   });
 };

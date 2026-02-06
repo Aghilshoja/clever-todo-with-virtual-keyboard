@@ -3,6 +3,52 @@ import { KeyboardStructure } from "./keyboard-data-structure.js";
 
 export const keyboard = new KeyboardStructure();
 
+export const ensurePlaceholder = (input) => {
+  if (!input.textContent.trim()) {
+    input.textContent = input.dataset.placeholder || "";
+  }
+};
+
+const clearPlaceholder = (inputElement) => {
+  if (!inputElement) return;
+
+  if (inputElement.textContent.trim() === inputElement.dataset.placeholder) {
+    inputElement.textContent = "";
+  }
+};
+
+const disableSubmitIfInputEmpty = () => {
+  const elements = getCachedElements();
+  if (!elements) return;
+
+  elements.submitTask.disabled =
+    elements.inputElement.textContent.trim() === "Enter a task";
+};
+
+export const backspaceFunctionality = () => {
+  const elements = getCachedElements();
+  if (!elements) return;
+  clearPlaceholder(elements.inputElement);
+  elements.inputElement.textContent = elements.inputElement.textContent.slice(
+    0,
+    -1,
+  );
+
+  if (!elements.inputElement.textContent.trim()) {
+    ensurePlaceholder(elements.inputElement);
+  }
+
+  disableSubmitIfInputEmpty();
+};
+
+export const typeIntoInput = (event) => {
+  const elements = getCachedElements();
+  if (!elements) return;
+  clearPlaceholder(elements.inputElement);
+  elements.inputElement.textContent += event.target.textContent;
+  disableSubmitIfInputEmpty();
+};
+
 export const createKeys = (chars, langs, colIndex, rowIndex) => {
   const buttons = document.createElement("button");
 

@@ -10,6 +10,8 @@ export const getCachedElements = () => {
       ".keyboard-section__preview-feedback",
     ),
     loeaderDot: document.querySelector(".splash-header__loader-dot"),
+    inputElement: document.querySelector(".keyboard-section__task-input"),
+    submitTask: document.querySelector(".keyboard-section__submit-task"),
   };
   return elements;
 };
