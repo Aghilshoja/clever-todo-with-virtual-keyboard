@@ -17,6 +17,14 @@ export class KeyboardApp {
     this.activelayout = null;
     this.activelang = "en";
     this.capsLock = "lowercase";
+    this.deleteTimer = null;
+    this.isBackspacePressed = false;
+    this.isBackspcaceHeld = false;
+    this.backSpaceTimer = null;
+    this.isCancelled = false;
+    this.backspaceClient = { clientX: null, clientY: null };
+    this.holdThreshold = 800;
+    this.pressStartTime - 0;
     this.indexs = {
       rowIndex: null,
       btnIndex: null,
