@@ -1,5 +1,10 @@
 import { getCachedElements } from "../cached-elements/get-cached-elements.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import {
+  ensureCaret,
+  deleteCharBeforeCaret,
+  hasUserText,
+} from "./keyboard-input-caret.js";
 
 export const pressBackspace = (e) => {
   if (e.target.classList.contains("keyboard-input-container__delete-key")) {
@@ -53,7 +58,7 @@ const startContinuousDelete = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
   virtualKeyboard.isBackspcaceHeld = true;
-  const interval = 1000 / 15;
+  const interval = 50;
 
   virtualKeyboard.deleteTimer = setInterval(() => {
     if (!virtualKeyboard.isBackspacePressed) {
@@ -71,16 +76,18 @@ const startContinuousDelete = () => {
 };
 
 export const ensurePlaceholder = (input) => {
-  if (!input.textContent.trim()) {
-    input.textContent = input.dataset.placeholder || "";
+  if (!hasUserText(input)) {
+    input.dataset.hasPlaceholder = "true";
+    input.classList.add("keyboard-section__task-input--caret");
+    input.textContent = input.dataset.placeholder;
   }
 };
 
-const clearPlaceholder = (inputElement) => {
-  if (!inputElement) throw new Error("Oops! element not found");
-
-  if (inputElement.textContent.trim() === inputElement.dataset.placeholder) {
-    inputElement.textContent = "";
+const clearPlaceholder = (input) => {
+  if (input.dataset.hasPlaceholder === "true") {
+    input.textContent = "";
+    input.classList.add("keyboard-section__task-input--caret");
+    delete input.dataset.hasPlaceholder;
   }
 };
 
@@ -94,17 +101,11 @@ const disableSubmitIfInputEmpty = () => {
 
 const deleteLastCharacterOfInput = () => {
   const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM was not found");
-  clearPlaceholder(elements.inputElement);
-  elements.inputElement.textContent = elements.inputElement.textContent.slice(
-    0,
-    -1,
-  );
+  if (!elements) throw new Error("Required DOM was not found");
 
-  if (!elements.inputElement.textContent.trim()) {
-    ensurePlaceholder(elements.inputElement);
-  }
-
+  const input = elements.inputElement;
+  const hasText = deleteCharBeforeCaret(input);
+  if (!hasText) ensurePlaceholder(input);
   disableSubmitIfInputEmpty();
 };
 
@@ -112,6 +113,11 @@ export const typeIntoInput = (event) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
   clearPlaceholder(elements.inputElement);
-  elements.inputElement.textContent += event.target.textContent;
+  const input = elements.inputElement;
+  input.classList.remove("keyboard-section__task-input--caret");
+  const caret = ensureCaret(input);
+
+  caret.insertAdjacentText("beforebegin", event.target.textContent);
+
   disableSubmitIfInputEmpty();
 };

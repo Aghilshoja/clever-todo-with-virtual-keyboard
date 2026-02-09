@@ -201,6 +201,23 @@
   background-color: rgb(218, 165, 32);
 }
 
+.keyboard-section__task-input--caret::before {
+  content: "|";
+  color: blue;
+  animation: blink 1s steps(1) infinite;
+}
+
+.caret {
+  color: blue;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 /* hover feedback for desktop with a mouse */
 @media (hover: hover) {
   .keys:hover,
