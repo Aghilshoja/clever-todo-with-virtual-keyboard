@@ -27,6 +27,8 @@ import {
   releaseBackspace,
   cancelPointer,
 } from "../keyboard-view/keyboard-input-behavior.js";
+import { handleSpaceBar } from "../keyboard-view/keyboard-spacebar.js";
+
 export const virtualKeyboard = new KeyboardApp();
 
 const elements = getCachedElements();
@@ -132,6 +134,8 @@ const initApp = () => {
     "pointermove",
     moveBackspacePointer,
   );
+
+  elements.keyboardContainer.addEventListener("click", handleSpaceBar);
 };
 
 initApp();

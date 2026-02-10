@@ -83,7 +83,7 @@ export const ensurePlaceholder = (input) => {
   }
 };
 
-const clearPlaceholder = (input) => {
+export const clearPlaceholder = (input) => {
   if (input.dataset.hasPlaceholder === "true") {
     input.textContent = "";
     input.classList.add("keyboard-section__task-input--caret");
@@ -91,7 +91,7 @@ const clearPlaceholder = (input) => {
   }
 };
 
-const disableSubmitIfInputEmpty = () => {
+export const disableSubmitIfInputEmpty = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
 
