@@ -20,12 +20,6 @@ export const deleteCharBeforeCaret = (input) => {
   node.textContent = node.textContent.slice(0, -1);
 
   if (node.textContent === "") node.remove();
-
-  const hasText = Array.from(input.childNodes).some(
-    (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim() !== "",
-  );
-
-  return hasText;
 };
 
 export const hasUserText = (input) => {

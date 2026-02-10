@@ -104,8 +104,8 @@ const deleteLastCharacterOfInput = () => {
   if (!elements) throw new Error("Required DOM was not found");
 
   const input = elements.inputElement;
-  const hasText = deleteCharBeforeCaret(input);
-  if (!hasText) ensurePlaceholder(input);
+  deleteCharBeforeCaret(input);
+  ensurePlaceholder(input);
   disableSubmitIfInputEmpty();
 };
 
