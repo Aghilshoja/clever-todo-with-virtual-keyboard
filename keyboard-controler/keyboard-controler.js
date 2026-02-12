@@ -28,6 +28,7 @@ import {
   cancelPointer,
 } from "../keyboard-view/keyboard-input-behavior.js";
 import { handleSpaceBar } from "../keyboard-view/keyboard-spacebar.js";
+import { positionCaret } from "../keyboard-view/keyboard-caret-positioning.js";
 
 export const virtualKeyboard = new KeyboardApp();
 
@@ -124,6 +125,10 @@ const initApp = () => {
     if (e.target.closest(".keys")) {
       typeIntoInput(e);
       virtualKeyboard.onKeyPressed();
+    }
+
+    if (e.target.classList.contains("keyboard-section__task-input")) {
+      positionCaret(e);
     }
   });
 
