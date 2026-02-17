@@ -32,6 +32,27 @@ import { positionCaret } from "../keyboard-view/keyboard-caret-positioning.js";
 
 export const virtualKeyboard = new KeyboardApp();
 
+export const uiState = {
+  currentPreviewKey: null,
+  clients: { clientX: null, clientY: null },
+  previewFeedbackTimer: null,
+  dragStartTimer: null,
+  currentPreviewKey: null,
+  activelayout: null,
+  deleteTimer: null,
+  isBackspacePressed: false,
+  isBackspcaceHeld: false,
+  backSpaceTimer: null,
+  isCancelled: false,
+  backspaceClient: { clientX: null, clientY: null },
+  holdThreshold: 800,
+  pressStartTime: 0,
+  indexs: {
+    rowIndex: null,
+    btnIndex: null,
+  },
+};
+
 const elements = getCachedElements();
 
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CLEAR_KEYBOARD, () => {
@@ -52,11 +73,11 @@ const initApp = () => {
 
   elements.keyboardContainer.addEventListener("pointerdown", (e) => {
     if (e.target.closest(".keys")) {
-      virtualKeyboard.currentPreviewKey = e.target;
+      uiState.currentPreviewKey = e.target;
       renderKeyPreviewPopup(e.target);
 
-      virtualKeyboard.dragStartTimer = setTimeout(() => {
-        virtualKeyboard.currentPreviewKey.draggable = true;
+      uiState.dragStartTimer = setTimeout(() => {
+        uiState.currentPreviewKey.draggable = true;
       }, 300);
     }
   });
@@ -69,13 +90,13 @@ const initApp = () => {
   );
 
   elements.keyboardContainer.addEventListener("pointerleave", () => {
-    if (virtualKeyboard.currentPreviewKey) {
-      if (virtualKeyboard.previewFeedbackTimer) {
-        clearTimeout(virtualKeyboard.previewFeedbackTimer);
-        virtualKeyboard.previewFeedbackTimer = null;
+    if (uiState.currentPreviewKey) {
+      if (uiState.previewFeedbackTimer) {
+        clearTimeout(uiState.previewFeedbackTimer);
+        uiState.previewFeedbackTimer = null;
       }
       hideKeyPreview();
-      virtualKeyboard.currentPreviewKey = null;
+      uiState.currentPreviewKey = null;
     }
   });
 

@@ -1,5 +1,5 @@
 import { getCachedElements } from "../cached-elements/get-cached-elements.js";
-import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { uiState } from "../keyboard-controler/keyboard-controler.js";
 
 const elements = getCachedElements();
 
@@ -8,9 +8,9 @@ export const renderKeyPreviewPopup = (keyElement) => {
   if (!elements || !elements.previewFeedback)
     throw new Error("required DOM wasn't found");
 
-  if (virtualKeyboard.previewFeedbackTimer) {
-    clearTimeout(virtualKeyboard.previewFeedbackTimer);
-    virtualKeyboard.previewFeedbackTimer = null;
+  if (uiState.previewFeedbackTimer) {
+    clearTimeout(uiState.previewFeedbackTimer);
+    uiState.previewFeedbackTimer = null;
   }
   const rect = keyElement.getBoundingClientRect();
   elements.previewFeedback.textContent = keyElement.textContent;
@@ -24,19 +24,17 @@ export const renderKeyPreviewPopup = (keyElement) => {
 export const hideKeyPreview = () => {
   if (!elements) throw new Error("required DOM wasn't found");
 
-  if (virtualKeyboard.previewFeedbackTimer) {
-    clearTimeout(virtualKeyboard.previewFeedbackTimer);
-    virtualKeyboard.previewFeedbackTimer = null;
+  if (uiState.previewFeedbackTimer) {
+    clearTimeout(uiState.previewFeedbackTimer);
+    uiState.previewFeedbackTimer = null;
   }
 
-  virtualKeyboard.previewFeedbackTimer = setTimeout(() => {
+  uiState.previewFeedbackTimer = setTimeout(() => {
     elements.previewFeedback.style.opacity = "0";
   }, 300);
 
-  if (virtualKeyboard.dragStartTimer && virtualKeyboard.currentPreviewKey) {
-    clearTimeout(virtualKeyboard.dragStartTimer);
-    virtualKeyboard.currentPreviewKey.draggable = false;
-  }
+  if (uiState.dragStartTimer) clearTimeout(uiState.dragStartTimer);
+  if (uiState.currentPreviewKey) uiState.currentPreviewKey.draggable = false;
 };
 
 export const updatePreviewOnPointerMove = (pointerEvent) => {
@@ -47,14 +45,14 @@ export const updatePreviewOnPointerMove = (pointerEvent) => {
       pointerEvent.clientY,
     );
 
-    if (virtualKeyboard.previewFeedbackTimer) {
-      clearTimeout(virtualKeyboard.previewFeedbackTimer);
-      virtualKeyboard.previewFeedbackTimer = null;
+    if (uiState.previewFeedbackTimer) {
+      clearTimeout(uiState.previewFeedbackTimer);
+      uiState.previewFeedbackTimer = null;
     }
 
     const key = keyElement?.closest(".keys");
-    if (key && key !== virtualKeyboard.currentPreviewKey) {
-      virtualKeyboard.currentPreviewKey = key;
+    if (key && key !== uiState.currentPreviewKey) {
+      uiState.currentPreviewKey = key;
       renderKeyPreviewPopup(key);
     }
   }

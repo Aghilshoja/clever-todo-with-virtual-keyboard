@@ -1,5 +1,8 @@
 import { getCachedElements } from "../cached-elements/get-cached-elements.js";
-import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import {
+  virtualKeyboard,
+  uiState,
+} from "../keyboard-controler/keyboard-controler.js";
 import {
   ensureCaret,
   deleteCharBeforeCaret,
@@ -8,61 +11,60 @@ import {
 
 export const pressBackspace = (e) => {
   if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    virtualKeyboard.pressStartTime = Date.now();
-    virtualKeyboard.backspaceClient.clientX = e.clientX;
-    virtualKeyboard.backspaceClient.clientY = e.clientY;
-    virtualKeyboard.isBackspacePressed = true;
-    virtualKeyboard.backSpaceTimer = setTimeout(() => {
-      if (virtualKeyboard.isBackspacePressed) startContinuousDelete();
-    }, virtualKeyboard.holdThreshold);
+    uiState.pressStartTime = Date.now();
+    uiState.backspaceClient.clientX = e.clientX;
+    uiState.backspaceClient.clientY = e.clientY;
+    uiState.isBackspacePressed = true;
+    uiState.backSpaceTimer = setTimeout(() => {
+      if (uiState.isBackspacePressed) startContinuousDelete();
+    }, uiState.holdThreshold);
   }
 };
 
 export const releaseBackspace = (e) => {
   if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    virtualKeyboard.isBackspacePressed = false;
-    virtualKeyboard.isBackspcaceHeld = false;
-    clearInterval(virtualKeyboard.deleteTimer);
-    clearTimeout(virtualKeyboard.backSpaceTimer);
+    uiState.isBackspacePressed = false;
+    uiState.isBackspcaceHeld = false;
+    clearInterval(uiState.deleteTimer);
+    clearTimeout(uiState.backSpaceTimer);
 
-    const pressDuration = Date.now() - virtualKeyboard.pressStartTime;
+    const pressDuration = Date.now() - uiState.pressStartTime;
 
-    if (!virtualKeyboard.isCancelled) {
-      if (pressDuration < virtualKeyboard.holdThreshold)
-        deleteLastCharacterOfInput();
+    if (!uiState.isCancelled) {
+      if (pressDuration < uiState.holdThreshold) deleteLastCharacterOfInput();
     }
   }
 };
 
 export const cancelPointer = (e) => {
   if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    if (virtualKeyboard.isBackspacePressed) {
-      clearInterval(virtualKeyboard.deleteTimer);
-      clearTimeout(virtualKeyboard.backSpaceTimer);
+    if (uiState.isBackspacePressed) {
+      clearInterval(uiState.deleteTimer);
+      clearTimeout(uiState.backSpaceTimer);
     }
   }
 };
 
 export const moveBackspacePointer = (e) => {
   if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    const clientX = e.clientX - virtualKeyboard.backspaceClient.clientX;
-    const clientY = e.clientY - virtualKeyboard.backspaceClient.clientY;
+    const clientX = e.clientX - uiState.backspaceClient.clientX;
+    const clientY = e.clientY - uiState.backspaceClient.clientY;
 
     if (Math.hypot(clientX, clientY) > 10) {
-      clearTimeout(virtualKeyboard.backSpaceTimer);
-      clearInterval(virtualKeyboard.deleteTimer);
+      clearTimeout(uiState.backSpaceTimer);
+      clearInterval(uiState.deleteTimer);
     }
   }
 };
 const startContinuousDelete = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
-  virtualKeyboard.isBackspcaceHeld = true;
+  uiState.isBackspcaceHeld = true;
   const interval = 50;
 
-  virtualKeyboard.deleteTimer = setInterval(() => {
-    if (!virtualKeyboard.isBackspacePressed) {
-      clearInterval(virtualKeyboard.deleteTimer);
+  uiState.deleteTimer = setInterval(() => {
+    if (!uiState.isBackspacePressed) {
+      clearInterval(uiState.deleteTimer);
       return;
     }
 

@@ -1,13 +1,13 @@
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-
+import { uiState } from "../keyboard-controler/keyboard-controler.js";
 export const handledraggeingKey = (e) => {
   const draggedKey = e.target.closest(".keys");
   if (!draggedKey) return;
 
   const rowIndex = Number(draggedKey.dataset.row);
   const draggedKeyIndex = Number(draggedKey.dataset.col);
-  virtualKeyboard.indexs.rowIndex = rowIndex;
-  virtualKeyboard.indexs.btnIndex = draggedKeyIndex;
+  uiState.indexs.rowIndex = rowIndex;
+  uiState.indexs.btnIndex = draggedKeyIndex;
 };
 
 export const handledragEnter = (e) => {
@@ -33,9 +33,9 @@ export const handledragEnd = (e) => {
     .querySelectorAll(".keyboard__keys--highlight")
     .forEach((k) => k.classList.remove("keyboard__keys--highlight"));
 
-  virtualKeyboard.indexs.rowIndex = null;
-  virtualKeyboard.indexs.btnIndex = null;
-  virtualKeyboard.dragStartTimer = null;
+  uiState.indexs.rowIndex = null;
+  uiState.indexs.btnIndex = null;
+  uiState.dragStartTimer = null;
 };
 
 export const handleKeyDrop = (e) => {
@@ -48,13 +48,9 @@ export const handleKeyDrop = (e) => {
 
   [
     keyboardLayout.rows[rowIndex][droppedKeyIndex],
-    keyboardLayout.rows[virtualKeyboard.indexs.rowIndex][
-      virtualKeyboard.indexs.btnIndex
-    ],
+    keyboardLayout.rows[uiState.indexs.rowIndex][uiState.indexs.btnIndex],
   ] = [
-    keyboardLayout.rows[virtualKeyboard.indexs.rowIndex][
-      virtualKeyboard.indexs.btnIndex
-    ],
+    keyboardLayout.rows[uiState.indexs.rowIndex][uiState.indexs.btnIndex],
     keyboardLayout.rows[rowIndex][droppedKeyIndex],
   ];
   virtualKeyboard.toggleLanguageLayout(keyboardLayout);
