@@ -41,9 +41,7 @@ export const uiState = {
   activelayout: null,
   deleteTimer: null,
   isBackspacePressed: false,
-  isBackspcaceHeld: false,
   backSpaceTimer: null,
-  isCancelled: false,
   backspaceClient: { clientX: null, clientY: null },
   holdThreshold: 800,
   pressStartTime: 0,
@@ -72,7 +70,7 @@ const initApp = () => {
   elements.mainPageNewTask.addEventListener("click", toggleKeyboard);
 
   elements.keyboardContainer.addEventListener("pointerdown", (e) => {
-    if (e.target.closest(".keys")) {
+    if (e.target.closest(".keyboard__key")) {
       uiState.currentPreviewKey = e.target;
       renderKeyPreviewPopup(e.target);
 
@@ -122,28 +120,23 @@ const initApp = () => {
   elements.keyboardContainer.addEventListener("drop", handleKeyDrop);
 
   document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("keyboard-input-container__english"))
+    if (e.target.classList.contains("keyboard__english-layout"))
       virtualKeyboard.setLang("fa");
 
-    if (e.target.classList.contains("keyboard-input-container__persian"))
+    if (e.target.classList.contains("keyboard__persian-layout"))
       virtualKeyboard.setLang("en");
 
-    if (
-      e.target.classList.contains("keyboard-input-container__symbol-switcher")
-    )
+    if (e.target.classList.contains("keyboard__symbol-switcher"))
       virtualKeyboard.setLang("symbols");
 
-    if (
-      e.target.classList.contains("keyboard-input-container__reverse-switcher")
-    )
+    if (e.target.classList.contains("keyboard__reverse-switcher"))
       virtualKeyboard.setLang("en");
 
-    if (e.target.classList.contains("keyboard-input-container__arrow-key")) {
-      e.target.classList.add("highlight-shift");
+    if (e.target.closest(".keyboard__shift-key")) {
       virtualKeyboard.currentCapsLock();
     }
 
-    if (e.target.closest(".keys")) {
+    if (e.target.closest(".keyboard__key")) {
       typeIntoInput(e);
       virtualKeyboard.onKeyPressed();
     }

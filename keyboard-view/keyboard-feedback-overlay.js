@@ -39,7 +39,7 @@ export const hideKeyPreview = () => {
 
 export const updatePreviewOnPointerMove = (pointerEvent) => {
   if (!pointerEvent) throw new Error("Key element not provided");
-  if (pointerEvent.target.closest(".keys")) {
+  if (pointerEvent.target.closest(".keyboard__key")) {
     const keyElement = document.elementFromPoint(
       pointerEvent.clientX,
       pointerEvent.clientY,
@@ -50,7 +50,7 @@ export const updatePreviewOnPointerMove = (pointerEvent) => {
       uiState.previewFeedbackTimer = null;
     }
 
-    const key = keyElement?.closest(".keys");
+    const key = keyElement?.closest(".keyboard__key");
     if (key && key !== uiState.currentPreviewKey) {
       uiState.currentPreviewKey = key;
       renderKeyPreviewPopup(key);

@@ -1,4 +1,4 @@
-import { keyboard } from "../keyboard-view/build-keyboard-ui.js";
+import { KeyboardStructure } from "../keyboard-view/keyboard-data-structure.js";
 
 export class KeyboardApp {
   static EVENTS = {
@@ -9,6 +9,7 @@ export class KeyboardApp {
   };
 
   constructor() {
+    this.keyboard = new KeyboardStructure();
     this.activelang = "en";
     this.capsLock = "lowercase";
     this.listeners = {
@@ -45,7 +46,9 @@ export class KeyboardApp {
       if (savedlayout) {
         this.activelayout = JSON.parse(savedlayout);
       } else {
-        this.activelayout = structuredClone(keyboard.keyboardStructure[lang]);
+        this.activelayout = structuredClone(
+          this.keyboard.keyboardStructure[lang],
+        );
       }
       this.toggleLanguageLayout(this.activelayout);
     } catch (error) {
@@ -85,6 +88,7 @@ export class KeyboardApp {
           langs,
           colIndex,
           rowIndex,
+          this.activelang,
         );
       });
     });

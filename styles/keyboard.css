@@ -46,20 +46,17 @@
   display: flex;
 }
 
-.keys,
-.virtual-keyboard__container__delete-key,
-.keyboaord-input-container__submit-button,
-.keyboard-input-container__arrow-key,
-.keyboard-input-container__symbol-switcher,
-.keyboard-input-container__submit-button,
-.keyboard-input-container__space-button,
-.keyboard-input-container__english,
-.keyboard-input-container__persian,
-.Persian-alphabet,
-.symbols,
-.numbers,
-.keyboard-input-container__reverse-switcher,
-.keyboard-input-container__delete-key {
+.keyboard__key,
+.keyboard__backspace-key,
+.keyboaord__submit-button,
+.keyboard__shift-key,
+.keyboard__symbol-switcher,
+.keyboard__submit-button,
+.keyboard__spacebar,
+.keyboard__english-layout,
+.keyboard__persian-layout,
+.keyboard__reverse-switcher,
+.keyboard__backspace-key {
   border: var(--BORDER-NONE);
   background: var(--BACKGROUND);
   flex-grow: 1;
@@ -92,16 +89,16 @@
    Using :active because hover doesn't work reliably on touch devices.
    This ensures keys show visual feedback when tapped on phones and tablets.
 */
-.keys:active,
-.virtual-keyboard__container__delete-key:active,
-.keyboard-input-container__symbol-switcher:active,
-.keyboard-input-container__submit-button:active,
-.keyboard-input-container__space-button:active,
-.keyboard-input-container__english:active,
-.keyboard-input-container__persian:active,
+.keyboard__key:active,
+.keyboard__shift-key:active,
+.keyboard__symbol-switcher:active,
+.keyboard__submit-button:active,
+.keyboard__spacebar:active,
+.keyboard__english-layout:active,
+.keyboard__persian-layout:active,
 .Persian-alphabet:active,
-.keyboard-input-container__reverse-switcher:active,
-.keyboard-input-container__delete-key:active,
+.keyboard__reverse-switcher:active,
+.keyboard__backspace-key:active,
 .keyboard-section__repeat-task:active,
 .keyboard-section__remind-me-button:active,
 .keyboard-section__due-date-button:active {
@@ -111,12 +108,6 @@
 /* some properties' value are hardcoded becuase they are not going to change in the future */
 .keyboard-section__time-options {
   display: flex;
-}
-
-.keyboard-input-container__input-container {
-  display: flex;
-  align-items: center;
-  background-color: var(--PRIMARY-COLOR);
 }
 
 .keyboard-section__input-container {
@@ -185,12 +176,12 @@
   z-index: 1;
 }
 
-.keyboard__keys--dragging {
+.keyboard__key--dragging {
   opacity: 0.6;
   transform: scale(0.93);
 }
 
-.keyboard__keys--highlight {
+.keyboard__key--highlight {
   outline: 2px solid #4da3ff;
 }
 
@@ -221,18 +212,15 @@
 
 /* hover feedback for desktop with a mouse */
 @media (hover: hover) {
-  .keys:hover,
-  .virtual-keyboard__container__delete-key:hover,
-  .keyboard-input-container__symbol-switcher:hover,
-  .keyboard-input-container__submit-button:hover,
-  .keyboard-input-container__space-button:hover,
-  .keyboard-input-container__english:hover,
-  .keyboard-input-container__persian:hover,
-  .Persian-alphabet:hover,
-  .symbols,
-  .numbers:hover,
-  .keyboard-input-container__reverse-switcher:hover,
-  .keyboard-input-container__delete-key:hover,
+  .keyboard__key:hover,
+  .keyboard__backspace-key:hover,
+  .keyboard__symbol-switcher:hover,
+  .keyboard__submit-button:hover,
+  .keyboard__spacebar:hover,
+  .keyboard__english-layout:hover,
+  .keyboard__persian-layout:hover,
+  .keyboard__reverse-switcher:hover,
+  .keyboard__shift-key:hover,
   .keyboard-section__repeat-task:hover,
   .keyboard-section__remind-me-button:hover,
   .keyboard-section__due-date-button:hover {

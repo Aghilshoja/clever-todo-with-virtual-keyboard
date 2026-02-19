@@ -1,8 +1,9 @@
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import { uiState } from "../keyboard-controler/keyboard-controler.js";
 export const handledraggeingKey = (e) => {
-  const draggedKey = e.target.closest(".keys");
+  const draggedKey = e.target.closest(".keyboard__key");
   if (!draggedKey) return;
+  draggedKey.classList.add("keyboard__key--dragging");
 
   const rowIndex = Number(draggedKey.dataset.row);
   const draggedKeyIndex = Number(draggedKey.dataset.col);
@@ -12,26 +13,26 @@ export const handledraggeingKey = (e) => {
 
 export const handledragEnter = (e) => {
   e.preventDefault();
-  const key = e.target.closest(".keys");
+  const key = e.target.closest(".keyboard__key");
   if (!key) return;
-  key.classList.add("keyboard__keys--highlight");
+  key.classList.add("keyboard__key--highlight");
 };
 
 export const handledragLeave = (e) => {
-  const key = e.target.closest(".keys");
+  const key = e.target.closest(".keyboard__key");
   if (!key) return;
   if (!key.contains(e.relatedTarget))
-    key.classList.remove("keyboard__keys--highlight");
+    key.classList.remove("keyboard__key--highlight");
 };
 
 export const handledragEnd = (e) => {
-  const key = e.target.closest(".keys");
+  const key = e.target.closest(".keyboard__key");
   if (!key) return;
-  key.classList.remove("keyboard__keys--dragging");
+  key.classList.remove("keyboard__key--dragging");
 
   document
-    .querySelectorAll(".keyboard__keys--highlight")
-    .forEach((k) => k.classList.remove("keyboard__keys--highlight"));
+    .querySelectorAll(".keyboard__key--highlight")
+    .forEach((k) => k.classList.remove("keyboard__key--highlight"));
 
   uiState.indexs.rowIndex = null;
   uiState.indexs.btnIndex = null;
@@ -39,9 +40,9 @@ export const handledragEnd = (e) => {
 };
 
 export const handleKeyDrop = (e) => {
-  const droppedkey = e.target.closest(".keys");
+  const droppedkey = e.target.closest(".keyboard__key");
   if (!droppedkey) return;
-  droppedkey.classList.remove("keyboard__keys--highlight");
+  droppedkey.classList.remove("keyboard__key--highlight");
   const droppedKeyIndex = Number(droppedkey.dataset.col);
   const rowIndex = Number(droppedkey.dataset.row);
   const keyboardLayout = virtualKeyboard.activelayout;

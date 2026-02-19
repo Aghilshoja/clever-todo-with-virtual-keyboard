@@ -6,7 +6,7 @@ import { clearPlaceholder } from "./keyboard-input-behavior.js";
 export const handleSpaceBar = (e) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("Required DOM was not found");
-  if (e.target.classList.contains("keyboard-input-container__space-button")) {
+  if (e.target.classList.contains("keyboard__spacebar")) {
     const input = elements.inputElement;
     const caret = ensureCaret(input);
     caret.before(document.createTextNode(" "));

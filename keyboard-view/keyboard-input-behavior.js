@@ -10,7 +10,7 @@ import {
 } from "./keyboard-input-caret.js";
 
 export const pressBackspace = (e) => {
-  if (e.target.classList.contains("keyboard-input-container__delete-key")) {
+  if (e.target.closest(".keyboard__backspace-key")) {
     uiState.pressStartTime = Date.now();
     uiState.backspaceClient.clientX = e.clientX;
     uiState.backspaceClient.clientY = e.clientY;
@@ -21,45 +21,42 @@ export const pressBackspace = (e) => {
   }
 };
 
-export const releaseBackspace = (e) => {
-  if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    uiState.isBackspacePressed = false;
-    uiState.isBackspcaceHeld = false;
-    clearInterval(uiState.deleteTimer);
-    clearTimeout(uiState.backSpaceTimer);
+export const releaseBackspace = () => {
+  clearInterval(uiState.deleteTimer);
+  clearTimeout(uiState.backSpaceTimer);
 
-    const pressDuration = Date.now() - uiState.pressStartTime;
+  /* Exit early if pointer moved away: 
+   isBackspacePressed is false when pointermove > 10px, so single deletion is skipped. 
+   If still true, the finger hasn't moved, and single deletion can happen. */
+  if (!uiState.isBackspacePressed) return;
 
-    if (!uiState.isCancelled) {
-      if (pressDuration < uiState.holdThreshold) deleteLastCharacterOfInput();
-    }
-  }
+  const pressDuration = Date.now() - uiState.pressStartTime;
+
+  if (pressDuration < uiState.holdThreshold) deleteLastCharacterOfInput();
+  uiState.isBackspacePressed = false;
 };
 
-export const cancelPointer = (e) => {
-  if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    if (uiState.isBackspacePressed) {
-      clearInterval(uiState.deleteTimer);
-      clearTimeout(uiState.backSpaceTimer);
-    }
-  }
+export const cancelPointer = () => {
+  if (!uiState.isBackspacePressed) return;
+  clearInterval(uiState.deleteTimer);
+  clearTimeout(uiState.backSpaceTimer);
+  uiState.isBackspacePressed = false;
 };
 
 export const moveBackspacePointer = (e) => {
-  if (e.target.classList.contains("keyboard-input-container__delete-key")) {
-    const clientX = e.clientX - uiState.backspaceClient.clientX;
-    const clientY = e.clientY - uiState.backspaceClient.clientY;
+  if (!uiState.isBackspacePressed) return;
+  const clientX = e.clientX - uiState.backspaceClient.clientX;
+  const clientY = e.clientY - uiState.backspaceClient.clientY;
 
-    if (Math.hypot(clientX, clientY) > 10) {
-      clearTimeout(uiState.backSpaceTimer);
-      clearInterval(uiState.deleteTimer);
-    }
+  if (Math.hypot(clientX, clientY) > 10) {
+    clearTimeout(uiState.backSpaceTimer);
+    clearInterval(uiState.deleteTimer);
+    uiState.isBackspacePressed = false;
   }
 };
 const startContinuousDelete = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
-  uiState.isBackspcaceHeld = true;
   const interval = 50;
 
   uiState.deleteTimer = setInterval(() => {
