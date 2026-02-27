@@ -200,6 +200,7 @@
 }
 
 .caret {
+  content: "|";
   color: blue;
   animation: blink 1s steps(1) infinite;
 }

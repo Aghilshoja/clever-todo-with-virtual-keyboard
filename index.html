@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/launch-splash-screen.css" />
     <link rel="stylesheet" href="styles/main-page-view.css" />
     <link rel="stylesheet" href="styles/keyboard.css" />
+    <link rel="stylesheet" href="styles/todos.css" />
     <script
       src="https://kit.fontawesome.com/713b912148.js"
       crossorigin="anonymous"
@@ -50,71 +51,95 @@
   TEMPORARY STATE: Nav hidden with .hidden-main-page during logo intro.
   After animation: class changes to .main-page (matches children's BEM naming).
 -->
-      <nav class="hidden-main-page" aria-label="Task categories">
-        <div class="main-page__flex-container">
-          <h2 class="main-page__heading">Tasks</h2>
-          <div class="main-page__options">
-            <button class="main-page__trigger-options">
-              <i class="fa-solid fa-ellipsis-vertical"></i>
-            </button>
+      <section class="hidden-main-page">
+        <div>
+          <div class="main-page__flex-container">
+            <h2 class="main-page__heading">Tasks</h2>
+            <div class="main-page__options">
+              <button class="main-page__trigger-options">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+            </div>
           </div>
+
+          <section class="main-page__default-list">
+            <h3 class="main-page__default-list__title">Default Task Section</h3>
+            <ul class="main-page__default-task-list list" data-id="default">
+              <img
+                src="/photo_2026-02-20_12-00-02.jpg"
+                alt="Your inbox is empty"
+                class="main-page__empty-state-image"
+                width="250"
+              />
+              <p class="main-page__empty-state-description">
+                <strong>Capture now,</strong><strong> Plan later</strong
+                ><br />Inbox is your go-to spot for quick task entry.
+              </p>
+              <p class="main-page__empty-state-description">
+                Clear your mind now, organize when you're ready
+              </p>
+            </ul>
+          </section>
         </div>
-        <ul class="main-page__lists" aria-label="Task categories navigation">
-          <li class="main-page__default-item">
-            <button
-              class="main-page__default-button"
-              aria-label="All your default tasks"
-            >
-              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
-              <span style="font-size: 1rem">&nbsp;Tasks</span>
-            </button>
-          </li>
+        <nav class="main-page__navigation" aria-label="task categories">
+          <ul class="main-page__lists">
+            <li class="main-page__default-item">
+              <button
+                class="main-page__default-button navigation"
+                aria-label="All your default tasks"
+                data-id="default"
+              >
+                <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                <span style="font-size: 1rem">&nbsp;Tasks</span>
+              </button>
+            </li>
 
-          <li class="main-page__my-day-item">
-            <button
-              class="main-page__my-day-button"
-              aria-label="Show My Day tasks - your focused list for today"
-            >
-              <i class="fa-regular fa-sun" aria-hidden="true"></i>
-              <span style="font-size: 1rem">&nbsp;My Day</span>
-            </button>
-          </li>
+            <li class="main-page__my-day-item">
+              <button
+                class="main-page__my-day-button navigation"
+                aria-label="Show My Day tasks - your focused list for today"
+              >
+                <i class="fa-regular fa-sun" aria-hidden="true"></i>
+                <span style="font-size: 1rem">&nbsp;My Day</span>
+              </button>
+            </li>
 
-          <li class="main-page__important-item">
-            <button
-              class="main-page__important-button"
-              aria-label="Your important tasks with highest priority"
-            >
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <span style="font-size: 1rem">&nbsp;Important</span>
-            </button>
-          </li>
+            <li class="main-page__important-item">
+              <button
+                class="main-page__important-button"
+                aria-label="Your important tasks with highest priority"
+              >
+                <i class="fa-regular fa-star" aria-hidden="true"></i>
+                <span style="font-size: 1rem">&nbsp;Important</span>
+              </button>
+            </li>
+            <li class="main-page__planned-item">
+              <button
+                class="main-page__planned-button"
+                aria-label="Tasks you have planned for specific days"
+              >
+                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                <span style="font-size: 1rem">&nbsp;Planned</span>
+              </button>
+            </li>
 
-          <li class="main-page__planned-item">
-            <button
-              class="main-page__planned-button"
-              aria-label="Tasks you have planned for specific days"
-            >
-              <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-              <span style="font-size: 1rem">&nbsp;Planned</span>
-            </button>
-          </li>
-
-          <div class="main-page__new-task">
-            <button class="main-page__add-task">+</button>
-          </div>
-
-          <li class="main-page__new-list">
-            <button
-              class="main-page__new-list-action"
-              aria-label="Add a new custom list"
-            >
-              <i class="fa-solid fa-plus" aria-hidden="true"></i>
-              <span style="font-size: 1rem">&nbsp; New List</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
+            <li class="main-page__new-list">
+              <button
+                class="main-page__new-list-action"
+                aria-label="Add a new custom list"
+              >
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                <span style="font-size: 1rem">&nbsp; New List</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+        <div class="main-page__new-task">
+          <button class="main-page__add-task" aria-label="Start adding a task">
+            +
+          </button>
+        </div>
+      </section>
 
       <article class="keyboard-widget" aria-label="Virtual keyboard widget">
         <section class="keyboard-section">
@@ -129,13 +154,12 @@
               tabindex="0"
               aria-label="enter a task in input field"
               role="textbox"
-              aria-label="enter a task"
+              aria-multiline="true"
               data-placeholder="Enter a task"
             ></div>
             <button
               class="keyboard-section__submit-task"
               aria-label="submit your task through app's submit button"
-              disabled
             >
               <i class="fa-solid fa-arrow-up"></i>
             </button>
@@ -143,7 +167,7 @@
           <div class="keyboard-section__time-options">
             <button
               class="keyboard-section__due-date-button"
-              aria-label="et due date for this task"
+              aria-label="Set due date for this task"
             >
               <i class="fas fa-calendar-alt"></i> Set due date
             </button>
@@ -169,12 +193,14 @@
     <script
       type="module"
       src="close-splash-screen/hide-splash-screen.js"
-      defer
     ></script>
     <script
       type="module"
       src="keyboard-controler/keyboard-controler.js"
-      defer
+    ></script>
+    <script
+      type="module"
+      src="todos-controller.js/todos-controller.js"
     ></script>
   </body>
 </html>

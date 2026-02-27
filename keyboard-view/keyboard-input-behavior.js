@@ -1,8 +1,5 @@
-import { getCachedElements } from "../cached-elements/get-cached-elements.js";
-import {
-  virtualKeyboard,
-  uiState,
-} from "../keyboard-controler/keyboard-controler.js";
+import { getCachedElements } from "../shared-components/get-cached-element.js";
+import { uiState } from "../keyboard-controler/keyboard-controler.js";
 import {
   ensureCaret,
   deleteCharBeforeCaret,

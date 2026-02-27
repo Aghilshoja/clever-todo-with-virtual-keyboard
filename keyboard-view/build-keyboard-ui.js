@@ -1,4 +1,4 @@
-import { getCachedElements } from "../cached-elements/get-cached-elements.js";
+import { getCachedElements } from "../shared-components/get-cached-element.js";
 
 export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
   const button = document.createElement("button");

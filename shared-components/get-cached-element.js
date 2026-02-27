@@ -12,6 +12,7 @@ export const getCachedElements = () => {
     loeaderDot: document.querySelector(".splash-header__loader-dot"),
     inputElement: document.querySelector(".keyboard-section__task-input"),
     submitTask: document.querySelector(".keyboard-section__submit-task"),
+    navigation: document.querySelector(".main-page__navigation"),
   };
   return elements;
 };

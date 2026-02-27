@@ -4,7 +4,6 @@ export const ensureCaret = (input) => {
   if (!caret) {
     caret = document.createElement("span");
     caret.classList.add("caret");
-    caret.textContent = "|";
     input.appendChild(caret);
   }
   return caret;

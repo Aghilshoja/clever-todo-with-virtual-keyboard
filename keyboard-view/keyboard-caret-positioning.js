@@ -1,5 +1,5 @@
 import { ensureCaret } from "./keyboard-input-caret.js";
-import { getCachedElements } from "../cached-elements/get-cached-elements.js";
+import { getCachedElements } from "../shared-components/get-cached-element.js";
 
 export const positionCaret = (e) => {
   const elements = getCachedElements();
