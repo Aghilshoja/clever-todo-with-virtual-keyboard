@@ -13,19 +13,21 @@
 
 .main-page {
   display: flex;
-  height: 100dvh;
+  min-height: 100dvh;
   flex-direction: column;
-  justify-content: space-between;
+}
+
+.main-page__navigation {
+  margin-top: auto;
 }
 
 .main-page__flex-container {
-  display: flex;
-  justify-content: space-between;
   padding: 0.4rem;
   background-color: rgba(128, 128, 128, 0.043);
 }
 
-.main-page__container {
+.main-page__container,
+.main-page__flex-container {
   display: flex;
   justify-content: space-between;
 }

@@ -7,7 +7,7 @@ export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
   const isNumber = /[0-9]/.test(chars) || /[۰-۹]/.test(chars);
 
   if (isSpecial) {
-    button.classList.add(`${isSpecial.class}`);
+    button.className = `${isSpecial.class} hover-affect active-affect keys-layout kb-btn-reset`;
     button.setAttribute("aria-label", isSpecial.label);
     if (isSpecial.icon) {
       const icon = document.createElement("i");
@@ -15,7 +15,8 @@ export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
       button.appendChild(icon);
     } else button.textContent = chars;
   } else {
-    button.classList.add("keyboard__key");
+    button.className =
+      "keyboard__key hover-affect active-affect keys-layout kb-btn-reset";
     button.dataset.lang = activeLang;
     button.dataset.col = colIndex;
     button.dataset.row = rowIndex;
@@ -38,7 +39,7 @@ export const createRows = (rowIndex) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM wasn't found");
   const rowElement = document.createElement("div");
-  rowElement.classList.add(`keyboard__row-${rowIndex}`);
+  rowElement.className = `keyboard__row-${rowIndex} kb-flex`;
   rowElement.dataset.col = rowIndex;
   elements.keyboardContainer.appendChild(rowElement);
 };
