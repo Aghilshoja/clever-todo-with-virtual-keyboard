@@ -11,23 +11,21 @@
   display: none;
 }
 
-.main-page {
-  display: flex;
-  height: 100dvh;
-  flex-direction: column;
-  justify-content: space-between;
+.main-page__navigation {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .main-page__flex-container {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 0.4rem;
-  background-color: rgba(128, 128, 128, 0.043);
-}
-
-.main-page__container {
-  display: flex;
-  justify-content: space-between;
+  background-color: white;
 }
 
 .main-page__lists {
@@ -58,7 +56,7 @@
 }
 
 .main-page__new-task {
-  position: absolute;
+  position: fixed;
   bottom: 80px;
   right: 40px;
   height: 50px;

@@ -21,11 +21,6 @@
   border: 0;
 }
 
-.main-page__default-task-list {
-  overflow: auto;
-  height: calc(100dvh - 101px);
-}
-
 .main-page__default-list {
   text-align: center;
 }
