@@ -23,10 +23,12 @@
 }
 
 .keyboard-widget {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1;
 }
+
 .keyboard-section--active {
   pointer-events: auto;
   opacity: 1;
