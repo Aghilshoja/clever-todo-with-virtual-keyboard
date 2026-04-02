@@ -13,6 +13,9 @@ export const getCachedElements = () => {
     inputElement: document.querySelector(".keyboard-section__task-input"),
     submitTask: document.querySelector(".keyboard-section__submit-task"),
     navigation: document.querySelector(".main-page__navigation"),
+    keyboardDismissOverlay: document.querySelector(
+      ".keyboard-section__dismiss-overlay",
+    ),
   };
   return elements;
 };
