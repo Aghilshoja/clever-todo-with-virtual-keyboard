@@ -55,17 +55,17 @@ const formatExactDate = (timestamp) => {
 const createMoreOptions = (task) => {
   const moreOptions = `
     <li class="task__date"><span>${createdAt(task)} on ${formatExactDate(task.createdAt)}</span></li>
-      <li class="task__edit pd">
+      <li class="task__edit pd cursor hover">
       <button data-id="${task.id}" class="task__edit-action button-reset fs cursor" aria-label="Edit your task"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
       </li>
-      <li class="task__duplication pd">
+      <li class="task__duplication pd cursor hover">
       <button data-id="${task.id}" class="task__duplication-action button-reset fs cursor" aria-label="duplicate your task"><i class="fa-solid fa-copy"></i> Duplicate</button>
       </li>
-      <li class="task__hide-completed-subtask fs pd"><button data-id="${task.id}" class="task__hide-completed-action button-reset fs cursor" aria-label="mark your task as completed"><i class="fa-solid fa-eye-slash"></i> Hide completed subtasks</button>
+      <li class="task__hide-completed-subtask fs pd cursor hover"><button data-id="${task.id}" class="task__hide-completed-action button-reset fs cursor" aria-label="mark your task as completed"><i class="fa-solid fa-eye-slash"></i> Hide completed subtasks</button>
       </li>
-      <li class="task__activity-log pd fs"><button data-id="${task.id}" class="task__activity-log-action button-reset fs cursor" aria-label="see your recent acitvity (deleting, editing , completing them and so on)"><i class="fa-solid fa-clock-rotate-left"></i> Activity log</button>
+      <li class="task__activity-log pd fs cursor hover"><button data-id="${task.id}" class="task__activity-log-action button-reset fs cursor" aria-label="see your recent acitvity (deleting, editing , completing them and so on)"><i class="fa-solid fa-clock-rotate-left"></i> Activity log</button>
       </li>
-      <li class="task__delete fs pd"><button data-id="${task.id}" class="task__delete-action button-reset fs cursor" aria-label="delete your task"><i class="fa-solid fa-trash"></i> Delete task</button>
+      <li class="task__delete fs pd cursor hover"><button data-id="${task.id}" class="task__delete-action button-reset fs cursor" aria-label="delete your task"><i class="fa-solid fa-trash"></i> Delete task</button>
       </li>
   `;
   return moreOptions;
@@ -73,10 +73,11 @@ const createMoreOptions = (task) => {
 
 const createToolbar = (task) => {
   const toolbar = `
-      <ul class="task__toolbar-actions b-radius bg box-shodow pd animate-position">
-            <li class="task__inbox flex-space-between">
-    <button class="task__inbox-btn button-reset cursor fs" aria-label="close inbox"><i class="fa-solid fa-inbox"></i> inbox > </button>
-    <button class="task__more-options button-reset cursor fs" aria-label="click to see more options"><i class="fa-solid fa-ellipsis-vertical"></i>
+    <div class="close-toolbar"></div>
+    <ul class="task__toolbar-actions b-radius bg box-shodow pd animate-position">
+              <li class="task__inbox flex-space-between">
+    <button class="task__inbox-btn button-reset cursor fs hover" aria-label="close inbox"><i class="fa-solid fa-inbox"></i> inbox > </button>
+    <button class="task__more-options button-reset cursor fs hover" aria-label="click to see more options"><i class="fa-solid fa-ellipsis-vertical"></i>
     </button>
       <ul class="task__manu animate-position pd box-shodow b-radius bg">${createMoreOptions(task)}</ul>
     </li>
@@ -93,23 +94,23 @@ const createToolbar = (task) => {
     </li>
     <li class="task__other-actions">
     <ul class="task__other-actions-list flex overflow">
-    <li class="task__toolbar-deadline"><button class="task__deadline button-reset flex pd fs cursor" data-id="${task.id}" aria-label="specify a deadline for your task"><i class="fa-solid fa-calendar-days"></i> Deadline</button>
+    <li class="task__toolbar-deadline cursor hover"><button class="task__deadline button-reset flex pd fs cursor" data-id="${task.id}" aria-label="specify a deadline for your task"><i class="fa-solid fa-calendar-days"></i> Deadline</button>
     </li>
-    <li class="task__toolbar-priority"><button class="task__toolbar-priority-action button-reset flex fs pd cursor" aria-label="specify your task priority" data-id="${task.id}"><i class="fa-solid fa-flag"></i> Priority</button>
+    <li class="task__toolbar-priority cursor hover"><button class="task__toolbar-priority-action button-reset flex fs pd cursor" aria-label="specify your task priority" data-id="${task.id}"><i class="fa-solid fa-flag"></i> Priority</button>
     </li>
-    <li class="task__toolbar-label"><button class="task__toolbar-label-action button-reset flex fs pd cursor" data-id="${task.id}" aria-label="label your task"><i class="fa-solid fa-tag"></i> Label</button>
+    <li class="task__toolbar-label cursor hover"><button class="task__toolbar-label-action button-reset flex fs pd cursor" data-id="${task.id}" aria-label="label your task"><i class="fa-solid fa-tag"></i> Label</button>
     </li>
-    <li class="task__toolbar-reminder"><button class="task__toolbar-reminder-action button-reset flex fs pd cursor" aria-label="Set a reminder on your task" data-id="${task.id}"><i class="fa-solid fa-bell"></i> Reminder</button>
+    <li class="task__toolbar-reminder cursor hover"><button class="task__toolbar-reminder-action button-reset flex fs pd cursor" aria-label="Set a reminder on your task" data-id="${task.id}"><i class="fa-solid fa-bell"></i> Reminder</button>
     </li>
-    <li class="task__toolbar-location"><button class="task__toolbar-location-action button-reset flex fs pd cursor" aria-label="specify your task location" data-id="${task.id}"><i class="fa-solid fa-location-dot"></i> Location</button>
+    <li class="task__toolbar-location cursor hover"><button class="task__toolbar-location-action button-reset flex fs pd cursor" aria-label="specify your task location" data-id="${task.id}"><i class="fa-solid fa-location-dot"></i> Location</button>
     </li>
-    <li class="task__toolbar-description"><button class="task__toolbar-description-action button-reset flex fs pd cursor" aria-label="write your task a description" data-id="${task.id}"><i class="fa-solid fa-align-left"></i> Description</button>
+    <li class="task__toolbar-description cursor hover"><button class="task__toolbar-description-action button-reset flex fs pd cursor" aria-label="write your task a description" data-id="${task.id}"><i class="fa-solid fa-align-left"></i> Description</button>
     </li>
-    <li class="task__toolbar-move-to"><button class="task__toolbar-move-to-action button-reset flex fs pd cursor" aria-label="move your task to the other categories" data-id="${task.id}"><i class="fa-solid fa-arrows-up-down-left-right"></i> Move to</button>
+    <li class="task__toolbar-move-to cursor hover"><button class="task__toolbar-move-to-action button-reset flex fs pd cursor" aria-label="move your task to the other categories" data-id="${task.id}"><i class="fa-solid fa-arrows-up-down-left-right"></i> Move to</button>
     </li>
     </ul>
     </li>
-    <li class="task__toolbar-subtask pd"><button class="task__toolbar-subtask-action button-reset fs cursor" aria-label="add a subtask" data-id="${task.id}">+  add sub-task</button>
+    <li class="task__toolbar-subtask pd cursor hover"><button class="task__toolbar-subtask-action button-reset fs cursor" aria-label="add a subtask" data-id="${task.id}">+  add sub-task</button>
     </li>
     <li class="task__toolbar-comment flex-space-between bg-grey radius pd">
     <div class="task__toolbar-comment-action" data-id="${task.id}"  tabindex="0"

@@ -165,7 +165,27 @@ ul {
     transform 1s ease-in-out;
 }
 
+.toolbar-action--active,
+.manu--active {
+  pointer-events: auto;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.hover:hover {
+  background-color: rgba(128, 128, 128, 0.11);
+}
+
 .highlight-list {
   background-color: rgba(255, 0, 0, 0.433);
   border-radius: 6px;
+}
+
+.close-toolbar--active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0);
 }

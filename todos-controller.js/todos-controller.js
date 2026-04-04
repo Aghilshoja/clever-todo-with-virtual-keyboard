@@ -3,6 +3,11 @@ import { renderTasks, activeUlId } from "../shared-components/render-tasks.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { addTask } from "../shared-components/add-task.js";
 import { highlighActiveList } from "../shared-components/highlight-active-list.js";
+import {
+  revealToolbar,
+  revealManu,
+} from "../shared-components/reveal-toolbar.js";
+import { closeToolbar } from "../shared-components/closeToolbarOnPageClick.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -22,6 +27,13 @@ const initTodo = () => {
 
   // Highlight default on load
   highlighActiveList();
+
+  const listContainer = document.querySelector(`
+    .list[data-id="${activeUlId.ul}"]`);
+
+  listContainer.addEventListener("click", revealManu);
+  listContainer.addEventListener("click", revealToolbar);
+  listContainer.addEventListener("click", closeToolbar);
 
   // Navigation Click
   elements.navigation.addEventListener("click", (e) => {
