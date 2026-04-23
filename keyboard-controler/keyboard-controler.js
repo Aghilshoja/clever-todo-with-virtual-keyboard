@@ -98,15 +98,7 @@ const initApp = () => {
     }
   });
 
-  document.body.addEventListener("click", (e) => {
-    if (
-      e.target.closest(".main-page") &&
-      !e.target.closest(".keyboard-section--active") &&
-      !e.target.closest(".main-page__add-task") &&
-      !e.target.closest(".main-page__new-task")
-    )
-      closeKeyboard();
-  });
+  elements.keyboardDismissOverlay.addEventListener("click", toggleKeyboard);
 
   elements.keyboardContainer.addEventListener("dragstart", handledraggeingKey);
 

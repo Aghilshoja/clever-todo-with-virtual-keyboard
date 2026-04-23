@@ -12,6 +12,7 @@ export const renderKeyPreviewPopup = (keyElement) => {
     clearTimeout(uiState.previewFeedbackTimer);
     uiState.previewFeedbackTimer = null;
   }
+  const keysOffsetWidth = keyElement.offsetWidth;
   const rect = keyElement.getBoundingClientRect();
   elements.previewFeedback.textContent = keyElement.textContent;
   elements.previewFeedback.style.bottom = `${rect.bottom}px`;
@@ -19,6 +20,7 @@ export const renderKeyPreviewPopup = (keyElement) => {
   elements.previewFeedback.style.right = `${rect.right}px`;
   elements.previewFeedback.style.left = `${rect.left - 7}px`;
   elements.previewFeedback.style.opacity = "1";
+  elements.previewFeedback.style.width = `${keysOffsetWidth}px`;
 };
 
 export const hideKeyPreview = () => {

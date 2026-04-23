@@ -23,6 +23,14 @@
   z-index: 1;
 }
 
+.close-keyboard {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 1;
+}
+
 .keyboard-section--active {
   pointer-events: auto;
   opacity: 1;
@@ -92,6 +100,18 @@
   background-color: rgb(255, 255, 255);
   align-items: center;
   padding: 0.4rem;
+}
+
+.keyboard-section__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .keyboard-section__task-input {
@@ -186,7 +206,6 @@
     opacity: 0;
   }
 }
-
 /* hover feedback for desktop with a mouse */
 @media (hover: hover) {
   .hover-affect:hover,
