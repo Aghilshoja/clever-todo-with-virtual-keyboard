@@ -16,6 +16,7 @@ export const getCachedElements = () => {
     keyboardDismissOverlay: document.querySelector(
       ".keyboard-section__dismiss-overlay",
     ),
+    mainPageFlexContainer: document.querySelector(".main-page__flex-container"),
   };
   return elements;
 };

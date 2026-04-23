@@ -8,7 +8,7 @@ import {
   revealManu,
 } from "../shared-components/reveal-toolbar.js";
 import { closeToolbar } from "../shared-components/closeToolbarOnPageClick.js";
-
+import { uupdatePaddingOfListDynamicallyBasedOnBottomNavbar } from "../shared-components/apply-padding-to-lists-based-on-nvas-offsetHeight.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -48,6 +48,17 @@ const initTodo = () => {
   });
 
   elements.submitTask.addEventListener("click", addTask);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);
+  });
+
+  // Update padding whenever the navbar resizes
+  const resizeObserver = new ResizeObserver((entries) => {
+    uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);
+  });
+
+  resizeObserver.observe(elements.navigation);
 };
 
 initTodo();
