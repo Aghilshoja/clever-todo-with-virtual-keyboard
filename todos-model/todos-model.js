@@ -9,8 +9,8 @@ export class TaskList {
     this.listeners.push(listeners);
   }
 
-  emitChange() {
-    this.listeners.forEach((listener) => listener(this));
+  emitChange(eachTask) {
+    this.listeners.forEach((listener) => listener(this, eachTask));
   }
 
   getTasks() {
@@ -35,6 +35,6 @@ export class TaskList {
       isCompleted: false,
     };
     this.getTasks().push(newTask);
-    this.emitChange();
+    this.emitChange(newTask);
   }
 }

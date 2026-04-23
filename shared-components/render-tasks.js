@@ -127,30 +127,40 @@ const createToolbar = (task) => {
 
 // we have 4 space between
 
-export const renderTasks = (task) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM wasn't found");
-  if (task.length === 0) return;
+const handleEmptyState = (task) => {
   const listContainer = document.querySelector(`
     .list[data-id="${activeUlId.ul}"]`);
+  // since we're checking the length of the task after a task is added we check if the lenght is 1 and and when deletion happens the second condition runs and revert the state to the empty one
+  const isThereTask = task.length === 1;
+  if (isThereTask) {
+    listContainer.textContent = "";
+  } else if (task.length === 0) {
+    listContainer.textContent = "";
+  }
+  return listContainer;
+};
+
+export const renderTasks = (task, eachTask) => {
+  const elements = getCachedElements();
+  if (!elements) throw new Error("required DOM wasn't found");
+
+  const listContainer = handleEmptyState(task);
   if (!listContainer) return;
-  listContainer.textContent = "";
-  task.forEach((task) => {
-    const list = `
-    <li class="task" data-id="${task.id}">
+
+  const list = `
+    <li class="task" data-id="${eachTask.id}">
     <ul class="task__container">
     <li class="task__item flex-space-between">
     <div class="group-input-and-text flex">
-    <input type="checkbox" data-id="${task.id}" class="task__main-task-checkbox check-layout">
-    <span class="task__text">${task.text}</span>
+    <input type="checkbox" data-id="${eachTask.id}" class="task__main-task-checkbox check-layout">
+    <span class="task__text">${eachTask.text}</span>
     </div>
     <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
     </li>
-    <li class="task__toolbar bg">${createToolbar(task)}
+    <li class="task__toolbar bg">${createToolbar(eachTask)}
     </li>
     </ul>
     </li>
     `;
-    listContainer.insertAdjacentHTML("afterbegin", list);
-  });
+  listContainer.insertAdjacentHTML("afterbegin", list);
 };

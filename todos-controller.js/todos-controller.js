@@ -8,10 +8,10 @@ export const lists = {
   default: new TaskList("default"),
 };
 
-const handleListChange = (listChange) => {
+const handleListChange = (listChange, eachTask) => {
   if (listChange.id !== activeUlId.ul) return;
 
-  renderTasks(listChange.getTasks());
+  renderTasks(listChange.getTasks(), eachTask);
 };
 
 lists.default.subscribe(handleListChange);
@@ -32,7 +32,7 @@ const initTodo = () => {
 
     if (!lists[activeUlId.ul]) return;
 
-    renderTasks(lists.default.getTasks());
+    renderTasks();
   });
 
   elements.submitTask.addEventListener("click", addTask);
