@@ -23,11 +23,6 @@
   z-index: 1;
 }
 
-.keyboard-widget {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
 .keyboard-section--active {
   pointer-events: auto;
   opacity: 1;
@@ -39,27 +34,16 @@
   z-index: 1;
 }
 
-.keyboard__row-0,
-.keyboard__row-1,
-.keyboard__row-2,
-.keyboard__row-3,
-.keyboard__row-4 {
+.kb-flex {
   display: flex;
 }
 
-.keyboard__key,
-.keyboard__backspace-key,
-.keyboaord__submit-button,
-.keyboard__shift-key,
-.keyboard__symbol-switcher,
-.keyboard__submit-button,
-.keyboard__spacebar,
-.keyboard__english-layout,
-.keyboard__persian-layout,
-.keyboard__reverse-switcher,
-.keyboard__backspace-key {
+.kb-btn-reset {
   border: var(--BORDER-NONE);
   background: var(--BACKGROUND);
+}
+
+.keys-layout {
   flex-grow: 1;
   background-color: var(--PRIMARY-COLOR);
   height: 39px;
@@ -90,16 +74,7 @@
    Using :active because hover doesn't work reliably on touch devices.
    This ensures keys show visual feedback when tapped on phones and tablets.
 */
-.keyboard__key:active,
-.keyboard__shift-key:active,
-.keyboard__symbol-switcher:active,
-.keyboard__submit-button:active,
-.keyboard__spacebar:active,
-.keyboard__english-layout:active,
-.keyboard__persian-layout:active,
-.Persian-alphabet:active,
-.keyboard__reverse-switcher:active,
-.keyboard__backspace-key:active,
+.active-affect:active,
 .keyboard-section__repeat-task:active,
 .keyboard-section__remind-me-button:active,
 .keyboard-section__due-date-button:active {
@@ -214,15 +189,7 @@
 
 /* hover feedback for desktop with a mouse */
 @media (hover: hover) {
-  .keyboard__key:hover,
-  .keyboard__backspace-key:hover,
-  .keyboard__symbol-switcher:hover,
-  .keyboard__submit-button:hover,
-  .keyboard__spacebar:hover,
-  .keyboard__english-layout:hover,
-  .keyboard__persian-layout:hover,
-  .keyboard__reverse-switcher:hover,
-  .keyboard__shift-key:hover,
+  .hover-affect:hover,
   .keyboard-section__repeat-task:hover,
   .keyboard-section__remind-me-button:hover,
   .keyboard-section__due-date-button:hover {

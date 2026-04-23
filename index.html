@@ -52,35 +52,33 @@
   After animation: class changes to .main-page (matches children's BEM naming).
 -->
       <section class="hidden-main-page">
-        <div>
-          <div class="main-page__flex-container">
-            <h2 class="main-page__heading">Tasks</h2>
-            <div class="main-page__options">
-              <button class="main-page__trigger-options">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </button>
-            </div>
+        <div class="main-page__flex-container">
+          <h2 class="main-page__heading">Tasks</h2>
+          <div class="main-page__options">
+            <button class="main-page__trigger-options">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
           </div>
-
-          <section class="main-page__default-list">
-            <h3 class="main-page__default-list__title">Default Task Section</h3>
-            <ul class="main-page__default-task-list list" data-id="default">
-              <img
-                src="photo_2026-02-20_12-00-02.jpg"
-                alt="Your inbox is empty"
-                class="main-page__empty-state-image"
-                width="250"
-              />
-              <p class="main-page__empty-state-description">
-                <strong>Capture now,</strong><strong> Plan later</strong
-                ><br />Inbox is your go-to spot for quick task entry.
-              </p>
-              <p class="main-page__empty-state-description">
-                Clear your mind now, organize when you're ready
-              </p>
-            </ul>
-          </section>
         </div>
+
+        <section class="main-page__default-list">
+          <h3 class="main-page__default-list__title">Default Task Section</h3>
+          <ul class="main-page__default-task-list list" data-id="default">
+            <img
+              src="photo_2026-02-20_12-00-02.jpg"
+              alt="Your inbox is empty"
+              class="main-page__empty-state-image"
+              width="250"
+            />
+            <p class="main-page__empty-state-description">
+              <strong>Capture now,</strong><strong> Plan later</strong
+              ><br />Inbox is your go-to spot for quick task entry.
+            </p>
+            <p class="main-page__empty-state-description">
+              Clear your mind now, organize when you're ready
+            </p>
+          </ul>
+        </section>
         <nav class="main-page__navigation" aria-label="task categories">
           <ul class="main-page__lists">
             <li class="main-page__default-item">
@@ -160,6 +158,7 @@
             <button
               class="keyboard-section__submit-task"
               aria-label="submit your task through app's submit button"
+              disabled
             >
               <i class="fa-solid fa-arrow-up"></i>
             </button>
