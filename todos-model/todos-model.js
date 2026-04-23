@@ -17,9 +17,19 @@ export class TaskList {
     return this.tasks;
   }
 
+  generateId() {
+    // Try crypto.randomUUID first
+    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    // Fallback for older mobile browsers
+    return Date.now() + "-" + Math.random().toString(36).substring(2, 9);
+  }
+
   addTask(text) {
     const newTask = {
-      id: crypto.randomUUID(),
+      id: this.generateId(),
       text: text,
       createdAt: Date.now(),
       isCompleted: false,
