@@ -58,7 +58,7 @@ const createMoreOptions = (task) => {
       <li class="task__edit pd cursor hover">
       <button data-id="${task.id}" class="task__edit-action button-reset fs cursor" aria-label="Edit your task"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
       </li>
-      <li class="task__duplication pd cursor hover">
+      <li class="task__duplication pd cursor hover" data-id="${task.id}">
       <button data-id="${task.id}" class="task__duplication-action button-reset fs cursor" aria-label="duplicate your task"><i class="fa-solid fa-copy"></i> Duplicate</button>
       </li>
       <li class="task__hide-completed-subtask fs pd cursor hover"><button data-id="${task.id}" class="task__hide-completed-action button-reset fs cursor" aria-label="mark your task as completed"><i class="fa-solid fa-eye-slash"></i> Hide completed subtasks</button>

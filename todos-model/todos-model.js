@@ -21,6 +21,17 @@ export class TaskList {
     this.tasks = this.tasks.filter((t) => t.id !== taskId);
   }
 
+  duplicateTask(taskId) {
+    const foundTask = this.getTasks().find((t) => t.id === taskId);
+    if (!foundTask) throw new Error("task object was not found");
+    const indexOfFoundTask = this.getTasks().indexOf(foundTask);
+    if (indexOfFoundTask === -1) return;
+    const duplicatedTask = { ...foundTask };
+    duplicatedTask.id = this.generateId();
+    this.getTasks().splice(indexOfFoundTask + 1, 0, duplicatedTask);
+    return duplicatedTask;
+  }
+
   generateId() {
     // Try crypto.randomUUID first
     if (typeof crypto !== "undefined" && crypto.randomUUID) {

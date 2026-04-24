@@ -10,6 +10,7 @@ import {
 import { closeToolbar } from "../shared-components/closeToolbarOnPageClick.js";
 import { uupdatePaddingOfListDynamicallyBasedOnBottomNavbar } from "../shared-components/apply-padding-to-lists-based-on-nvas-offsetHeight.js";
 import { warnDeletion, deleteTask } from "../shared-components/delete-mode.js";
+import { duplicateTask } from "../shared-components/duplicate-mode.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -40,6 +41,7 @@ const initTodo = () => {
   listContainer.addEventListener("click", revealToolbar);
   listContainer.addEventListener("click", closeToolbar);
   listContainer.addEventListener("click", warnDeletion);
+  listContainer.addEventListener("click", duplicateTask);
   elements.warningPopup.addEventListener("click", deleteTask);
 
   // Navigation Click
