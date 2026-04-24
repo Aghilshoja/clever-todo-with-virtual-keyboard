@@ -65,7 +65,7 @@ const createMoreOptions = (task) => {
       </li>
       <li class="task__activity-log pd fs cursor hover"><button data-id="${task.id}" class="task__activity-log-action button-reset fs cursor" aria-label="see your recent acitvity (deleting, editing , completing them and so on)"><i class="fa-solid fa-clock-rotate-left"></i> Activity log</button>
       </li>
-      <li class="task__delete fs pd cursor hover"><button data-id="${task.id}" class="task__delete-action button-reset fs cursor" aria-label="delete your task"><i class="fa-solid fa-trash"></i> Delete task</button>
+      <li class="task__delete fs pd cursor hover" data-id="${task.id}"><button data-id="${task.id}" class="task__delete-action button-reset fs cursor" aria-label="delete your task"><i class="fa-solid fa-trash"></i> Delete task</button>
       </li>
   `;
   return moreOptions;
@@ -84,7 +84,7 @@ const createToolbar = (task) => {
       <li class="task__toolbar-list-item  flex-space-between pd">
           <div class="group-input-and-text flex">
     <input type="checkbox" data-id="${task.id}" class="task__toolbar-task-checkbox check-layout">
-    <span class="task__toolbar-task-text">${task.text}</span>
+    <span class="task__toolbar-task-text word-wrap">${task.text}</span>
     </div>
       <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
       
@@ -126,16 +126,12 @@ const createToolbar = (task) => {
   return toolbar;
 };
 
-// we have 4 space between
-
-const handleEmptyState = (task) => {
+const clearListContainer = (task) => {
   const listContainer = document.querySelector(`
     .list[data-id="${activeUlId.ul}"]`);
-  // since we're checking the length of the task after a task is added we check if the lenght is 1 and and when deletion happens the second condition runs and revert the state to the empty one
+  // since we're checking the length of the task after a task is added we check if the lenght is 1
   const isThereTask = task.length === 1;
   if (isThereTask) {
-    listContainer.textContent = "";
-  } else if (task.length === 0) {
     listContainer.textContent = "";
   }
   return listContainer;
@@ -145,8 +141,9 @@ export const renderTasks = (task, eachTask) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM wasn't found");
 
-  const listContainer = handleEmptyState(task);
+  const listContainer = clearListContainer(task);
   if (!listContainer) return;
+  if (task.length === 0 || eachTask === undefined) return;
 
   const list = `
     <li class="task" data-id="${eachTask.id}">
@@ -154,7 +151,7 @@ export const renderTasks = (task, eachTask) => {
     <li class="task__item flex-space-between">
     <div class="group-input-and-text flex">
     <input type="checkbox" data-id="${eachTask.id}" class="task__main-task-checkbox check-layout">
-    <span class="task__text">${eachTask.text}</span>
+    <span class="task__text word-wrap">${eachTask.text}</span>
     </div>
     <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
     </li>

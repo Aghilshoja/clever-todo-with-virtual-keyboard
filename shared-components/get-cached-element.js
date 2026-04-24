@@ -17,6 +17,7 @@ export const getCachedElements = () => {
       ".keyboard-section__dismiss-overlay",
     ),
     mainPageFlexContainer: document.querySelector(".main-page__flex-container"),
+    warningPopup: document.querySelector(".warning"),
   };
   return elements;
 };

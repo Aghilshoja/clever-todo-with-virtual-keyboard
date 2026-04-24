@@ -17,6 +17,10 @@ export class TaskList {
     return this.tasks;
   }
 
+  deleteTask(taskId) {
+    this.tasks = this.tasks.filter((t) => t.id !== taskId);
+  }
+
   generateId() {
     // Try crypto.randomUUID first
     if (typeof crypto !== "undefined" && crypto.randomUUID) {

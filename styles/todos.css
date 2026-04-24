@@ -130,6 +130,12 @@ ul {
   border-radius: 20px;
 }
 
+.word-wrap {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
 .box-shodow {
   box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.259);
 }
@@ -188,4 +194,46 @@ ul {
   width: 100%;
   background-color: rgba(128, 128, 128, 0);
   z-index: 1;
+}
+
+.warning {
+  display: none;
+}
+
+/* delete warning popup */
+.warning--active {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  backdrop-filter: blur(1px);
+}
+
+.warning__confirm-deletion {
+  color: red;
+}
+
+.warning__message {
+  background-color: var(--PRIMARY-COLOR);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 1px 1px 15px black;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 90%; /* Never wider than 90% of viewport */
+  width: fit-content; /* Shrink to content, but respect max-width */
+  margin: 0 auto;
+}
+
+.warning__confirmation {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }

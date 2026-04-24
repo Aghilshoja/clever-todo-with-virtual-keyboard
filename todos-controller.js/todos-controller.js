@@ -9,8 +9,13 @@ import {
 } from "../shared-components/reveal-toolbar.js";
 import { closeToolbar } from "../shared-components/closeToolbarOnPageClick.js";
 import { uupdatePaddingOfListDynamicallyBasedOnBottomNavbar } from "../shared-components/apply-padding-to-lists-based-on-nvas-offsetHeight.js";
+import { warnDeletion, deleteTask } from "../shared-components/delete-mode.js";
 export const lists = {
   default: new TaskList("default"),
+};
+
+export const appStateUi = {
+  taskId: null,
 };
 
 const handleListChange = (listChange, eachTask) => {
@@ -34,6 +39,8 @@ const initTodo = () => {
   listContainer.addEventListener("click", revealManu);
   listContainer.addEventListener("click", revealToolbar);
   listContainer.addEventListener("click", closeToolbar);
+  listContainer.addEventListener("click", warnDeletion);
+  elements.warningPopup.addEventListener("click", deleteTask);
 
   // Navigation Click
   elements.navigation.addEventListener("click", (e) => {
