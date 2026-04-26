@@ -18,6 +18,10 @@ export const getCachedElements = () => {
     ),
     mainPageFlexContainer: document.querySelector(".main-page__flex-container"),
     warningPopup: document.querySelector(".warning"),
+    unrelatedKeyboardOptions: document.querySelectorAll(
+      ".keyboard-section__circle, .keyboard-section__repeat-task, .keyboard-section__submit-task, .keyboard-section__due-date-button, .keyboard-section__remind-me-button",
+    ),
+    circleEl: document.querySelector(".keyboard-section__circle"),
   };
   return elements;
 };

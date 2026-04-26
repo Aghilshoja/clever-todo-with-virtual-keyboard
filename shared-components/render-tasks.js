@@ -55,7 +55,7 @@ const formatExactDate = (timestamp) => {
 const createMoreOptions = (task) => {
   const moreOptions = `
     <li class="task__date"><span>${createdAt(task)} on ${formatExactDate(task.createdAt)}</span></li>
-      <li class="task__edit pd cursor hover">
+      <li class="task__edit pd cursor hover" data-id="${task.id}">
       <button data-id="${task.id}" class="task__edit-action button-reset fs cursor" aria-label="Edit your task"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
       </li>
       <li class="task__duplication pd cursor hover" data-id="${task.id}">
@@ -75,19 +75,35 @@ const createToolbar = (task) => {
   const toolbar = `
     <div class="close-toolbar"></div>
     <ul class="task__toolbar-actions b-radius bg box-shodow pd animate-position">
+    <li class="task__edit-page">
+      <button
+    class="task__cancel-editing button-reset fs pd"
+    aria-label="cancel editing"
+  >
+    < Edit task
+  </button>
+  <button
+    class="task__save-edited-task pd fs button-reset"
+    aria-label="save edited task"
+    disabled
+  >
+    Save
+  </button>
+    </li>
               <li class="task__inbox flex-space-between">
     <button class="task__inbox-btn button-reset cursor fs hover" aria-label="close inbox"><i class="fa-solid fa-inbox"></i> inbox > </button>
     <button class="task__more-options button-reset cursor fs hover" aria-label="click to see more options"><i class="fa-solid fa-ellipsis-vertical"></i>
     </button>
       <ul class="task__manu animate-position pd box-shodow b-radius bg">${createMoreOptions(task)}</ul>
     </li>
-      <li class="task__toolbar-list-item  flex-space-between pd">
-          <div class="group-input-and-text flex">
+      <li class="task__toolbar-list-item flex pd">
+          
     <input type="checkbox" data-id="${task.id}" class="task__toolbar-task-checkbox check-layout">
-    <span class="task__toolbar-task-text word-wrap">${task.text}</span>
-    </div>
-      <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
-      
+    <p class="task__toolbar-task-text word-wrap">${task.text}</p>
+      <button class="task__toolbar-important button-reset cursor"><i class="fa-regular fa-star"></i></button>
+    </li>
+    <li class="task__toolbar--description">
+      <p class="task__toolbar-description-text word-wrap color">${task.description ? task.description : ""}</p>
     </li>
     <li class="task__date pd">
     <input type="date">
@@ -104,7 +120,7 @@ const createToolbar = (task) => {
     </li>
     <li class="task__toolbar-location cursor hover"><button class="task__toolbar-location-action button-reset flex fs pd cursor" aria-label="specify your task location" data-id="${task.id}"><i class="fa-solid fa-location-dot"></i> Location</button>
     </li>
-    <li class="task__toolbar-description cursor hover"><button class="task__toolbar-description-action button-reset flex fs pd cursor" aria-label="write your task a description" data-id="${task.id}"><i class="fa-solid fa-align-left"></i> Description</button>
+    <li class="task__toolbar-description cursor hover" data-id="${task.id}"><button class="task__toolbar-description-action button-reset flex fs pd cursor" aria-label="write your task a description" data-id="${task.id}"><i class="fa-solid fa-align-left"></i> Description</button>
     </li>
     <li class="task__toolbar-move-to cursor hover"><button class="task__toolbar-move-to-action button-reset flex fs pd cursor" aria-label="move your task to the other categories" data-id="${task.id}"><i class="fa-solid fa-arrows-up-down-left-right"></i> Move to</button>
     </li>
@@ -151,7 +167,10 @@ export const renderTasks = (task, eachTask) => {
     <li class="task__item flex-space-between">
     <div class="group-input-and-text flex">
     <input type="checkbox" data-id="${eachTask.id}" class="task__main-task-checkbox check-layout">
-    <span class="task__text word-wrap">${eachTask.text}</span>
+    <div class="task__wrap-task-and-description">
+    <p class="task__text word-wrap">${eachTask.text}</p>
+    <p class="task__description color word-wrap">${task.description ? task.description : ""}</p>
+    </div>
     </div>
     <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
     </li>

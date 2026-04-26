@@ -126,6 +126,16 @@ ul {
   background-color: rgba(128, 128, 128, 0.129);
 }
 
+.color {
+  color: rgba(128, 128, 128, 0.693);
+}
+
+.word-wrap {
+  word-break: break-word; /* Better than break-all for mixed content */
+  overflow-wrap: break-word; /* Standard, widely supported */
+  white-space: normal;
+}
+
 .radius {
   border-radius: 20px;
 }
@@ -137,7 +147,7 @@ ul {
 }
 
 .box-shodow {
-  box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.259);
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.259);
 }
 
 .b-radius {
@@ -200,7 +210,6 @@ ul {
   display: none;
 }
 
-/* delete warning popup */
 .warning--active {
   display: flex;
   flex-direction: column;
@@ -236,4 +245,30 @@ ul {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.task__edit-page,
+.hide-unrelated-els,
+.hide-task-description,
+.hide-task-text {
+  display: none;
+}
+
+.task__edit-page--active {
+  display: flex;
+  justify-content: space-between;
+}
+
+.toolbar--active {
+  height: 100dvh;
+}
+
+.task__wrap-task-and-description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.task__save-edited-task:disabled {
+  cursor: not-allowed;
 }

@@ -6,7 +6,12 @@ export const positionCaret = (e) => {
   if (!elements) throw new Error("required DOM was not found");
 
   const input = elements.inputElement;
-  if (input.dataset.hasPlaceholder === "true") return;
+  const isTherePlaceholder =
+    input.textContent === "Description" ||
+    input.textContent === "Edit your task" ||
+    input.textContent === "Enter a task";
+
+  if (isTherePlaceholder) return;
   const caret = ensureCaret(input);
 
   const pos = document.caretPositionFromPoint(e.clientX, e.clientY);

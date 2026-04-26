@@ -1,11 +1,9 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { uiState } from "../keyboard-controler/keyboard-controler.js";
-import {
-  ensureCaret,
-  deleteCharBeforeCaret,
-  hasUserText,
-} from "./keyboard-input-caret.js";
+import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
+import { appStateUi } from "../todos-controller.js/todos-controller.js";
 
+import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 export const pressBackspace = (e) => {
   if (e.target.closest(".keyboard__backspace-key")) {
     uiState.pressStartTime = Date.now();
@@ -72,19 +70,38 @@ const startContinuousDelete = () => {
 };
 
 export const ensurePlaceholder = (input) => {
-  if (!hasUserText(input)) {
-    input.dataset.hasPlaceholder = "true";
+  if (
+    appStateUi.activePlaceholder === "Description" &&
+    input.textContent === ""
+  ) {
+    input.classList.add("keyboard-section__task-input--caret");
+    input.textContent = input.dataset.description;
+  }
+
+  if (
+    appStateUi.activePlaceholder === "Edit-your-task" &&
+    input.textContent === ""
+  ) {
+    input.classList.add("keyboard-section__task-input--caret");
+    input.textContent = input.dataset.editPlaceholder;
+  }
+
+  if (
+    appStateUi.activePlaceholder === "Enter-a-task" &&
+    input.textContent === ""
+  ) {
     input.classList.add("keyboard-section__task-input--caret");
     input.textContent = input.dataset.placeholder;
   }
 };
 
 export const clearPlaceholder = (input) => {
-  if (input.dataset.hasPlaceholder === "true") {
-    input.textContent = "";
-    input.classList.add("keyboard-section__task-input--caret");
-    delete input.dataset.hasPlaceholder;
-  }
+  const isTherePlaceholder =
+    input.textContent === "Description" ||
+    input.textContent === "Edit your task" ||
+    input.textContent === "Enter a task";
+
+  if (isTherePlaceholder) input.textContent = "";
 };
 
 export const disableSubmitIfInputEmpty = () => {
@@ -103,17 +120,19 @@ const deleteLastCharacterOfInput = () => {
   deleteCharBeforeCaret(input);
   ensurePlaceholder(input);
   disableSubmitIfInputEmpty();
+  disableOrEnableSaveBtn();
 };
 
 export const typeIntoInput = (event) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
-  clearPlaceholder(elements.inputElement);
   const input = elements.inputElement;
+  clearPlaceholder(input);
   input.classList.remove("keyboard-section__task-input--caret");
   const caret = ensureCaret(input);
 
   caret.insertAdjacentText("beforebegin", event.target.textContent);
 
   disableSubmitIfInputEmpty();
+  disableOrEnableSaveBtn();
 };

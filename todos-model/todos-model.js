@@ -41,6 +41,11 @@ export class TaskList {
     // Fallback for older mobile browsers
     return Date.now() + "-" + Math.random().toString(36).substring(2, 9);
   }
+  editTaskOrDescription(taskId) {
+    const taskTodEdit = this.getTasks().find((t) => t.id === taskId);
+    if (!taskTodEdit) throw new Error("task object was not found");
+    return taskTodEdit;
+  }
 
   addTask(text) {
     const newTask = {
@@ -48,6 +53,7 @@ export class TaskList {
       text: text,
       createdAt: Date.now(),
       isCompleted: false,
+      description: null,
     };
     this.getTasks().push(newTask);
     this.emitChange(newTask);

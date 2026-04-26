@@ -20,9 +20,3 @@ export const deleteCharBeforeCaret = (input) => {
 
   if (node.textContent === "") node.remove();
 };
-
-export const hasUserText = (input) => {
-  return Array.from(input.childNodes).some(
-    (node) => node.nodeType === Node.TEXT_NODE && node.textContent !== "",
-  );
-};
