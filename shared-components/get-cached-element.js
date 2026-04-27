@@ -23,6 +23,9 @@ export const getCachedElements = () => {
     ),
     circleEl: document.querySelector(".keyboard-section__circle"),
     taskCounter: document.querySelector(".main-page__task-counter"),
+    inputCharacterLimit: document.querySelector(
+      ".keyboard-section__input-character-limit",
+    ),
   };
   return elements;
 };

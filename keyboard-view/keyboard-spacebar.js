@@ -3,6 +3,7 @@ import { ensureCaret } from "./keyboard-input-caret.js";
 import { disableSubmitIfInputEmpty } from "./keyboard-input-behavior.js";
 import { clearPlaceholder } from "./keyboard-input-behavior.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
+import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 
 export const handleSpaceBar = (e) => {
   const elements = getCachedElements();
@@ -20,5 +21,6 @@ export const handleSpaceBar = (e) => {
     input.classList.remove("keyboard-section__task-input--caret");
     disableSubmitIfInputEmpty();
     disableOrEnableSaveBtn();
+    handleTaskCharacterLimit();
   }
 };

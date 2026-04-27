@@ -13,10 +13,17 @@ export const deleteCharBeforeCaret = (input) => {
   const caret = input.querySelector(".caret");
   if (!caret) return;
 
-  let node = caret.previousSibling;
-  if (!node || node.nodeType !== Node.TEXT_NODE) return;
+  let previousNode = caret.previousSibling;
 
-  node.textContent = node.textContent.slice(0, -1);
+  // Check if the previous node is a TEXT_NODE
+  if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
+    previousNode.textContent = previousNode.textContent.slice(0, -1);
 
-  if (node.textContent === "") node.remove();
+    if (previousNode.textContent === "") {
+      previousNode.remove();
+    }
+  }
+  // NEW: Check if the previous node is an ELEMENT_NODE then remove it
+  else if (previousNode && previousNode.nodeType === Node.ELEMENT_NODE)
+    previousNode.remove();
 };

@@ -2,7 +2,7 @@ import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { uiState } from "../keyboard-controler/keyboard-controler.js";
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
 import { appStateUi } from "../todos-controller.js/todos-controller.js";
-
+import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 export const pressBackspace = (e) => {
   if (e.target.closest(".keyboard__backspace-key")) {
@@ -121,6 +121,7 @@ const deleteLastCharacterOfInput = () => {
   ensurePlaceholder(input);
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();
+  handleTaskCharacterLimit();
 };
 
 export const typeIntoInput = (event) => {
@@ -135,4 +136,5 @@ export const typeIntoInput = (event) => {
 
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();
+  handleTaskCharacterLimit();
 };

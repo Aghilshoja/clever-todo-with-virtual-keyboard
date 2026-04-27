@@ -63,7 +63,7 @@ const checkIfDescriptionUnchanged = (input, taskTextEl) => {
   return descriptionUnchanged;
 };
 
-const getRequiredDom = () => {
+export const getRequiredDom = () => {
   const saveButton = document.querySelector(".task__save-edited-task--active");
   const taskTextEl = document.querySelector(".task__toolbar-task-text--active");
   const descriptionEl = document.querySelector(

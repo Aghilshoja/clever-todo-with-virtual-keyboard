@@ -115,8 +115,6 @@
 
 .keyboard-section__task-input {
   flex-grow: 1;
-  overflow: hidden;
-  max-height: 130px;
   word-break: break-all;
   white-space: pre-wrap;
 }
@@ -188,10 +186,27 @@
   background-color: rgb(218, 165, 32);
 }
 
+.keyboard-section__input-character-limit {
+  display: none;
+}
+
+.reached-character-limit {
+  display: block;
+  opacity: 1;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  padding: 0.6rem;
+  margin: 0.5rem;
+}
+
 .keyboard-section__task-input--caret::before {
   content: "|";
   color: blue;
   animation: blink 1s steps(1) infinite;
+}
+
+.highlight-extra-chars {
+  background-color: yellow;
 }
 
 .caret::after {
