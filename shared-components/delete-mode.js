@@ -2,6 +2,7 @@ import { getCachedElements } from "./get-cached-element.js";
 import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { activeUlId } from "./render-tasks.js";
+import { countTasks } from "./count-tasks.js";
 
 const elements = getCachedElements();
 
@@ -40,6 +41,7 @@ export const deleteTask = (e) => {
   } else elements.warningPopup.classList.remove("warning--active");
 
   handleEmptyTaskStateUi();
+  countTasks();
 };
 
 export const warnDeletion = (e) => {

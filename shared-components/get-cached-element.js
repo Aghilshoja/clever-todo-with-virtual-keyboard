@@ -22,6 +22,7 @@ export const getCachedElements = () => {
       ".keyboard-section__circle, .keyboard-section__repeat-task, .keyboard-section__submit-task, .keyboard-section__due-date-button, .keyboard-section__remind-me-button",
     ),
     circleEl: document.querySelector(".keyboard-section__circle"),
+    taskCounter: document.querySelector(".main-page__task-counter"),
   };
   return elements;
 };

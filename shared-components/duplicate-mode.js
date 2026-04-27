@@ -1,4 +1,5 @@
 import { lists } from "../todos-controller.js/todos-controller.js";
+import { countTasks } from "./count-tasks.js";
 
 export const duplicateTask = (event) => {
   if (event.target.closest(".task__duplication")) {
@@ -26,4 +27,5 @@ export const duplicateTask = (event) => {
         el.classList.remove("close-toolbar--active"),
       );
   }
+  countTasks();
 };
