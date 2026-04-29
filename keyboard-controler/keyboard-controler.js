@@ -29,7 +29,10 @@ import {
 } from "../keyboard-view/keyboard-input-behavior.js";
 import { handleSpaceBar } from "../keyboard-view/keyboard-spacebar.js";
 import { positionCaret } from "../keyboard-view/keyboard-caret-positioning.js";
-
+import {
+  saveInputText,
+  loadDraftedInputText,
+} from "../shared-components/save-drafted-text-input-to-local-storage.js";
 export const virtualKeyboard = new KeyboardApp();
 
 export const uiState = {
@@ -111,6 +114,8 @@ const initApp = () => {
   elements.keyboardContainer.addEventListener("dragend", handledragEnd);
   elements.keyboardContainer.addEventListener("drop", handleKeyDrop);
 
+  document.addEventListener("DOMContentLoaded", loadDraftedInputText);
+
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("keyboard__english-layout"))
       virtualKeyboard.setLang("fa");
@@ -131,6 +136,7 @@ const initApp = () => {
     if (e.target.closest(".keyboard__key")) {
       typeIntoInput(e);
       virtualKeyboard.onKeyPressed();
+      saveInputText();
     }
 
     if (e.target.classList.contains("keyboard-section__task-input")) {

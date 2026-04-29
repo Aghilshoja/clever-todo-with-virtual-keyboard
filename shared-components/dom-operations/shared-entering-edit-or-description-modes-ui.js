@@ -83,6 +83,9 @@ const moveInputAndHideTaskText = (toolbar, task) => {
   const taskEl = toolbar.querySelector(".task__toolbar-task-text");
   if (!taskEl) return;
 
+  const input = elements.inputElement;
+  input.dataset.draft = input.textContent;
+
   if (elements.inputElement)
     elements.inputElement.classList.remove(
       "keyboard-section__task-input--caret",

@@ -4,6 +4,7 @@ import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
 import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
+import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
 export const pressBackspace = (e) => {
   if (e.target.closest(".keyboard__backspace-key")) {
     uiState.pressStartTime = Date.now();
@@ -119,9 +120,10 @@ const deleteLastCharacterOfInput = () => {
   const input = elements.inputElement;
   deleteCharBeforeCaret(input);
   ensurePlaceholder(input);
-  disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();
   handleTaskCharacterLimit();
+  saveInputText();
+  disableSubmitIfInputEmpty();
 };
 
 export const typeIntoInput = (event) => {
@@ -137,4 +139,5 @@ export const typeIntoInput = (event) => {
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();
   handleTaskCharacterLimit();
+  saveInputText();
 };

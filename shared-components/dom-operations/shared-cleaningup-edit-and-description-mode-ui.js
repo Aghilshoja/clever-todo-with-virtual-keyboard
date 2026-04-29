@@ -3,6 +3,8 @@ import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-behavior.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
+import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
+import { saveInputText } from "../save-drafted-text-input-to-local-storage.js";
 
 const elements = getCachedElements();
 
@@ -83,10 +85,25 @@ const deactiviateToolbar = (toolbar) => {
     );
 };
 
+// Restores the user's unsubmitted task draft after leaving edit mode.
+/* Discards any edits made to an existing task and reinserts the previously saved draft into the input field. */
+const restoreDraftBackupAfterEditMode = () => {
+  const input = elements.inputElement;
+  if (input.dataset.draft !== "" && input.dataset.draft !== "Enter a task") {
+    input.textContent = "";
+    const caret = ensureCaret(input);
+    caret.insertAdjacentText("beforebegin", input.dataset.draft);
+    saveInputText();
+  } else {
+    input.textContent = "";
+    ensurePlaceholder(input);
+    saveInputText();
+  }
+};
+
 const resetOtherPartsAsWell = (event) => {
   appStateUi.activePlaceholder = "Enter-a-task";
-  elements.inputElement.textContent = "";
-  ensurePlaceholder(elements.inputElement);
+  restoreDraftBackupAfterEditMode();
   disableSubmitIfInputEmpty();
   toggleKeyboard(event);
   appStateUi.activeMode = "none";

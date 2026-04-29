@@ -3,6 +3,7 @@ import { ensurePlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
 import { countTasks } from "./count-tasks.js";
+import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
 
 export const addTask = () => {
   const elements = getCachedElements();
@@ -12,6 +13,7 @@ export const addTask = () => {
   if (value !== "" && value !== "Enter a task") lists.default.addTask(value);
   elements.inputElement.textContent = "";
   ensurePlaceholder(elements.inputElement);
+  saveInputText();
   disableSubmitIfInputEmpty();
   countTasks();
 };

@@ -92,7 +92,7 @@ const createToolbar = (task) => {
     </li>
               <li class="task__inbox flex-space-between">
     <button class="task__inbox-btn button-reset cursor fs hover" aria-label="close inbox"><i class="fa-solid fa-inbox"></i> inbox > </button>
-    <button class="task__more-options button-reset cursor fs hover" aria-label="click to see more options"><i class="fa-solid fa-ellipsis-vertical"></i>
+    <button class="task__more-options button-reset cursor fs hover" aria-label="click to see more options"><i class="fa-solid fa-ellipsis-vertical"></i>ellip
     </button>
       <ul class="task__manu animate-position pd box-shodow b-radius bg">${createMoreOptions(task)}</ul>
     </li>

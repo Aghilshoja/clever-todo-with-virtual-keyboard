@@ -68,7 +68,7 @@ const initTodo = () => {
 
     if (!lists[activeUlId.ul]) return;
 
-    renderTasks();
+    renderTasks(lists.default.getTasks());
   });
 
   elements.submitTask.addEventListener("click", addTask);
