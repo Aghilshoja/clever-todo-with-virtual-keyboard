@@ -121,9 +121,9 @@ const deleteLastCharacterOfInput = () => {
   deleteCharBeforeCaret(input);
   ensurePlaceholder(input);
   disableOrEnableSaveBtn();
-  handleTaskCharacterLimit();
   saveInputText();
   disableSubmitIfInputEmpty();
+  handleTaskCharacterLimit();
 };
 
 export const typeIntoInput = (event) => {
