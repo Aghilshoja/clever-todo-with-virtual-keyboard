@@ -11,10 +11,12 @@ export const saveEditedTaskText = (toolbar, taskItem, event) => {
   if (elements.inputElement.textContent.trim() === "") {
     taskText.textContent = appStateUi.taskObjectToEdit.text;
     toolbarTaskText.textContent = appStateUi.taskObjectToEdit.text;
+    taskText.dataset.trucateText = appStateUi.taskObjectToEdit.text;
   } else if (toolbarTaskText && taskText) {
     taskText.textContent = elements.inputElement.textContent;
     toolbarTaskText.textContent = elements.inputElement.textContent;
     appStateUi.taskObjectToEdit.text = elements.inputElement.textContent;
+    taskText.dataset.truncateText = elements.inputElement.textContent;
   }
   cleanupEditUi(toolbar, event);
 };
@@ -26,6 +28,8 @@ export const saveEditedTaskDescription = (toolbar, taskItem, event) => {
   );
   if (elements.inputElement.textContent.trim() === "") {
     mainTaskDescription.textContent = appStateUi.taskObjectToEdit.description;
+    mainTaskDescription.dataset.truncateText =
+      appStateUi.taskObjectToEdit.description;
     toolbarTaskDescription.textContent =
       appStateUi.taskObjectToEdit.description;
   }
@@ -33,6 +37,8 @@ export const saveEditedTaskDescription = (toolbar, taskItem, event) => {
     mainTaskDescription.textContent = elements.inputElement.textContent;
     toolbarTaskDescription.textContent = elements.inputElement.textContent;
     appStateUi.taskObjectToEdit.description = elements.inputElement.textContent;
+    mainTaskDescription.dataset.truncateText =
+      elements.inputElement.textContent;
   }
   cleanupDescriptionUi(toolbar, event);
 };

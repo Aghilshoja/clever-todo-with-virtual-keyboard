@@ -272,3 +272,8 @@ ul {
 .task__save-edited-task:disabled {
   cursor: not-allowed;
 }
+
+.task__toolbar-scrollable-area {
+  height: 40dvh;
+  overflow-y: auto;
+}

@@ -96,14 +96,17 @@ const createToolbar = (task) => {
     </button>
       <ul class="task__manu animate-position pd box-shodow b-radius bg">${createMoreOptions(task)}</ul>
     </li>
+
+    <li> 
+    <ul class="task__toolbar-scrollable-area">
       <li class="task__toolbar-list-item flex pd">
           
     <input type="checkbox" data-id="${task.id}" class="task__toolbar-task-checkbox check-layout">
-    <p class="task__toolbar-task-text word-wrap">${task.text}</p>
+    <p class="task__toolbar-task-text word-wrap" data-truncate-text="${task.text}">${task.text}</p>
       <button class="task__toolbar-important button-reset cursor"><i class="fa-regular fa-star"></i></button>
     </li>
     <li class="task__toolbar--description">
-      <p class="task__toolbar-description-text word-wrap color">${task.description ? task.description : ""}</p>
+      <p class="task__toolbar-description-text word-wrap color" data-truncate-text="${task.description ? task.description : ""}">${task.description ? task.description : ""}</p>
     </li>
     <li class="task__date pd">
     <input type="date">
@@ -128,6 +131,8 @@ const createToolbar = (task) => {
     </li>
     <li class="task__toolbar-subtask pd cursor hover"><button class="task__toolbar-subtask-action button-reset fs cursor" aria-label="add a subtask" data-id="${task.id}">+  add sub-task</button>
     </li>
+    </li> 
+    </ul>
     <li class="task__toolbar-comment flex-space-between bg-grey radius pd">
     <div class="task__toolbar-comment-action" data-id="${task.id}"  tabindex="0"
       aria-label="enter a comment in input field"
@@ -168,8 +173,8 @@ export const renderTasks = (task, eachTask) => {
     <div class="group-input-and-text flex">
     <input type="checkbox" data-id="${eachTask.id}" class="task__main-task-checkbox check-layout">
     <div class="task__wrap-task-and-description">
-    <p class="task__text word-wrap">${eachTask.text}</p>
-    <p class="task__description color word-wrap">${task.description ? task.description : ""}</p>
+    <p class="task__text word-wrap" data-truncate-text="${eachTask.text}">${eachTask.text}</p>
+    <p class="task__description color word-wrap" data-truncate-text="${eachTask.description ? eachTask.description : ""}">${eachTask.description ? eachTask.description : ""}</p>
     </div>
     </div>
     <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>

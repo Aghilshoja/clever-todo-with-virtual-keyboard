@@ -15,6 +15,10 @@ import { implementEditAndDescriptionMode } from "../shared-components/handle-edi
 import { saveEditedTask } from "../shared-components/handle-edit-and-description-modes.js";
 import { editDescriptionAndTask } from "../shared-components/dom-operations/operation-on-dom-on-switch-between-edit-and-description-modes.js";
 import { exitEditMode } from "../shared-components/handle-edit-and-description-modes.js";
+import {
+  truncateTaskDescription,
+  truncateTaskText,
+} from "../shared-components/truncate-task.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -75,14 +79,18 @@ const initTodo = () => {
 
   document.addEventListener("DOMContentLoaded", () => {
     uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);
+    truncateTaskText();
+    truncateTaskDescription();
   });
 
   // Update padding whenever the navbar resizes
   const resizeObserver = new ResizeObserver((entries) => {
     uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);
+    truncateTaskText();
+    truncateTaskDescription();
   });
 
-  resizeObserver.observe(elements.navigation);
+  resizeObserver.observe(document.body);
 };
 
 initTodo();

@@ -65,6 +65,7 @@ export const revertTextOfDescriptionAndTaskText = (event) => {
   const toolbarTaskText = taskItem.querySelector(".task__toolbar-task-text");
   if (!toolbarTaskText) return;
   toolbarTaskText.textContent = taskText.textContent;
+  taskText.dataset.truncateText = toolbarTaskText.textContent;
   const taskItemDescription = taskItem.querySelector(".task__description");
   if (!taskItemDescription) return;
   const toolbarDescription = taskItem.querySelector(
@@ -72,6 +73,7 @@ export const revertTextOfDescriptionAndTaskText = (event) => {
   );
   if (!toolbarDescription) return;
   toolbarDescription.textContent = taskItemDescription.textContent;
+  taskItemDescription.dataset.truncateText = toolbarDescription.textContent;
 };
 
 export const editDescriptionAndTask = (event) => {
@@ -148,10 +150,13 @@ const saveEditedDescription = (allElements) => {
     taskItemDescriptionEl.textContent = inputText;
     toolbarDescriptionEl.textContent = inputText;
     appStateUi.taskObjectToEdit.description = inputText;
+    // sync truncattion attribute with latest data
+    taskItemDescriptionEl.dataset.truncateText = inputText;
     /* update model and UI if input = Description, and is still on the still on description mode and not switched */
   } else if (isDescription && inputText === "Description") {
     taskItemDescriptionEl.textContent = "";
     toolbarDescriptionEl.textContent = "";
+    taskItemDescriptionEl.dataset.truncateText = "";
     appStateUi.taskObjectToEdit.description = null;
     /* if  description el = Description  and input = empty or white spcae clear UI and update the model || if description el = Description and switched to edit task text just clear UI and update the model */
   } else if (
@@ -161,10 +166,13 @@ const saveEditedDescription = (allElements) => {
   ) {
     taskItemDescriptionEl.textContent = "";
     toolbarDescriptionEl.textContent = "";
+    taskItemDescriptionEl.dataset.truncateText = "";
     appStateUi.taskObjectToEdit.description = null;
     /* if the last clicked element was not the last one meaning text content of the description el has already been updated just update the main task description */
   } else {
     taskItemDescriptionEl.textContent = toolbarDescriptionEl.textContent;
+    taskItemDescriptionEl.dataset.truncateText =
+      toolbarDescriptionEl.textContent;
     appStateUi.taskObjectToEdit.description = toolbarDescriptionEl.textContent;
   }
 };
@@ -178,13 +186,16 @@ const saveEditedTask = (allElements) => {
   if (isTaskEl && inputText.trim() !== "" && inputText !== "Edit your task") {
     taskItemTaskEl.textContent = inputText;
     toolbarTaskEl.textContent = inputText;
+    taskItemTaskEl.dataset.truncateText = inputText;
     appStateUi.taskObjectToEdit.text = inputText;
     // restore original task text if white spaces added as task text
   } else if (isTaskEl && inputText.trim() === "") {
     taskItemTaskEl.textContent = appStateUi.taskObjectToEdit.text;
     toolbarTaskEl.textContent = appStateUi.taskObjectToEdit.text;
+    taskItemTaskEl.dataset.truncateText = appStateUi.taskObjectToEdit.text;
   } else if (toolbarTaskEl.textContent !== "Edit your task") {
     taskItemTaskEl.textContent = toolbarTaskEl.textContent;
+    taskItemTaskEl.dataset.truncateText = toolbarTaskEl.textContent;
     appStateUi.taskObjectToEdit.text = toolbarTaskEl.textContent;
   }
 };

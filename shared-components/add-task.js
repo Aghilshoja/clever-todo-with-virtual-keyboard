@@ -4,6 +4,7 @@ import { lists } from "../todos-controller.js/todos-controller.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
 import { countTasks } from "./count-tasks.js";
 import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
+import { truncateTaskDescription, truncateTaskText } from "./truncate-task.js";
 
 export const addTask = () => {
   const elements = getCachedElements();
@@ -16,4 +17,6 @@ export const addTask = () => {
   saveInputText();
   disableSubmitIfInputEmpty();
   countTasks();
+  truncateTaskDescription();
+  truncateTaskText();
 };
