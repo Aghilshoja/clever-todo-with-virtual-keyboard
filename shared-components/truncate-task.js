@@ -1,7 +1,6 @@
 export const truncateTaskText = () => {
-  const taskEl = document.querySelector(".task__text");
-  const descriptionEl = document.querySelector(".task__description");
-  if (!taskEl || !descriptionEl) return;
+  const taskEl = document.querySelectorAll(".task__text");
+  if (!taskEl) return;
 
   const breakpoints = [
     { maxWidth: 400, maxTextLength: 100 },
@@ -16,16 +15,18 @@ export const truncateTaskText = () => {
 
   const maxLength = currentBreakpoint ? currentBreakpoint.maxTextLength : null;
 
-  const fullText = taskEl.dataset.truncateText;
-  if (!fullText) return;
+  taskEl.forEach((taskEl) => {
+    const fullText = el.dataset.truncateText;
+    if (!fullText) return;
 
-  if (maxLength !== null && fullText.length > maxLength)
-    taskEl.textContent = fullText.slice(0, maxLength) + "...";
-  else taskEl.textContent = fullText;
+    if (maxLength !== null && fullText.length > maxLength)
+      taskEl.textContent = fullText.slice(0, maxLength) + "...";
+    else taskEl.textContent = fullText;
+  });
 };
 
 export const truncateTaskDescription = () => {
-  const descriptionEl = document.querySelector(".task__description");
+  const descriptionEl = document.querySelectorAll(".task__description");
   if (!descriptionEl) return;
 
   const breakpoints = [
@@ -41,10 +42,12 @@ export const truncateTaskDescription = () => {
 
   const maxLength = currentBreakpoint ? currentBreakpoint.maxTextLength : null;
 
-  const fullText = descriptionEl.dataset.truncateText;
-  if (!fullText) return;
+  descriptionEl.forEach((desEl) => {
+    const fullText = desEl.dataset.truncateText;
+    if (!fullText) return;
 
-  if (maxLength !== null && fullText.length > maxLength)
-    descriptionEl.textContent = fullText.slice(0, maxLength) + "...";
-  else descriptionEl.textContent = fullText;
+    if (maxLength !== null && fullText.length > maxLength)
+      desEl.textContent = fullText.slice(0, maxLength) + "...";
+    else desEl.textContent = fullText;
+  });
 };
