@@ -1,4 +1,5 @@
 import { getCachedElements } from "./get-cached-element.js";
+import { getCompletedListContainer } from "./complete-mode.js";
 
 export const activeUlId = {
   ul: "default",
@@ -101,7 +102,7 @@ const createToolbar = (task) => {
     <ul class="task__toolbar-scrollable-area">
       <li class="task__toolbar-list-item flex pd">
           
-    <input type="checkbox" data-id="${task.id}" class="task__toolbar-task-checkbox check-layout">
+    <input type="checkbox" data-id="${task.id}" class="${task.isCompleted ? `task__toolbar-completed-task-checkbox check-layout` : `task__toolbar-task-checkbox check-layout`}" ${task.isCompleted ? "checked" : ""}>
     <p class="task__toolbar-task-text word-wrap" data-truncate-text="${task.text}">${task.text}</p>
       <button class="task__toolbar-important button-reset cursor"><i class="fa-regular fa-star"></i></button>
     </li>
@@ -185,4 +186,32 @@ export const renderTasks = (task, eachTask) => {
     </li>
     `;
   listContainer.insertAdjacentHTML("afterbegin", list);
+};
+
+export const renderCompletedTask = (eachCompletedTask) => {
+  const elements = getCachedElements();
+  if (!elements) throw new Error("required DOM wasn't found");
+  if (!eachCompletedTask) return;
+
+  const completedListContainer = getCompletedListContainer();
+  if (!completedListContainer) return;
+  const list = `
+    <li class="task" data-id="${eachCompletedTask.id}">
+    <ul class="task__container">
+    <li class="task__item flex-space-between">
+    <div class="group-input-and-text flex">
+    <input type="checkbox" data-id="${eachCompletedTask.id}" class="task__completed-main-task-checkbox check-layout" checked>
+    <div class="task__wrap-task-and-description">
+    <p class="task__text word-wrap" data-truncate-text="${eachCompletedTask.text}">${eachCompletedTask.text}</p>
+    <p class="task__description color word-wrap" data-truncate-text="${eachCompletedTask.description ? eachCompletedTask.description : ""}">${eachCompletedTask.description ? eachCompletedTask.description : ""}</p>
+    </div>
+    </div>
+    <button class="task__important button-reset cursor"><i class="fa-regular fa-star"></i></button>
+    </li>
+    <li class="task__toolbar bg">${createToolbar(eachCompletedTask)}
+    </li>
+    </ul>
+    </li>
+    `;
+  completedListContainer.completedList.insertAdjacentHTML("afterbegin", list);
 };

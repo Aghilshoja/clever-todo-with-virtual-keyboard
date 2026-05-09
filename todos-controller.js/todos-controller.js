@@ -19,6 +19,7 @@ import {
   truncateTaskDescription,
   truncateTaskText,
 } from "../shared-components/truncate-task.js";
+import { completeTask } from "../shared-components/complete-mode.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -42,6 +43,19 @@ const handleListChange = (listChange, eachTask) => {
 
 lists.default.subscribe(handleListChange);
 
+export const addListeners = (list) => {
+  list.addEventListener("click", revealManu);
+  list.addEventListener("click", revealToolbar);
+  list.addEventListener("click", closeToolbar);
+  list.addEventListener("click", warnDeletion);
+  list.addEventListener("click", duplicateTask);
+  list.addEventListener("click", implementEditAndDescriptionMode);
+  list.addEventListener("click", saveEditedTask);
+  list.addEventListener("click", editDescriptionAndTask);
+  list.addEventListener("click", exitEditMode);
+  list.addEventListener("click", completeTask);
+};
+
 const initTodo = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("Required DOM wasn't found");
@@ -52,15 +66,7 @@ const initTodo = () => {
   const listContainer = document.querySelector(`
     .list[data-id="${activeUlId.ul}"]`);
 
-  listContainer.addEventListener("click", revealManu);
-  listContainer.addEventListener("click", revealToolbar);
-  listContainer.addEventListener("click", closeToolbar);
-  listContainer.addEventListener("click", warnDeletion);
-  listContainer.addEventListener("click", duplicateTask);
-  listContainer.addEventListener("click", implementEditAndDescriptionMode);
-  listContainer.addEventListener("click", saveEditedTask);
-  listContainer.addEventListener("click", editDescriptionAndTask);
-  listContainer.addEventListener("click", exitEditMode);
+  addListeners(listContainer);
   elements.warningPopup.addEventListener("click", deleteTask);
 
   // Navigation Click

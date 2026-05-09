@@ -3,10 +3,11 @@ import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
+import { showNumberOfCompletedTasks } from "./complete-mode.js";
 
 const elements = getCachedElements();
 
-const handleEmptyTaskStateUi = () => {
+export const handleEmptyTaskStateUi = () => {
   const listContainer = document.querySelector(`
       .list[data-id="${activeUlId.ul}"]`);
   if (lists.default.tasks.length === 0) {
@@ -42,6 +43,7 @@ export const deleteTask = (e) => {
 
   handleEmptyTaskStateUi();
   countTasks();
+  showNumberOfCompletedTasks();
 };
 
 export const warnDeletion = (e) => {

@@ -9,7 +9,8 @@
   --FONT-SIZE: 1.1rem;
 }
 
-.main-page__default-list__title {
+.main-page__default-list__title,
+.completed-default-list__title {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -276,4 +277,31 @@ ul {
 .task__toolbar-scrollable-area {
   height: 40dvh;
   overflow-y: auto;
+}
+
+.completed-default-tasks {
+  display: none;
+  margin: 1rem 0.5rem 0 0.5rem;
+}
+
+summary {
+  list-style: none;
+  list-style-type: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+summary::after {
+  content: "▶ ";
+  margin-right: 5px;
+}
+details[open] summary::after {
+  content: "▼ ";
+}
+
+.completed-default-tasks--active {
+  display: block;
 }

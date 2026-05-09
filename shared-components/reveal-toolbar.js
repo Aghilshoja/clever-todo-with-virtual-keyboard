@@ -9,9 +9,13 @@ export const adjustActiveTaskTextWidth = () => {
   const taskTextEl = toolbar.querySelector(".task__toolbar-task-text");
   const importantButtonTask = toolbar.querySelector(".task__toolbar-important");
   const toolbarCheckbox = toolbar.querySelector(".task__toolbar-task-checkbox");
-  if (!taskTextEl || !importantButtonTask || !toolbarCheckbox) return;
+  const completedTaskCheckbox = toolbar.querySelector(
+    ".task__toolbar-completed-task-checkbox",
+  );
+  const toolbarOfAllList = toolbarCheckbox || completedTaskCheckbox;
+  if (!taskTextEl || !importantButtonTask || !toolbarOfAllList) return;
   const totalOffsetWidth =
-    importantButtonTask.offsetWidth + toolbarCheckbox.offsetWidth;
+    importantButtonTask.offsetWidth + toolbarOfAllList.offsetWidth;
   taskTextEl.style.width = `calc(100% - ${totalOffsetWidth}px)`;
 };
 

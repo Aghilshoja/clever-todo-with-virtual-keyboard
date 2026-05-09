@@ -2,6 +2,7 @@ export class TaskList {
   constructor(id) {
     this.id = id;
     this.tasks = [];
+    this.completedTasks = [];
     this.listeners = [];
   }
 
@@ -17,19 +18,75 @@ export class TaskList {
     return this.tasks;
   }
 
+  getCompletedTasks() {
+    return this.completedTasks;
+  }
+
+  // update delete , edit, and duplicate features to handle completed list as well
   deleteTask(taskId) {
-    this.tasks = this.tasks.filter((t) => t.id !== taskId);
+    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const foundTask = allTypesOfTasks.find((t) => t.id === taskId);
+    if (!foundTask) throw new Error("task object was not found");
+    const isCompleted = foundTask.isCompleted === true;
+
+    if (isCompleted) {
+      this.completedTasks = this.completedTasks.filter((t) => t.id !== taskId);
+    } else {
+      this.tasks = this.tasks.filter((task) => task.id !== taskId);
+    }
   }
 
   duplicateTask(taskId) {
-    const foundTask = this.getTasks().find((t) => t.id === taskId);
+    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const foundTask = allTypesOfTasks.find((t) => t.id === taskId);
     if (!foundTask) throw new Error("task object was not found");
-    const indexOfFoundTask = this.getTasks().indexOf(foundTask);
-    if (indexOfFoundTask === -1) return;
+    const isCompleted = foundTask.isCompleted === true;
+
     const duplicatedTask = { ...foundTask };
-    duplicatedTask.id = this.generateId();
-    this.getTasks().splice(indexOfFoundTask + 1, 0, duplicatedTask);
+
+    if (isCompleted) {
+      duplicatedTask.id = this.generateId();
+      duplicatedTask.createdAt = Date.now();
+      const indexOfOriginalTask = this.getCompletedTasks().indexOf(foundTask);
+      this.getCompletedTasks().splice(
+        indexOfOriginalTask + 1,
+        0,
+        duplicatedTask,
+      );
+    } else {
+      duplicatedTask.id = this.generateId();
+      const indexOfOriginalTask = this.getTasks().indexOf(foundTask);
+      this.getTasks().splice(indexOfOriginalTask + 1, 0, duplicatedTask);
+    }
     return duplicatedTask;
+  }
+
+  formatExactDate(t) {
+    const timestamp = Date.now();
+    return new Date(timestamp).toLocaleString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  markTaskAsCompleted(taskId) {
+    const taskToComplete = this.getTasks().find((t) => t.id === taskId);
+    if (!taskToComplete) throw new Error("Task object was not found");
+    this.tasks = this.tasks.filter((t) => t.id !== taskId);
+    const copyCompletedTask = {
+      id: this.generateId(),
+      text: taskToComplete.text,
+      isCompleted: true,
+      description: taskToComplete.description,
+      completedAt: this.formatExactDate(),
+    };
+
+    this.getCompletedTasks().push(copyCompletedTask);
+    return copyCompletedTask;
   }
 
   generateId() {
@@ -41,8 +98,10 @@ export class TaskList {
     // Fallback for older mobile browsers
     return Date.now() + "-" + Math.random().toString(36).substring(2, 9);
   }
+
   editTaskOrDescription(taskId) {
-    const taskTodEdit = this.getTasks().find((t) => t.id === taskId);
+    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const taskTodEdit = allTypesOfTasks.find((t) => t.id === taskId);
     if (!taskTodEdit) throw new Error("task object was not found");
     return taskTodEdit;
   }
