@@ -16,7 +16,7 @@ export const truncateTaskText = () => {
   const maxLength = currentBreakpoint ? currentBreakpoint.maxTextLength : null;
 
   taskEl.forEach((taskEl) => {
-    const fullText = el.dataset.truncateText;
+    const fullText = taskEl.dataset.truncateText;
     if (!fullText) return;
 
     if (maxLength !== null && fullText.length > maxLength)
