@@ -1,16 +1,20 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { renderCompletedTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { addListeners } from "../todos-controller.js/todos-controller.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { showUndopopup } from "./undo-completed-task.js";
 
 const elements = getCachedElements();
 
 const removeCompleteTaskFromActiveList = (taskId) => {
   const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
   if (!taskItem) return;
+  appStateUi.undoOperation.removedEl = taskItem;
+  appStateUi.undoOperation.previousEl = taskItem.previousElementSibling;
+  appStateUi.undoOperation.nextEl = taskItem.nextElementSibling;
   taskItem.remove();
 };
 
@@ -64,7 +68,15 @@ export const completeTask = (e) => {
     completedListContainer.completedList,
   ); /* add listeners to the completed list */
   showNumberOfCompletedTasks();
-  renderCompletedTask(completedTaskobject);
+  renderCompletedTask(completedTaskobject.copyCompletedTask);
+  appStateUi.undoOperation.completedTaskObject =
+    completedTaskobject.copyCompletedTask;
+  appStateUi.undoOperation.completedTaskIndex =
+    completedTaskobject.completedTaskIndex;
+  appStateUi.undoOperation.originalTaskObject =
+    completedTaskobject.taskToComplete;
   countTasks(); //update badge of active list
   handleEmptyTaskStateUi();
+  // show undo popup
+  showUndopopup();
 };

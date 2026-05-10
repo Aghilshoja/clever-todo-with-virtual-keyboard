@@ -26,6 +26,8 @@ export const getCachedElements = () => {
     inputCharacterLimit: document.querySelector(
       ".keyboard-section__input-character-limit",
     ),
+    undoCompletion: document.querySelector(".undo-completion"),
+    undoCompletedTask: document.querySelector(".undo-completed-task"),
   };
   return elements;
 };

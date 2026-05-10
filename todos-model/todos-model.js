@@ -76,6 +76,10 @@ export class TaskList {
   markTaskAsCompleted(taskId) {
     const taskToComplete = this.getTasks().find((t) => t.id === taskId);
     if (!taskToComplete) throw new Error("Task object was not found");
+    const completedTaskIndex = this.getTasks().findIndex(
+      (t) => t.id === taskId,
+    );
+    if (completedTaskIndex === -1) return;
     this.tasks = this.tasks.filter((t) => t.id !== taskId);
     const copyCompletedTask = {
       id: this.generateId(),
@@ -86,7 +90,21 @@ export class TaskList {
     };
 
     this.getCompletedTasks().push(copyCompletedTask);
-    return copyCompletedTask;
+    return {
+      copyCompletedTask,
+      completedTaskIndex /* return the index of the original task object to use it for the undo operation*/,
+      taskToComplete, // return the original active task for undo operation
+    };
+  }
+
+  undoCompletedTask(taskObject, index, completedTaskId) {
+    if (this.getTasks().length === 0) this.getTasks().push(taskObject);
+    else if (this.getTasks().length > 0)
+      this.getTasks().splice(index, 0, taskObject);
+
+    this.completedTasks = this.completedTasks.filter(
+      (t) => t.id !== completedTaskId,
+    );
   }
 
   generateId() {
