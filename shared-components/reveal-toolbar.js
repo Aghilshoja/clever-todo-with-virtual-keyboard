@@ -22,7 +22,8 @@ export const adjustActiveTaskTextWidth = () => {
 export const revealToolbar = (e) => {
   if (
     e.target.closest(".task") &&
-    !e.target.closest(".task__main-task-checkbox")
+    !e.target.closest(".task__main-task-checkbox") &&
+    !e.target.closest(".task__completed-main-task-checkbox")
   ) {
     const taskItem = e.target.closest(".task");
     if (!taskItem) return;
