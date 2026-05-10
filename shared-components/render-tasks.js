@@ -7,8 +7,8 @@ export const activeUlId = {
 
 const createdAt = (task) => {
   let now = Date.now();
-  let createdAt = task.createdAt;
-  const msDifference = now - createdAt;
+  let createdOrCompletedAt = task.createdAt || task.completedAt;
+  const msDifference = now - createdOrCompletedAt;
 
   const days = msDifference / 86400000;
   const roundDays = Math.floor(days);
@@ -55,7 +55,7 @@ const formatExactDate = (timestamp) => {
 
 const createMoreOptions = (task) => {
   const moreOptions = `
-    <li class="task__date"><span>${createdAt(task)} on ${formatExactDate(task.createdAt)}</span></li>
+    <li class="task__date"><span>${task.isCompleted ? `${createdAt(task)} on ${formatExactDate(task.completedAt)}` : `${createdAt(task)} on ${formatExactDate(task.createdAt)}`}</span></li>
       <li class="task__edit pd cursor hover" data-id="${task.id}">
       <button data-id="${task.id}" class="task__edit-action button-reset fs cursor" aria-label="Edit your task"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
       </li>

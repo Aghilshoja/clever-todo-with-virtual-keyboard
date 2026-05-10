@@ -61,18 +61,6 @@ export class TaskList {
     return duplicatedTask;
   }
 
-  formatExactDate(t) {
-    const timestamp = Date.now();
-    return new Date(timestamp).toLocaleString(undefined, {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
-
   markTaskAsCompleted(taskId) {
     const taskToComplete = this.getTasks().find((t) => t.id === taskId);
     if (!taskToComplete) throw new Error("Task object was not found");
@@ -86,7 +74,7 @@ export class TaskList {
       text: taskToComplete.text,
       isCompleted: true,
       description: taskToComplete.description,
-      completedAt: this.formatExactDate(),
+      completedAt: Date.now(),
     };
 
     this.getCompletedTasks().push(copyCompletedTask);
