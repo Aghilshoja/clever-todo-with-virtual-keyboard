@@ -85,6 +85,23 @@ export class TaskList {
     };
   }
 
+  moveTaskFromCompletedToActive(taskId) {
+    const taskToUncomplete = this.getCompletedTasks().find(
+      (t) => t.id === taskId,
+    );
+    if (!taskToUncomplete) throw new Error("task object was not found");
+    this.completedTasks = this.completedTasks.filter((t) => t.id !== taskId);
+    const activeTask = {
+      id: this.generateId(),
+      text: taskToUncomplete.text,
+      isCompleted: false,
+      description: taskToUncomplete.description,
+      createdAt: Date.now(),
+    };
+    this.getTasks().push(activeTask);
+    return activeTask;
+  }
+
   undoCompletedTask(taskObject, index, completedTaskId) {
     if (this.getTasks().length === 0) this.getTasks().push(taskObject);
     else if (this.getTasks().length > 0)

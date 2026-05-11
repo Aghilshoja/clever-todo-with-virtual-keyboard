@@ -21,6 +21,7 @@ import {
 } from "../shared-components/truncate-task.js";
 import { completeTask } from "../shared-components/complete-mode.js";
 import { undoCompletedTask } from "../shared-components/undo-completed-task.js";
+import { moveTaskFromCompletedToActive } from "../shared-components/move-task-rrom-completed-to-active.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -63,6 +64,7 @@ export const addListeners = (list) => {
   list.addEventListener("click", editDescriptionAndTask);
   list.addEventListener("click", exitEditMode);
   list.addEventListener("click", completeTask);
+  list.addEventListener("click", moveTaskFromCompletedToActive);
 };
 
 const initTodo = () => {
