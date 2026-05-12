@@ -9,7 +9,7 @@ import { showUndopopup } from "./undo-completed-task.js";
 
 const elements = getCachedElements();
 
-const removeCompleteTaskFromActiveList = (taskId) => {
+export const captureAndRemoveTaskItem = (taskId) => {
   const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
   if (!taskItem) return;
   appStateUi.undoOperation.removedEl = taskItem;
@@ -63,15 +63,14 @@ export const completeTask = (e) => {
   const completedTaskobject = lists.default.markTaskAsCompleted(taskId);
   const completedListContainer = getCompletedListContainer();
   if (!completedListContainer) return;
-  removeCompleteTaskFromActiveList(taskId);
+  captureAndRemoveTaskItem(taskId);
   addListeners(
     completedListContainer.completedList,
   ); /* add listeners to the completed list */
   showNumberOfCompletedTasks();
   renderCompletedTask(completedTaskobject.copyCompletedTask);
-  appStateUi.undoOperation.completedTaskObject =
-    completedTaskobject.copyCompletedTask;
-  appStateUi.undoOperation.completedTaskIndex =
+  appStateUi.undoOperation.taskObject = completedTaskobject.copyCompletedTask;
+  appStateUi.undoOperation.taskObjectIndex =
     completedTaskobject.completedTaskIndex;
   appStateUi.undoOperation.originalTaskObject =
     completedTaskobject.taskToComplete;

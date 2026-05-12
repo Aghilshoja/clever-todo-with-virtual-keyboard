@@ -333,7 +333,7 @@ details[open] summary::after {
 }
 
 .undo-completed-task,
-.completed-mark {
+.completion-status-label {
   color: white;
   padding: 0.6rem;
 }

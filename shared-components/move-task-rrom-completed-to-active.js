@@ -1,13 +1,10 @@
 import { lists } from "../todos-controller.js/todos-controller.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
+import {
+  captureAndRemoveTaskItem,
+  showNumberOfCompletedTasks,
+} from "./complete-mode.js";
 import { renderTasks } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
-
-const removeTaskmarkedAsNotCompleted = (taskId) => {
-  const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
-  if (!taskItem) return;
-  taskItem.remove();
-};
 
 export const moveTaskFromCompletedToActive = (event) => {
   const clickedCheckbox =
@@ -17,7 +14,7 @@ export const moveTaskFromCompletedToActive = (event) => {
   const taskid = clickedCheckbox.dataset.id;
   if (!taskid) return;
   const activeTaskObject = lists.default.moveTaskFromCompletedToActive(taskid);
-  removeTaskmarkedAsNotCompleted(taskid);
+  captureAndRemoveTaskItem(taskid);
   showNumberOfCompletedTasks();
   renderTasks(lists.default.getTasks(), activeTaskObject);
   countTasks();

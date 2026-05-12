@@ -34,13 +34,10 @@ export const showUndopopup = () => {
   }, 2000);
 };
 
-const removeUndoneCompletedTaskFromCompletedList = () => {
-  const taskId = appStateUi.undoOperation.completedTaskObject.id;
-  const removedTaskItemFromCompletedlist = document.querySelector(
-    `.task[data-id="${taskId}"]`,
-  );
-  if (removedTaskItemFromCompletedlist)
-    removedTaskItemFromCompletedlist.remove();
+const removeTaskItemForUndo = () => {
+  const taskId = appStateUi.undoOperation.taskObject.id;
+  const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
+  if (taskItem) taskItem.remove();
 };
 
 const hideUndoPopup = () => {
@@ -53,12 +50,12 @@ const hideUndoPopup = () => {
 export const undoCompletedTask = () => {
   if (!elements) throw new Error("Required DOM was not found");
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
-  const taskObjectIndex = appStateUi.undoOperation.completedTaskIndex;
+  const taskObjectIndex = appStateUi.undoOperation.taskObjectIndex;
   const removedTaskItem = appStateUi.undoOperation.removedEl;
   const previousEl = appStateUi.undoOperation.previousEl;
   const nextEl = appStateUi.undoOperation.nextEl;
-  const completedTaskId = appStateUi.undoOperation.completedTaskObject.id;
-  removeUndoneCompletedTaskFromCompletedList();
+  const completedTaskId = appStateUi.undoOperation.taskObject.id;
+  removeTaskItemForUndo();
 
   lists.default.undoCompletedTask(
     originalTaskObject,

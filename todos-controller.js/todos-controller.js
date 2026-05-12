@@ -39,8 +39,8 @@ export const appStateUi = {
     previousEl: null,
     nextEl: null,
     removedEl: null,
-    completedTaskObject: null,
-    completedTaskIndex: null,
+    taskObject: null,
+    taskObjectIndex: null,
     originalTaskObject: null,
   },
 };
