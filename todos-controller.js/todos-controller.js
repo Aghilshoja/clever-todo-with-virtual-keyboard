@@ -20,7 +20,7 @@ import {
   truncateTaskText,
 } from "../shared-components/truncate-task.js";
 import { completeTask } from "../shared-components/complete-mode.js";
-import { undoCompletedTask } from "../shared-components/undo-completed-task.js";
+import { handleUndoCompletingAndUncompleting } from "../shared-components/undo-completed-task.js";
 import { moveTaskFromCompletedToActive } from "../shared-components/move-task-rrom-completed-to-active.js";
 export const lists = {
   default: new TaskList("default"),
@@ -42,6 +42,7 @@ export const appStateUi = {
     taskObject: null,
     taskObjectIndex: null,
     originalTaskObject: null,
+    undoType: "none",
   },
 };
 
@@ -79,7 +80,10 @@ const initTodo = () => {
 
   addListeners(listContainer);
   elements.warningPopup.addEventListener("click", deleteTask);
-  elements.undoCompletedTask.addEventListener("click", undoCompletedTask);
+  elements.undoCompletedTask.addEventListener(
+    "click",
+    handleUndoCompletingAndUncompleting,
+  );
 
   // Navigation Click
   elements.navigation.addEventListener("click", (e) => {

@@ -1,10 +1,12 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
 import {
   captureAndRemoveTaskItem,
   showNumberOfCompletedTasks,
+  updateCompletionStatusLabel,
 } from "./complete-mode.js";
 import { renderTasks } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
+import { showUndopopup } from "./undo-completed-task.js";
 
 export const moveTaskFromCompletedToActive = (event) => {
   const clickedCheckbox =
@@ -16,6 +18,14 @@ export const moveTaskFromCompletedToActive = (event) => {
   const activeTaskObject = lists.default.moveTaskFromCompletedToActive(taskid);
   captureAndRemoveTaskItem(taskid);
   showNumberOfCompletedTasks();
-  renderTasks(lists.default.getTasks(), activeTaskObject);
+  appStateUi.undoOperation.taskObject = activeTaskObject.activeTask;
+  appStateUi.undoOperation.taskObjectIndex =
+    activeTaskObject.indexOfTaskToUncomplete;
+  appStateUi.undoOperation.originalTaskObject =
+    activeTaskObject.taskToUncomplete;
+  renderTasks(lists.default.getTasks(), activeTaskObject.activeTask);
   countTasks();
+  updateCompletionStatusLabel(event);
+  showUndopopup();
+  appStateUi.undoOperation.undoType = "undo-uncompleted";
 };

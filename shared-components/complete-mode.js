@@ -52,6 +52,18 @@ export const showNumberOfCompletedTasks = () => {
   }
 };
 
+export const updateCompletionStatusLabel = (e) => {
+  const completionStatus = elements.completionStatusLabel;
+  const activeListCheckbox =
+    e.target.closest(".task__main-task-checkbox") ||
+    e.target.closest(".task__toolbar-task-checkbox");
+  const completedListCheckbox =
+    e.target.closest(".task__completed-main-task-checkbox") ||
+    e.target.closest(".task__toolbar-completed-task-checkbox");
+  if (activeListCheckbox) completionStatus.textContent = "Completed";
+  else if (completedListCheckbox) completionStatus.textContent = "Uncompleted";
+};
+
 export const completeTask = (e) => {
   const clickedCheckbox =
     e.target.closest(".task__main-task-checkbox") ||
@@ -77,5 +89,7 @@ export const completeTask = (e) => {
   countTasks(); //update badge of active list
   handleEmptyTaskStateUi();
   // show undo popup
+  updateCompletionStatusLabel(e);
   showUndopopup();
+  appStateUi.undoOperation.undoType = "undo-completed";
 };

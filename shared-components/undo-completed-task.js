@@ -3,6 +3,7 @@ import { getCachedElements } from "./get-cached-element.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
+import { undoUncompletedTask } from "./undo-uncompleted-task.js";
 
 const elements = getCachedElements();
 
@@ -34,20 +35,20 @@ export const showUndopopup = () => {
   }, 2000);
 };
 
-const removeTaskItemForUndo = () => {
+export const removeTaskItemForUndo = () => {
   const taskId = appStateUi.undoOperation.taskObject.id;
   const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
   if (taskItem) taskItem.remove();
 };
 
-const hideUndoPopup = () => {
+export const hideUndoPopup = () => {
   if (!elements) throw new Error("Required DOM was not found");
   const undoCompletionPopup = elements.undoCompletion;
   if (!undoCompletionPopup) return;
   undoCompletionPopup.classList.remove("undo-completion--active");
 };
 
-export const undoCompletedTask = () => {
+const undoCompletedTask = () => {
   if (!elements) throw new Error("Required DOM was not found");
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
   const taskObjectIndex = appStateUi.undoOperation.taskObjectIndex;
@@ -62,8 +63,12 @@ export const undoCompletedTask = () => {
     taskObjectIndex,
     completedTaskId,
   );
-  const checkbox = removedTaskItem.querySelector(".task__main-task-checkbox");
-  if (checkbox.checked) checkbox.checked = false;
+  const checkboxes = removedTaskItem.querySelectorAll(
+    ".task__main-task-checkbox, .task__toolbar-task-checkbox",
+  );
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) checkbox.checked = false;
+  });
 
   if (previousEl) previousEl.after(removedTaskItem);
   else if (nextEl) nextEl.before(removedTaskItem);
@@ -78,4 +83,10 @@ export const undoCompletedTask = () => {
   showNumberOfCompletedTasks();
   countTasks();
   hideUndoPopup();
+};
+
+export const handleUndoCompletingAndUncompleting = () => {
+  const undoType = appStateUi.undoOperation.undoType;
+  if (undoType === "undo-completed") undoCompletedTask();
+  else if (undoType === "undo-uncompleted") undoUncompletedTask();
 };

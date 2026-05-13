@@ -28,6 +28,7 @@ export const getCachedElements = () => {
     ),
     undoCompletion: document.querySelector(".undo-completion"),
     undoCompletedTask: document.querySelector(".undo-completed-task"),
+    completionStatusLabel: document.querySelector(".completion-status-label"),
   };
   return elements;
 };

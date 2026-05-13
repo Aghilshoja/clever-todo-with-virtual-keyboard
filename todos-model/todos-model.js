@@ -90,6 +90,9 @@ export class TaskList {
       (t) => t.id === taskId,
     );
     if (!taskToUncomplete) throw new Error("task object was not found");
+    const indexOfTaskToUncomplete =
+      this.getCompletedTasks().indexOf(taskToUncomplete);
+    if (indexOfTaskToUncomplete === -1) return;
     this.completedTasks = this.completedTasks.filter((t) => t.id !== taskId);
     const activeTask = {
       id: this.generateId(),
@@ -99,7 +102,11 @@ export class TaskList {
       createdAt: Date.now(),
     };
     this.getTasks().push(activeTask);
-    return activeTask;
+    return {
+      taskToUncomplete,
+      indexOfTaskToUncomplete,
+      activeTask,
+    };
   }
 
   undoCompletedTask(taskObject, index, completedTaskId) {
@@ -110,6 +117,15 @@ export class TaskList {
     this.completedTasks = this.completedTasks.filter(
       (t) => t.id !== completedTaskId,
     );
+  }
+
+  undoUncompletedTask(originalTaskObject, index, uncompletedTaskId) {
+    if (this.getCompletedTasks().length === 0)
+      this.getCompletedTasks().push(originalTaskObject);
+    else if (this.getCompletedTasks().length > 0)
+      this.getCompletedTasks().splice(index, 0, originalTaskObject);
+
+    this.tasks = this.tasks.filter((t) => t.id !== uncompletedTaskId);
   }
 
   generateId() {

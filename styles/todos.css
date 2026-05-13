@@ -307,7 +307,7 @@ details[open] summary::after {
 }
 
 .undo-completion {
-  position: absolute;
+  position: fixed;
   bottom: 160px;
   opacity: 0;
   width: 100%;
