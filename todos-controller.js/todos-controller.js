@@ -22,6 +22,14 @@ import {
 import { completeTask } from "../shared-components/complete-mode.js";
 import { handleUndoCompletingAndUncompleting } from "../shared-components/undo-completed-task.js";
 import { moveTaskFromCompletedToActive } from "../shared-components/move-task-rrom-completed-to-active.js";
+import {
+  dragStart,
+  dragOver,
+  draggedEnter,
+  draggedLeave,
+  dropTarget,
+  draggedEndTask,
+} from "../shared-components/drag-and-drop.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -68,6 +76,15 @@ export const addListeners = (list) => {
   list.addEventListener("click", moveTaskFromCompletedToActive);
 };
 
+const addDragAndDropListeners = (list) => {
+  list.addEventListener("dragstart", dragStart);
+  list.addEventListener("dragover", dragOver);
+  list.addEventListener("dragenter", draggedEnter);
+  list.addEventListener("dragleave", draggedLeave);
+  list.addEventListener("drop", dropTarget);
+  list.addEventListener("dragend", draggedEndTask);
+};
+
 const initTodo = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("Required DOM wasn't found");
@@ -77,8 +94,15 @@ const initTodo = () => {
 
   const listContainer = document.querySelector(`
     .list[data-id="${activeUlId.ul}"]`);
-
+  if (!listContainer) return;
+  const nextElementSibling = listContainer.nextElementSibling;
+  if (!nextElementSibling) return;
+  const completedList = nextElementSibling.querySelector("ul");
+  if (!completedList) return;
   addListeners(listContainer);
+  addListeners(completedList);
+  addDragAndDropListeners(listContainer);
+  addDragAndDropListeners(completedList);
   elements.warningPopup.addEventListener("click", deleteTask);
   elements.undoCompletedTask.addEventListener(
     "click",
