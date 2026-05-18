@@ -342,3 +342,30 @@ details[open] summary::after {
   border-left: 1px solid white;
   cursor: pointer;
 }
+
+/* drag and drop feature */
+.task--dragging {
+  border: 4px solid yellowgreen;
+}
+
+.task--highlight {
+  border: 2px solid red;
+}
+
+.dragged-image-wrapper {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: max-content;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.121);
+  pointer-events: none;
+  display: flex;
+  gap: 0.6rem;
+  padding: 1rem;
+}
+
+.task-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

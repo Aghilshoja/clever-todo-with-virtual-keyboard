@@ -168,7 +168,7 @@ export const renderTasks = (task, eachTask) => {
   if (task.length === 0 || eachTask === undefined) return;
 
   const list = `
-    <li class="task" data-id="${eachTask.id}">
+    <li class="task" draggable="true" data-id="${eachTask.id}">
     <ul class="task__container">
     <li class="task__item flex-space-between">
     <div class="group-input-and-text flex">
@@ -196,7 +196,7 @@ export const renderCompletedTask = (eachCompletedTask) => {
   const completedListContainer = getCompletedListContainer();
   if (!completedListContainer) return;
   const list = `
-    <li class="task" data-id="${eachCompletedTask.id}">
+    <li class="task" draggable="true" data-id="${eachCompletedTask.id}">
     <ul class="task__container">
     <li class="task__item flex-space-between">
     <div class="group-input-and-text flex">
