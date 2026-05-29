@@ -7,6 +7,10 @@ import {
 import { renderTasks } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { showUndopopup } from "./undo-completed-task.js";
+import {
+  disableOrEnableButtons,
+  updateCounterAfterCompletingOrUncompletingATask,
+} from "./select-tasks.js";
 
 export const moveTaskFromCompletedToActive = (event) => {
   const clickedCheckbox =
@@ -28,4 +32,7 @@ export const moveTaskFromCompletedToActive = (event) => {
   updateCompletionStatusLabel(event);
   showUndopopup();
   appStateUi.undoOperation.undoType = "undo-uncompleted";
+  updateCounterAfterCompletingOrUncompletingATask();
+  /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
+  disableOrEnableButtons();
 };

@@ -6,6 +6,11 @@ import { countTasks } from "./count-tasks.js";
 import { addListeners } from "../todos-controller.js/todos-controller.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { showUndopopup } from "./undo-completed-task.js";
+import {
+  disableOrEnableButtons,
+  updateCounterAfterCompletingOrUncompletingATask,
+  updateLabelsOfOperationalButtonsForSelectedTasks,
+} from "./select-tasks.js";
 
 const elements = getCachedElements();
 
@@ -92,4 +97,10 @@ export const completeTask = (e) => {
   updateCompletionStatusLabel(e);
   showUndopopup();
   appStateUi.undoOperation.undoType = "undo-completed";
+  updateLabelsOfOperationalButtonsForSelectedTasks();
+
+  /* update number of tasks selected after completing them in task selection mode */
+  updateCounterAfterCompletingOrUncompletingATask();
+  /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
+  disableOrEnableButtons();
 };

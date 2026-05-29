@@ -83,7 +83,7 @@ span.task-counter--active {
   border-radius: 10px;
   color: white;
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   left: 37px;
   font-size: 0.75rem;
 }
@@ -91,4 +91,102 @@ span.task-counter--active {
 .main-page__default-button {
   position: relative;
   bottom: 0;
+}
+
+.initially-hidden {
+  display: none;
+}
+
+.main-page__drop-down-list {
+  position: absolute;
+  top: 47px;
+  right: 3px;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  pointer-events: none;
+  background-color: white;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.332);
+  transition:
+    opacity 0.4s ease-in-out,
+    transform 0.4s ease-in-out;
+}
+
+.main-page__section:hover,
+.main-page__select-your-tasks:hover,
+.main-page__activity:hover,
+.main-page__comments:hover {
+  background-color: rgba(128, 128, 128, 0.081);
+}
+
+.main-page__drop-down-list--active {
+  transform: scaleX(1);
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.header-opacity,
+.nav-opacity {
+  opacity: 0;
+}
+
+.main-page__count-selected-tasks {
+  display: none;
+}
+
+.main-page__count-selected-tasks--active {
+  position: fixed;
+  top: 10px;
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+  z-index: 1;
+  padding: 0 0 0 1rem;
+}
+
+.main-page__toolbar {
+  display: none;
+}
+
+ul.main-page__toolbar--active {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 0.4rem;
+  box-shadow: 1px 1px 10px black;
+}
+
+.deactivate:disabled {
+  cursor: not-allowed;
+}
+
+.main-page__hidden-options {
+  display: none;
+}
+
+.main-page__toolbar-manu {
+  position: absolute;
+  bottom: 40px;
+  right: 2px;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  pointer-events: none;
+  background-color: white;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.332);
+  transition:
+    opacity 0.4s ease-in-out,
+    transform 0.4s ease-in-out;
+}
+
+.main-page__toolbar-manu--active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scaleY(1);
+}
+
+.hide-adding-task-icon {
+  display: none;
 }

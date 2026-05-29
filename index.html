@@ -55,11 +55,46 @@
         <div class="main-page__flex-container">
           <h2 class="main-page__heading">Tasks</h2>
           <div class="main-page__options">
-            <button class="main-page__trigger-options">
+            <button class="main-page__trigger-options cursor">
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
+            <ul class="main-page__drop-down-list">
+              <!-- main page section means that the section is in the main page main interface where the app opens -->
+              <li class="main-page__section">
+                <button
+                  class="main-page__add-section button-reset pd fs cursor"
+                  aria-label="add a section"
+                >
+                  add section
+                </button>
+              </li>
+              <li class="main-page__select-your-tasks initially-hidden">
+                <button
+                  class="main-page__select-tasks button-reset pd fs cursor"
+                  aria-label="select tasks to do an action on them"
+                >
+                  select tasks
+                </button>
+              </li>
+              <li class="main-page__activity">
+                <button
+                  class="main-page__activity-log button-reset pd fs cursor"
+                  aria-label="check your history like which tasks you have deleted, edited or completed"
+                >
+                  activity log
+                </button>
+              </li>
+              <li class="main-page__comments">
+                <button class="main-page__comments button-reset pd fs cursor" aria-label="see all of your comments">Comments</button>
+              </li>
+            </ul>
           </div>
         </div>
+
+        <div class="main-page__count-selected-tasks">
+                <button class="main-page__exit-task-selection button-reset  cursor fs" aria-label="exit task selection">  <i class="fas fa-arrow-left"></i></button>
+                <p class="main-page__number-of-selected-tasks fs"></p>
+          </div>
 
         <section class="main-page__default-list">
           <h3 class="main-page__default-list__title">Default Task Section</h3>
@@ -148,6 +183,38 @@
             +
           </button>
         </div>
+                  <ul class="main-page__toolbar">
+            <li class="main-page__date">
+              <button class="main-page__task-date button-reset fs cursor deactivate" aria-label="set a date on your tasks or a task" title="Set date on your selected tasks" disabled><i class="far fa-calendar-alt"></i></button>
+            </li>
+            <li class="main-page__move-tasks">
+              <button class="main-task__move-to fs cursor button-reset deactivate" aria-label="move your tasks to another list"  title="Move your selected tasks to other lists" disabled><i class="fa-solid fa-arrows-up-down-left-right"></i> </button>
+            </li>
+            <li class="main-page__label">
+              <button class="main-page__task-label button-reset fs cursor deactivate" aria-label="label your task"  title="Add a label to your selected tasks" disabled><i class="fa-solid fa-tag"></i></button>
+            </li>
+            <li class="main-page__proiority">
+              <button class="main-page__task-proiority cursor fs button-reset deactivate" aria-label="specify proiority of your tasks " title="Proioritize your selected tasks" disabled><i class="fa-solid fa-flag"></i></button>
+            </li>
+            <li class="main-page__more--options">
+              <button class="main-page__more---options button-reset cursor fs deactivate" aria-label="other options to consider" title="click on the ellipsis to see more options">  <i class="fa-solid fa-ellipsis-vertical"></i></button>
+                <ul class="main-page__toolbar-manu">
+                <li class="main-page__delete-operation">
+                  <button class="main-page__delete-tasks button-reset fs pd cursor" aria-label="delete your selected tasks" title="Delete your selected tasks" disabled><i class="fa-solid fa-trash"></i> <span class="main-page__delete-label"></span></button>
+                </li>
+                <li class="main-page__duplicate-operation">
+                  <button class="main-page__duplicate-tasks button-reset fs pd cursor deactivate" aria-label="Duplicate your selected tasks" title="Duplicate your selected tasks" disabled><i class="fa-solid fa-copy"></i> <span class="main-page__duplication-label"></span></button>
+                </li>
+                <li class="main-page__complete-operation">
+                  <button class="main-page__complete-or-uncomplete-tasks button-reset cursor pd fs deactivate" aria-label="Completed-tasks" title="Complete your selected tasks" disabled><i class="fas fa-check-circle"></i> <span class="main-page__completed-or-uncompleted-label"></span></button>
+                </li>
+                <!-- deadline will be implemented as a pro feature later-->
+                <li class="main__oage__deadline">
+                  <button class="main-page__tasks-deadline button-reset cursor pd fs deactivate" aria-label="Set dealine on your selected tasks" title="Add a deadline to your selected tasks" disabled><i class="fas fa-hourglass-half"></i> Deadline</button>
+                </li>
+              </ul>
+            </li>
+          </ul>
       </section>
 
       <article class="keyboard-widget" aria-label="Virtual keyboard widget">
@@ -175,7 +242,7 @@
               aria-label="submit your task through app's submit button"
               disabled
             >
-              <i class="fa-solid fa-arrow-up"></i>>
+              <i class="fa-solid fa-arrow-up"></i>
             </button>
           </div>
 

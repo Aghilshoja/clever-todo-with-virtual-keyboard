@@ -4,6 +4,7 @@ import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { undoUncompletedTask } from "./undo-uncompleted-task.js";
+import { disableOrEnableButtons } from "./select-tasks.js";
 
 const elements = getCachedElements();
 
@@ -48,6 +49,14 @@ export const hideUndoPopup = () => {
   undoCompletionPopup.classList.remove("undo-completion--active");
 };
 
+const unhighlightSelectedTaskAfterUndoOperation = (taskitem) => {
+  const isRemovedTaskHighilighted = taskitem.classList.contains(
+    "highlight-selected-tasks",
+  );
+  if (isRemovedTaskHighilighted)
+    taskitem.classList.remove("highlight-selected-tasks");
+};
+
 const undoCompletedTask = () => {
   if (!elements) throw new Error("Required DOM was not found");
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
@@ -56,6 +65,8 @@ const undoCompletedTask = () => {
   const previousEl = appStateUi.undoOperation.previousEl;
   const nextEl = appStateUi.undoOperation.nextEl;
   const completedTaskId = appStateUi.undoOperation.taskObject.id;
+  unhighlightSelectedTaskAfterUndoOperation(removedTaskItem);
+  disableOrEnableButtons();
   removeTaskItemForUndo();
 
   lists.default.undoCompletedTask(

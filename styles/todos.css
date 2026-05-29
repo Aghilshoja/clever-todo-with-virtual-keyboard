@@ -357,7 +357,7 @@ details[open] summary::after {
   top: -9999px;
   left: -9999px;
   width: max-content;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.121);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.262);
   pointer-events: none;
   display: flex;
   gap: 0.6rem;
@@ -368,4 +368,8 @@ details[open] summary::after {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.highlight-selected-tasks {
+  background-color: rgba(211, 211, 211, 0.119);
 }
