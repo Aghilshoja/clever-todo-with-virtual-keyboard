@@ -29,6 +29,18 @@ export const getCachedElements = () => {
     undoCompletion: document.querySelector(".undo-completion"),
     undoCompletedTask: document.querySelector(".undo-completed-task"),
     completionStatusLabel: document.querySelector(".completion-status-label"),
+    dropDownList: document.querySelector(".main-page__drop-down-list"),
+    selectedTasks: document.querySelector(".main-page__count-selected-tasks"),
+    mainPageToolbar: document.querySelector(".main-page__toolbar"),
+    activateToolbarButtons: document.querySelectorAll(
+      ".main-page__task-date, .main-task__move-to, .main-page__task-label, .main-page__task-proiority, .main-page__other--option, .main-page__delete-tasks, .main-page__duplicate-tasks, .main-page__complete-or-uncomplete-tasks",
+    ),
+    mainPageMoreOptionsOfSelectedTasks: document.querySelector(
+      ".main-page__more--options",
+    ),
+    mainPageSelectedTaskToolbarmanu: document.querySelector(
+      ".main-page__toolbar-manu",
+    ),
   };
   return elements;
 };

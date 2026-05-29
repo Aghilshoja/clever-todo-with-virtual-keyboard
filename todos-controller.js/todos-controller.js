@@ -30,6 +30,13 @@ import {
   dropTarget,
   draggedEndTask,
 } from "../shared-components/drag-and-drop.js";
+import {
+  toggleOptions,
+  triggerTaskSelectionUi,
+  selectTasks,
+  toggleOptionsOfSelectedTasks,
+  exitTaskSelection,
+} from "../shared-components/select-tasks.js";
 export const lists = {
   default: new TaskList("default"),
 };
@@ -52,6 +59,8 @@ export const appStateUi = {
     originalTaskObject: null,
     undoType: "none",
   },
+  taskSelectionMode: "on-active-list",
+  selectedTasksCounter: 0,
 };
 
 const handleListChange = (listChange, eachTask) => {
@@ -74,6 +83,7 @@ export const addListeners = (list) => {
   list.addEventListener("click", exitEditMode);
   list.addEventListener("click", completeTask);
   list.addEventListener("click", moveTaskFromCompletedToActive);
+  list.addEventListener("click", selectTasks);
 };
 
 const addDragAndDropListeners = (list) => {
@@ -108,6 +118,11 @@ const initTodo = () => {
     "click",
     handleUndoCompletingAndUncompleting,
   );
+
+  document.addEventListener("click", toggleOptions);
+  elements.dropDownList.addEventListener("click", triggerTaskSelectionUi);
+  document.addEventListener("click", toggleOptionsOfSelectedTasks);
+  elements.selectedTasks.addEventListener("click", exitTaskSelection);
 
   // Navigation Click
   elements.navigation.addEventListener("click", (e) => {

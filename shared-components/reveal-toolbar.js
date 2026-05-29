@@ -20,6 +20,10 @@ export const adjustActiveTaskTextWidth = () => {
 };
 
 export const revealToolbar = (e) => {
+  const isSelectedTaskActive = document.querySelector(
+    ".main-page__count-selected-tasks--active",
+  );
+  if (isSelectedTaskActive) return;
   if (
     e.target.closest(".task") &&
     !e.target.closest(".task__main-task-checkbox") &&
