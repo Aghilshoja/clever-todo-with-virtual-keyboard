@@ -11,11 +11,21 @@ import {
   updateCounterAfterCompletingOrUncompletingATask,
   updateLabelsOfOperationalButtonsForSelectedTasks,
 } from "./select-tasks.js";
+import {
+  ACTIONS,
+  ACTIVE,
+  ATTR,
+  ATTR_STATES,
+  INACTIVE,
+  UNDO_STATES,
+} from "../constants/todo-constants.js";
 
 const elements = getCachedElements();
 
 export const captureAndRemoveTaskItem = (taskId) => {
-  const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
+  const taskItem = document.querySelector(
+    `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
+  );
   if (!taskItem) return;
   appStateUi.undoOperation.removedEl = taskItem;
   appStateUi.undoOperation.previousEl = taskItem.previousElementSibling;
@@ -25,12 +35,14 @@ export const captureAndRemoveTaskItem = (taskId) => {
 
 export const getCompletedListContainer = () => {
   const activeList = document.querySelector(
-    `.list[data-id="${activeUlId.ul}"]`,
+    `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
   );
 
   const listWrapper = activeList.nextElementSibling;
-  const completedListTitle = listWrapper.querySelector("summary");
-  const completedList = listWrapper.querySelector("ul");
+  const completedListTitle = listWrapper.querySelector(
+    `[${ATTR.COMPLETION_STATUS}]`,
+  );
+  const completedList = listWrapper.querySelector(`[${ATTR.COMPLETED_LIST}]`);
   return {
     listWrapper,
     completedListTitle,
@@ -46,33 +58,27 @@ export const showNumberOfCompletedTasks = () => {
     numberOfCompletedTasks === 1
       ? `${numberOfCompletedTasks} completed task`
       : `${numberOfCompletedTasks} completed tasks`;
-  completedElements.listWrapper.classList.add(
-    "completed-default-tasks--active",
-  );
+  completedElements.listWrapper.dataset[ATTR_STATES.COMPLETED_LIST_SECTION] =
+    ACTIVE.COMPLETED_SECTION;
 
   if (numberOfCompletedTasks === 0) {
-    completedElements.listWrapper.classList.remove(
-      "completed-default-tasks--active",
-    );
+    completedElements.listWrapper.dataset[ATTR_STATES.COMPLETED_LIST_SECTION] =
+      INACTIVE.COMPLETED_SECTION;
   }
 };
 
 export const updateCompletionStatusLabel = (e) => {
   const completionStatus = elements.completionStatusLabel;
-  const activeListCheckbox =
-    e.target.closest(".task__main-task-checkbox") ||
-    e.target.closest(".task__toolbar-task-checkbox");
-  const completedListCheckbox =
-    e.target.closest(".task__completed-main-task-checkbox") ||
-    e.target.closest(".task__toolbar-completed-task-checkbox");
+  const activeListCheckbox = e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`);
+  const completedListCheckbox = e.target.closest(
+    `[${ACTIONS.UNCOMPLETE_TASK}]`,
+  );
   if (activeListCheckbox) completionStatus.textContent = "Completed";
   else if (completedListCheckbox) completionStatus.textContent = "Uncompleted";
 };
 
 export const completeTask = (e) => {
-  const clickedCheckbox =
-    e.target.closest(".task__main-task-checkbox") ||
-    e.target.closest(".task__toolbar-task-checkbox");
+  const clickedCheckbox = e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`);
   if (!clickedCheckbox) return;
   if (!elements) throw new Error("Required DOM was not found");
   const taskId = clickedCheckbox.dataset.id;
@@ -96,7 +102,7 @@ export const completeTask = (e) => {
   // show undo popup
   updateCompletionStatusLabel(e);
   showUndopopup();
-  appStateUi.undoOperation.undoType = "undo-completed";
+  appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_COMPLETED;
   updateLabelsOfOperationalButtonsForSelectedTasks();
 
   /* update number of tasks selected after completing them in task selection mode */

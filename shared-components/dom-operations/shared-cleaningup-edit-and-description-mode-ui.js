@@ -5,91 +5,105 @@ import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-be
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { saveInputText } from "../save-drafted-text-input-to-local-storage.js";
+import { PLACEHOLDERS } from "../../constants/keyboard-constants.js";
+import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  ATTR,
+  ATTR_STATES,
+  CHECK_STATES,
+  CLOSED,
+  EDIT_MODES,
+  HIDDEN,
+  INACTIVE,
+} from "../../constants/todo-constants.js";
+import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
+import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
 
 const elements = getCachedElements();
 
-const renderUnrelatedElements = (toolbar) => {
-  if (!toolbar) return;
-  const showUnrelatedEls = document.querySelectorAll(".hide-unrelated-els");
-  if (showUnrelatedEls)
-    showUnrelatedEls.forEach((unrelatedEls) =>
-      unrelatedEls.classList.remove("hide-unrelated-els"),
+const renderUnrelatedElements = () => {
+  const unrelatedEls = document.querySelectorAll(
+    `[${CHECK_STATES.UNRELATED_ELS}]`,
+  );
+  if (unrelatedEls)
+    unrelatedEls.forEach(
+      (unrelatedEls) => delete unrelatedEls.dataset[ATTR_STATES.UNRELATED_ELS],
     );
 };
 
-const cleanupEditModeUi = (toolbar) => {
-  const taskEl = toolbar.querySelector(".task__toolbar-task-text");
-  if (!taskEl) return;
-  taskEl.classList.remove("hide-task-text");
+const putInputElementWhereThatWas = () => {
   if (elements.circleEl) elements.circleEl.after(elements.inputElement);
+};
+
+const cleanupEditModeUi = (toolbar) => {
+  if (!toolbar) return;
+  const repetitiveElements = getRepetitiveElements(toolbar);
+  if (!repetitiveElements.taskTextEl) return;
+  const taskEl = repetitiveElements.taskTextEl;
+  delete taskEl.dataset[ATTR_STATES.TASK_TEXT_STATE];
+  delete taskEl.dataset[ATTR_STATES.TASK_TEXT_ACTIVE];
+  putInputElementWhereThatWas();
 };
 
 const cleanupDescriptioinModeUi = (toolbar) => {
   if (!toolbar) return;
-  if (elements.inputElement) {
-    const descriptionEl = toolbar.querySelector(
-      ".task__toolbar-description-text",
-    );
-    if (!descriptionEl) return;
-    descriptionEl.classList.remove("hide-task-description");
-    if (elements.circleEl) elements.circleEl.after(elements.inputElement);
-  }
+  const repetitiveElements = getRepetitiveElements(toolbar);
+  if (!repetitiveElements.description) return;
+  const descriptionEl = repetitiveElements.description;
+  delete descriptionEl.dataset[ATTR_STATES.DESCRIPTION_STATE];
+  delete descriptionEl.dataset[ATTR_STATES.DESCRIPTION_ACTIVE];
+  putInputElementWhereThatWas();
 };
 
 const deactiviateToolbar = (toolbar) => {
   if (!toolbar) return;
-  toolbar.classList.remove("toolbar-action--active");
-  toolbar.classList.remove("toolbar--active");
-  const editPageUi = toolbar.querySelector(".task__edit-page");
-  if (editPageUi) editPageUi.classList.remove("task__edit-page--active");
-  // get save button using the class name that is given to it before to disable it again
-  const saveButton = toolbar.querySelector(".task__save-edited-task--active");
-  if (saveButton) {
-    saveButton.disabled = true;
-    saveButton.classList.remove("task__save-edited-task--active");
+  toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = CLOSED.TASK_TOOLBAR;
+  delete toolbar.dataset[ATTR_STATES.TOOLBAR_FULL_HEIGHT];
+
+  const repetitiveElements = getRepetitiveElements(toolbar);
+  const actionButtonsContainer = repetitiveElements.actionButtonsContainer;
+  const activeSaveButton = repetitiveElements.activeSaveBtn;
+  const activeMenu = repetitiveElements.activeManu;
+
+  if (actionButtonsContainer && activeSaveButton && activeMenu) {
+    actionButtonsContainer.dataset[ATTR_STATES.ACTION_BUTTONS_CON] =
+      HIDDEN.ACTION_BUTTONS_CON;
+    activeSaveButton.disabled = true;
+    delete activeSaveButton.dataset[ATTR_STATES.SAVE_BUTTON_ACTIVE];
+    // if menu wass open close it
+    activeMenu.dataset[ATTR_STATES.TASK_MENU] = CLOSED.TASK_MENU;
   }
 
-  const activeManu = toolbar.querySelector(".manu--active");
-  if (activeManu) activeManu.classList.remove("manu--active");
+  if (!repetitiveElements.description || !repetitiveElements.taskTextEl) return;
+  const description = repetitiveElements.description;
 
-  const description = toolbar.querySelector(".task__toolbar-description-text");
   if (
     description.textContent.trim() === "" ||
-    description.textContent === "Description"
+    description.textContent === PLACEHOLDERS.DESCRIPTION
   ) {
     description.parentElement.classList.remove("pd");
-    description.classList.remove("pd");
     description.textContent = "";
   } else if (
-    description.textContent !== "Description" ||
+    description.textContent !== PLACEHOLDERS.DESCRIPTION ||
     description.textContent.trim() !== ""
-  ) {
-    description.classList.remove("pd");
+  )
     description.parentElement.classList.add("pd");
-  }
 
   const removeToolbarOverlay = toolbar.previousElementSibling;
   if (removeToolbarOverlay)
-    removeToolbarOverlay.classList.remove("close-toolbar--active");
-  const activeTaskText = document.querySelector(
-    ".task__toolbar-task-text--active",
-  );
-  if (activeTaskText)
-    activeTaskText.classList.remove("task__toolbar-task-text--active");
-  const activeDescriptionEl = document.querySelector(
-    ".task__toolbar-description-text--active",
-  );
-  if (activeDescriptionEl)
-    activeDescriptionEl.classList.remove(
-      "task__toolbar-description-text--active",
-    );
+    removeToolbarOverlay.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
+      INACTIVE.TOOBAR_OVERLAY;
 };
 
 // Restores the user's unsubmitted task draft after leaving edit mode.
 /* Discards any edits made to an existing task and reinserts the previously saved draft into the input field. */
 const restoreDraftBackupAfterEditMode = () => {
   const input = elements.inputElement;
-  if (input.dataset.draft !== "" && input.dataset.draft !== "Enter a task") {
+  if (!input) return;
+  if (
+    input.dataset.draft !== "" &&
+    input.dataset.draft !== PLACEHOLDERS.ENTER_TASK
+  ) {
     input.textContent = "";
     const caret = ensureCaret(input);
     caret.insertAdjacentText("beforebegin", input.dataset.draft);
@@ -102,11 +116,11 @@ const restoreDraftBackupAfterEditMode = () => {
 };
 
 const resetOtherPartsAsWell = (event) => {
-  appStateUi.activePlaceholder = "Enter-a-task";
+  keyboardUiState.activePlaceholder = PLACEHOLDERS.ENTER_TASK;
   restoreDraftBackupAfterEditMode();
   disableSubmitIfInputEmpty();
-  toggleKeyboard(event);
-  appStateUi.activeMode = "none";
+  closeKeyboard();
+  appStateUi.activeMode = EDIT_MODES.NO_MODES;
 };
 
 export const cleanupDescriptionUi = (toolbar, event) => {

@@ -1,5 +1,7 @@
+import { ATTR } from "../constants/todo-constants.js";
+
 export const truncateTaskText = () => {
-  const taskEl = document.querySelectorAll(".task__text");
+  const taskEl = document.querySelectorAll(`[${ATTR.MAIN_TASK_TEXT}]`);
   if (!taskEl) return;
 
   const breakpoints = [
@@ -26,7 +28,9 @@ export const truncateTaskText = () => {
 };
 
 export const truncateTaskDescription = () => {
-  const descriptionEl = document.querySelectorAll(".task__description");
+  const descriptionEl = document.querySelectorAll(
+    `[${ATTR.MAIN_TASK_DESCRIPTION}]`,
+  );
   if (!descriptionEl) return;
 
   const breakpoints = [

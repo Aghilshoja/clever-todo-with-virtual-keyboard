@@ -11,11 +11,10 @@ import {
   disableOrEnableButtons,
   updateCounterAfterCompletingOrUncompletingATask,
 } from "./select-tasks.js";
+import { ACTIONS, UNDO_STATES } from "../constants/todo-constants.js";
 
 export const moveTaskFromCompletedToActive = (event) => {
-  const clickedCheckbox =
-    event.target.closest(".task__completed-main-task-checkbox") ||
-    event.target.closest(".task__toolbar-completed-task-checkbox");
+  const clickedCheckbox = event.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`);
   if (!clickedCheckbox) return;
   const taskid = clickedCheckbox.dataset.id;
   if (!taskid) return;
@@ -31,7 +30,7 @@ export const moveTaskFromCompletedToActive = (event) => {
   countTasks();
   updateCompletionStatusLabel(event);
   showUndopopup();
-  appStateUi.undoOperation.undoType = "undo-uncompleted";
+  appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_UNCOMPLETED;
   updateCounterAfterCompletingOrUncompletingATask();
   /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
   disableOrEnableButtons();

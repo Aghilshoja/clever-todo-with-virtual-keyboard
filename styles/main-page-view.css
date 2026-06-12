@@ -7,7 +7,33 @@
   --BORDER-RADIUS: 30%;
 }
 
-.hidden-main-page {
+.main-page__default-list__title,
+.completed-default-list__title,
+.undo-completion__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.main-page__default-list {
+  text-align: center;
+}
+
+.main-page__empty-state-description {
+  margin: 0 2rem 0 2rem;
+}
+
+.main-page__empty_state-image {
+  max-width: 100%;
+  height: auto;
+}
+
+[data-main-page-state="hidden"] {
   display: none;
 }
 
@@ -69,11 +95,11 @@
   border-radius: var(--BORDER-RADIUS);
 }
 
-.main-page__task-counter {
+[data-task-counter-state="inactive"] {
   display: none;
 }
 
-span.task-counter--active {
+[data-task-counter-state="active"] {
   background-color: red;
   display: flex;
   justify-content: center;
@@ -93,23 +119,33 @@ span.task-counter--active {
   bottom: 0;
 }
 
-.initially-hidden {
+/* the select item in the dropdown list */
+[data-select-task-state="hidden"] {
   display: none;
 }
 
-.main-page__drop-down-list {
+[data-dropdown-list-state] {
   position: absolute;
   top: 47px;
   right: 3px;
-  opacity: 0;
-  transform: scaleX(0);
   transform-origin: right;
-  pointer-events: none;
   background-color: white;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.332);
   transition:
     opacity 0.4s ease-in-out,
     transform 0.4s ease-in-out;
+}
+
+[data-dropdown-list-state="closed"] {
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+[data-dropdown-list-state="open"] {
+  transform: scaleX(1);
+  pointer-events: auto;
+  opacity: 1;
 }
 
 .main-page__section:hover,
@@ -119,22 +155,16 @@ span.task-counter--active {
   background-color: rgba(128, 128, 128, 0.081);
 }
 
-.main-page__drop-down-list--active {
-  transform: scaleX(1);
-  pointer-events: auto;
-  opacity: 1;
-}
-
 .header-opacity,
 .nav-opacity {
   opacity: 0;
 }
 
-.main-page__count-selected-tasks {
+[data-selection-bar-state="inactive"] {
   display: none;
 }
 
-.main-page__count-selected-tasks--active {
+[data-selection-bar-state="active"] {
   position: fixed;
   top: 10px;
   width: 100%;
@@ -144,11 +174,12 @@ span.task-counter--active {
   padding: 0 0 0 1rem;
 }
 
-.main-page__toolbar {
+[data-batch-toolbar-state="closed"],
+[data-task-creator-state="hidden"] {
   display: none;
 }
 
-ul.main-page__toolbar--active {
+[data-batch-toolbar-state="open"] {
   display: flex;
   justify-content: space-between;
   position: fixed;
@@ -181,12 +212,14 @@ ul.main-page__toolbar--active {
     transform 0.4s ease-in-out;
 }
 
-.main-page__toolbar-manu--active {
+[data-batch-menu-state="open"] {
   opacity: 1;
   pointer-events: auto;
   transform: scaleY(1);
 }
 
-.hide-adding-task-icon {
-  display: none;
+[data-batch-menu-state="closed"] {
+  opacity: 0;
+  transform: scaleY(0);
+  pointer-events: none;
 }

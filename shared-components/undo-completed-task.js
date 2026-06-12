@@ -5,6 +5,16 @@ import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { undoUncompletedTask } from "./undo-uncompleted-task.js";
 import { disableOrEnableButtons } from "./select-tasks.js";
+import {
+  ACTIONS,
+  ATTR,
+  HIGHLIGHT_SELECTED_TASK,
+  UNDO_STATES,
+  CHECK_STATES,
+  ATTR_STATES,
+  ACTIVE,
+  INACTIVE,
+} from "../constants/todo-constants.js";
 
 const elements = getCachedElements();
 
@@ -18,19 +28,18 @@ export const showUndopopup = () => {
   // 1. Clear any existing timer
   if (undoPopupTimer) clearTimeout(undoPopupTimer);
 
-  const isUndoPopupOpen = undoCompletion.classList.contains(
-    "undo-completion--active",
-  );
+  const isUndoPopupOpen =
+    undoCompletion.dataset[ATTR_STATES.UNDO_CON] === ACTIVE.UNDO_CON;
 
   if (isUndoPopupOpen)
-    undoCompletion.classList.remove("undo-completion--active");
+    undoCompletion.dataset[ATTR_STATES.UNDO_CON] = INACTIVE.UNDO_CON;
 
   setTimeout(() => {
-    undoCompletion.classList.add("undo-completion--active");
+    undoCompletion.dataset[ATTR_STATES.UNDO_CON] = ACTIVE.UNDO_CON;
   }, 2);
 
   undoPopupTimer = setTimeout(() => {
-    elements.undoCompletion.classList.remove("undo-completion--active");
+    undoCompletion.dataset[ATTR_STATES.UNDO_CON] = INACTIVE.UNDO_CON;
     // Reset the timer variable once it's done
     undoPopupTimer = null;
   }, 2000);
@@ -38,7 +47,9 @@ export const showUndopopup = () => {
 
 export const removeTaskItemForUndo = () => {
   const taskId = appStateUi.undoOperation.taskObject.id;
-  const taskItem = document.querySelector(`.task[data-id="${taskId}"]`);
+  const taskItem = document.querySelector(
+    `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
+  );
   if (taskItem) taskItem.remove();
 };
 
@@ -46,15 +57,11 @@ export const hideUndoPopup = () => {
   if (!elements) throw new Error("Required DOM was not found");
   const undoCompletionPopup = elements.undoCompletion;
   if (!undoCompletionPopup) return;
-  undoCompletionPopup.classList.remove("undo-completion--active");
+  undoCompletionPopup.dataset[ATTR_STATES.UNDO_CON] = INACTIVE.UNDO_CON;
 };
 
-const unhighlightSelectedTaskAfterUndoOperation = (taskitem) => {
-  const isRemovedTaskHighilighted = taskitem.classList.contains(
-    "highlight-selected-tasks",
-  );
-  if (isRemovedTaskHighilighted)
-    taskitem.classList.remove("highlight-selected-tasks");
+const unhighlightSelectedTaskAfterUndoOperation = (taskItem) => {
+  delete taskItem.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
 };
 
 const undoCompletedTask = () => {
@@ -75,7 +82,7 @@ const undoCompletedTask = () => {
     completedTaskId,
   );
   const checkboxes = removedTaskItem.querySelectorAll(
-    ".task__main-task-checkbox, .task__toolbar-task-checkbox",
+    `[${ACTIONS.COMPLETE_TASK}]`,
   );
   checkboxes.forEach((checkbox) => {
     if (checkbox.checked) checkbox.checked = false;
@@ -85,7 +92,7 @@ const undoCompletedTask = () => {
   else if (nextEl) nextEl.before(removedTaskItem);
   else {
     const activeList = document.querySelector(
-      `.list[data-id="${activeUlId.ul}"]`,
+      `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
     );
     if (!activeList) return;
     activeList.textContent = "";
@@ -98,6 +105,6 @@ const undoCompletedTask = () => {
 
 export const handleUndoCompletingAndUncompleting = () => {
   const undoType = appStateUi.undoOperation.undoType;
-  if (undoType === "undo-completed") undoCompletedTask();
-  else if (undoType === "undo-uncompleted") undoUncompletedTask();
+  if (undoType === UNDO_STATES.UNDO_COMPLETED) undoCompletedTask();
+  else if (undoType === UNDO_STATES.UNDO_UNCOMPLETED) undoUncompletedTask();
 };

@@ -8,10 +8,16 @@ export class KeyboardApp {
     UPDATE_KEYS: "updateKeys",
   };
 
+  static CAPS_LOCK = {
+    UPPERCASE: "uppercase",
+    LOWERCASE: "lowercase",
+    CAPS: "caps",
+  };
+
   constructor() {
     this.keyboard = new KeyboardStructure();
     this.activelang = "en";
-    this.capsLock = "lowercase";
+    this.capsLock = KeyboardApp.CAPS_LOCK.LOWERCASE;
     this.listeners = {
       createRows: [],
       createKeys: [],
@@ -61,17 +67,30 @@ export class KeyboardApp {
   }
 
   currentCapsLock() {
-    if (this.capsLock === "lowercase") this.capsLock = "cap";
-    else if (this.capsLock === "cap") this.capsLock = "uppercase";
-    else this.capsLock = "lowercase";
+    const LOWERCASE = KeyboardApp.CAPS_LOCK.LOWERCASE;
+    const UPPERCASE = KeyboardApp.CAPS_LOCK.UPPERCASE;
+    const CAPS = KeyboardApp.CAPS_LOCK.CAPS;
+    if (this.capsLock === LOWERCASE) this.capsLock = CAPS;
+    else if (this.capsLock === CAPS) this.capsLock = UPPERCASE;
+    else this.capsLock = LOWERCASE;
 
-    this.emitChange(KeyboardApp.EVENTS.UPDATE_KEYS, this.capsLock);
+    this.emitChange(
+      KeyboardApp.EVENTS.UPDATE_KEYS,
+      this.capsLock,
+      KeyboardApp.CAPS_LOCK,
+    );
   }
 
   onKeyPressed() {
-    if (this.capsLock === "cap") {
-      this.capsLock = "lowercase";
-      this.emitChange(KeyboardApp.EVENTS.UPDATE_KEYS, this.capsLock);
+    const LOWERCASE = KeyboardApp.CAPS_LOCK.LOWERCASE;
+    const CAPS = KeyboardApp.CAPS_LOCK.CAPS;
+    if (this.capsLock === CAPS) {
+      this.capsLock = LOWERCASE;
+      this.emitChange(
+        KeyboardApp.EVENTS.UPDATE_KEYS,
+        this.capsLock,
+        KeyboardApp.CAPS_LOCK,
+      );
     }
   }
 

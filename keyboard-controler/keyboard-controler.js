@@ -33,9 +33,14 @@ import {
   saveInputText,
   loadDraftedInputText,
 } from "../shared-components/save-drafted-text-input-to-local-storage.js";
+import {
+  KEYBOARD_ACTIONS,
+  ATTRIBUTES,
+  PLACEHOLDERS,
+} from "../constants/keyboard-constants.js";
 export const virtualKeyboard = new KeyboardApp();
 
-export const uiState = {
+export const keyboardUiState = {
   currentPreviewKey: null,
   clients: { clientX: null, clientY: null },
   previewFeedbackTimer: null,
@@ -52,6 +57,7 @@ export const uiState = {
     rowIndex: null,
     btnIndex: null,
   },
+  activePlaceholder: PLACEHOLDERS.ENTER_TASK,
 };
 
 const elements = getCachedElements();
@@ -73,12 +79,12 @@ const initApp = () => {
   elements.mainPageNewTask.addEventListener("click", toggleKeyboard);
 
   elements.keyboardContainer.addEventListener("pointerdown", (e) => {
-    if (e.target.closest(".keyboard__key")) {
-      uiState.currentPreviewKey = e.target;
+    if (e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`)) {
+      keyboardUiState.currentPreviewKey = e.target;
       renderKeyPreviewPopup(e.target);
 
-      uiState.dragStartTimer = setTimeout(() => {
-        uiState.currentPreviewKey.draggable = true;
+      keyboardUiState.dragStartTimer = setTimeout(() => {
+        keyboardUiState.currentPreviewKey.draggable = true;
       }, 300);
     }
   });
@@ -91,17 +97,17 @@ const initApp = () => {
   );
 
   elements.keyboardContainer.addEventListener("pointerleave", () => {
-    if (uiState.currentPreviewKey) {
-      if (uiState.previewFeedbackTimer) {
-        clearTimeout(uiState.previewFeedbackTimer);
-        uiState.previewFeedbackTimer = null;
+    if (keyboardUiState.currentPreviewKey) {
+      if (keyboardUiState.previewFeedbackTimer) {
+        clearTimeout(keyboardUiState.previewFeedbackTimer);
+        keyboardUiState.previewFeedbackTimer = null;
       }
       hideKeyPreview();
-      uiState.currentPreviewKey = null;
+      keyboardUiState.currentPreviewKey = null;
     }
   });
 
-  elements.keyboardDismissOverlay.addEventListener("click", toggleKeyboard);
+  elements.keyboardDismissOverlay.addEventListener("click", closeKeyboard);
 
   elements.keyboardContainer.addEventListener("dragstart", handledraggeingKey);
 
@@ -117,29 +123,29 @@ const initApp = () => {
   document.addEventListener("DOMContentLoaded", loadDraftedInputText);
 
   document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("keyboard__english-layout"))
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_FA}]`))
       virtualKeyboard.setLang("fa");
 
-    if (e.target.classList.contains("keyboard__persian-layout"))
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_EN}]`))
       virtualKeyboard.setLang("en");
 
-    if (e.target.classList.contains("keyboard__symbol-switcher"))
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_SYM}]`))
       virtualKeyboard.setLang("symbols");
 
-    if (e.target.classList.contains("keyboard__reverse-switcher"))
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_EN}]`))
       virtualKeyboard.setLang("en");
 
-    if (e.target.closest(".keyboard__shift-key")) {
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SHIFT_KEY}]`)) {
       virtualKeyboard.currentCapsLock();
     }
 
-    if (e.target.closest(".keyboard__key")) {
+    if (e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`)) {
       typeIntoInput(e);
       virtualKeyboard.onKeyPressed();
       saveInputText();
     }
 
-    if (e.target.classList.contains("keyboard-section__task-input")) {
+    if (e.target.closest(`[${ATTRIBUTES.INPUT}]`)) {
       positionCaret(e);
     }
   });

@@ -1,10 +1,11 @@
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
+import { ACTIONS, ATTR } from "../constants/todo-constants.js";
 
 export const duplicateTask = (event) => {
-  if (event.target.closest(".task__duplication")) {
-    const taskItem = event.target.closest(".task");
+  if (event.target.closest(`[${ACTIONS.DUPLICATE}]`)) {
+    const taskItem = event.target.closest(`[${ATTR.TASK_ITEM}]`);
     if (!taskItem) return;
     const taskId = event.target.dataset.id;
     const duplicatedTask = lists.default.duplicateTask(taskId);

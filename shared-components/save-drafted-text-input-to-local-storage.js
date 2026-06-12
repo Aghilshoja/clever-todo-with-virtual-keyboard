@@ -2,6 +2,7 @@ import { getCachedElements } from "./get-cached-element.js";
 import { ensureCaret } from "../keyboard-view/keyboard-input-caret.js";
 import { clearPlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
+import { ATTRIBUTES } from "../constants/keyboard-constants.js";
 
 const elements = getCachedElements();
 
@@ -12,14 +13,15 @@ export const saveInputText = () => {
 
 export const loadDraftedInputText = () => {
   const input = elements.inputElement;
+  if (!input) return;
   const loadedDraftedText = localStorage.getItem("save-drafted-text");
   if (loadedDraftedText !== "Enter a task") {
     clearPlaceholder(input);
-    input.classList.remove("keyboard-section__task-input--caret");
+    delete input.dataset[ATTRIBUTES.INPUT_CARET];
     const caret = ensureCaret(input);
     caret.insertAdjacentText("beforebegin", loadedDraftedText);
     disableSubmitIfInputEmpty();
   } else {
-    input.classList.add("keyboard-section__task-input--caret");
+    input.dataset[ATTRIBUTES.INPUT_CARET] = "";
   }
 };

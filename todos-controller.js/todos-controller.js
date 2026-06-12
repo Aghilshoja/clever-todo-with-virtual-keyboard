@@ -37,14 +37,20 @@ import {
   toggleOptionsOfSelectedTasks,
   exitTaskSelection,
 } from "../shared-components/select-tasks.js";
+import {
+  ATTR,
+  EDIT_MODES,
+  SELECTION_BAR,
+  UNDO_STATES,
+} from "../constants/todo-constants.js";
+
 export const lists = {
   default: new TaskList("default"),
 };
 
 export const appStateUi = {
   taskId: null,
-  activeMode: "none",
-  activePlaceholder: "Enter-a-task",
+  activeMode: EDIT_MODES.NO_MODES,
   taskObjectToEdit: null,
   lastClickedElement: {
     lastEl: null,
@@ -57,9 +63,9 @@ export const appStateUi = {
     taskObject: null,
     taskObjectIndex: null,
     originalTaskObject: null,
-    undoType: "none",
+    undoType: UNDO_STATES.NO_UNDO,
   },
-  taskSelectionMode: "on-active-list",
+  taskSelectionMode: SELECTION_BAR.ACTIVE_LIST,
   selectedTasksCounter: 0,
 };
 
@@ -98,12 +104,29 @@ const addDragAndDropListeners = (list) => {
 const initTodo = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("Required DOM wasn't found");
+  const {
+    warningPopup,
+    undoCompletedTask,
+    dropDownList,
+    selectionBar,
+    navigation,
+    submitTask,
+  } = elements;
 
+  if (
+    !warningPopup ||
+    !undoCompletedTask ||
+    !dropDownList ||
+    !selectionBar ||
+    !navigation ||
+    !submitTask
+  )
+    return;
   // Highlight default on load
   highlighActiveList();
 
   const listContainer = document.querySelector(`
-    .list[data-id="${activeUlId.ul}"]`);
+  [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
   if (!listContainer) return;
   const nextElementSibling = listContainer.nextElementSibling;
   if (!nextElementSibling) return;
@@ -113,19 +136,19 @@ const initTodo = () => {
   addListeners(completedList);
   addDragAndDropListeners(listContainer);
   addDragAndDropListeners(completedList);
-  elements.warningPopup.addEventListener("click", deleteTask);
-  elements.undoCompletedTask.addEventListener(
+  warningPopup.addEventListener("click", deleteTask);
+  undoCompletedTask.addEventListener(
     "click",
     handleUndoCompletingAndUncompleting,
   );
 
   document.addEventListener("click", toggleOptions);
-  elements.dropDownList.addEventListener("click", triggerTaskSelectionUi);
+  dropDownList.addEventListener("click", triggerTaskSelectionUi);
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
-  elements.selectedTasks.addEventListener("click", exitTaskSelection);
+  selectionBar.addEventListener("click", exitTaskSelection);
 
   // Navigation Click
-  elements.navigation.addEventListener("click", (e) => {
+  navigation.addEventListener("click", (e) => {
     const listBtn = e.target.closest("[data-id]");
     if (!listBtn) return;
 
@@ -136,7 +159,7 @@ const initTodo = () => {
     renderTasks(lists.default.getTasks());
   });
 
-  elements.submitTask.addEventListener("click", addTask);
+  submitTask.addEventListener("click", addTask);
 
   document.addEventListener("DOMContentLoaded", () => {
     uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);

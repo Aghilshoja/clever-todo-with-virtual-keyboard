@@ -15,7 +15,11 @@
     ></script>
   </head>
   <body>
-    <header class="splash-header">
+    <header
+      class="splash-header"
+      data-splash-header
+      data-splash-header-state="visible"
+    >
       <div class="splash-header__logo">
         <div class="splash-header__checkmark-stem" aria-hidden="true"></div>
         <div class="splash-header__checkmark-kick" aria-hidden="true"></div>
@@ -30,6 +34,7 @@
           <div
             class="splash-header__loader-dot"
             data-step="1"
+            data-loading
             aria-hidden="true"
           ></div>
           <div
@@ -47,18 +52,21 @@
     </header>
 
     <main>
-      <!-- 
-  TEMPORARY STATE: Nav hidden with .hidden-main-page during logo intro.
-  After animation: class changes to .main-page (matches children's BEM naming).
--->
-      <section class="hidden-main-page">
-        <div class="main-page__flex-container">
+      <section class="main-page" data-main-page data-main-page-state="hidden">
+        <div class="main-page__flex-container" data-header-container>
           <h2 class="main-page__heading">Tasks</h2>
           <div class="main-page__options">
-            <button class="main-page__trigger-options cursor">
+            <button
+              class="main-page__trigger-options cursor"
+              data-action="toggle-dropdown-list"
+            >
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
-            <ul class="main-page__drop-down-list">
+            <ul
+              class="main-page__drop-down-list"
+              data-main-dropdown-list
+              data-dropdown-list-state="closed"
+            >
               <!-- main page section means that the section is in the main page main interface where the app opens -->
               <li class="main-page__section">
                 <button
@@ -68,10 +76,15 @@
                   add section
                 </button>
               </li>
-              <li class="main-page__select-your-tasks initially-hidden">
+              <li
+                class="main-page__select-your-tasks"
+                data-select-task
+                data-select-task-state="hidden"
+              >
                 <button
                   class="main-page__select-tasks button-reset pd fs cursor"
                   aria-label="select tasks to do an action on them"
+                  data-action="enter-selection-mode"
                 >
                   select tasks
                 </button>
@@ -85,46 +98,79 @@
                 </button>
               </li>
               <li class="main-page__comments">
-                <button class="main-page__comments button-reset pd fs cursor" aria-label="see all of your comments">Comments</button>
+                <button
+                  class="main-page__comments button-reset pd fs cursor"
+                  aria-label="see all of your comments"
+                >
+                  Comments
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        <div class="main-page__count-selected-tasks">
-                <button class="main-page__exit-task-selection button-reset  cursor fs" aria-label="exit task selection">  <i class="fas fa-arrow-left"></i></button>
-                <p class="main-page__number-of-selected-tasks fs"></p>
-          </div>
+        <div
+          class="main-page__count-selected-tasks"
+          data-selection-bar
+          data-selection-bar-state="inactive"
+        >
+          <button
+            class="main-page__exit-task-selection button-reset cursor fs"
+            aria-label="exit task selection"
+            data-action="exit-task-selection"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <p class="main-page__number-of-selected-tasks fs"></p>
+        </div>
 
         <section class="main-page__default-list">
           <h3 class="main-page__default-list__title">Default Task Section</h3>
-          <ul class="main-page__default-task-list list" data-id="default">
-            <img
-              src="photo_2026-02-20_12-00-02.jpg"
-              alt="Your inbox is empty"
-              class="main-page__empty-state-image"
-              width="250"
-            />
-            <p class="main-page__empty-state-description">
-              <strong>Capture now,</strong><strong> Plan later</strong
-              ><br />Inbox is your go-to spot for quick task entry.
-            </p>
-            <p class="main-page__empty-state-description">
-              Clear your mind now, organize when you're ready
-            </p>
+          <ul
+            class="main-page__default-task-list"
+            data-id="default"
+            data-default-list
+          >
+            <li>
+              <img
+                src="photo_2026-02-20_12-00-02.jpg"
+                alt="Your inbox is empty"
+                class="main-page__empty-state-image"
+                width="250"
+              />
+              <p class="main-page__empty-state-description">
+                <strong>Capture now,</strong><strong> Plan later</strong
+                ><br />Inbox is your go-to spot for quick task entry.
+              </p>
+              <p class="main-page__empty-state-description">
+                Clear your mind now, organize when you're ready
+              </p>
+            </li>
           </ul>
           <section
             class="completed-default-tasks list-wrapper"
             data-id="completed-default"
+            data-completed-section
+            data-completed-section-state="inactive"
           >
             <h3 class="completed-default-list__title">completed tasks</h3>
             <details class="completed-default-tasks__toggler">
-              <summary class="completed-default-tasks__title"></summary>
-              <ul class="completed-default-tasks__list completed-list"></ul>
+              <summary
+                class="completed-default-tasks__title"
+                data-completed-status
+              ></summary>
+              <ul
+                class="completed-default-tasks__list"
+                data-completed-list
+              ></ul>
             </details>
           </section>
         </section>
-        <nav class="main-page__navigation" aria-label="task categories">
+        <nav
+          class="main-page__navigation"
+          aria-label="task categories"
+          data-nav
+        >
           <ul class="main-page__lists">
             <li class="main-page__default-item">
               <button
@@ -132,7 +178,11 @@
                 aria-label="All your default tasks"
                 data-id="default"
               >
-                <span class="main-page__task-counter"></span>
+                <span
+                  class="main-page__task-counter"
+                  data-task-counter
+                  data-task-counter-state="inactive"
+                ></span>
                 <i class="fa-solid fa-list-check" aria-hidden="true"></i>
                 <span style="font-size: 1rem">&nbsp;Tasks</span>
               </button>
@@ -178,53 +228,152 @@
             </li>
           </ul>
         </nav>
-        <div class="main-page__new-task">
-          <button class="main-page__add-task" aria-label="Start adding a task">
+        <div class="main-page__new-task" data-task-creator>
+          <button
+            class="main-page__add-task"
+            aria-label="Start adding a task"
+            data-action="add-new-task"
+          >
             +
           </button>
         </div>
-                  <ul class="main-page__toolbar">
-            <li class="main-page__date">
-              <button class="main-page__task-date button-reset fs cursor deactivate" aria-label="set a date on your tasks or a task" title="Set date on your selected tasks" disabled><i class="far fa-calendar-alt"></i></button>
-            </li>
-            <li class="main-page__move-tasks">
-              <button class="main-task__move-to fs cursor button-reset deactivate" aria-label="move your tasks to another list"  title="Move your selected tasks to other lists" disabled><i class="fa-solid fa-arrows-up-down-left-right"></i> </button>
-            </li>
-            <li class="main-page__label">
-              <button class="main-page__task-label button-reset fs cursor deactivate" aria-label="label your task"  title="Add a label to your selected tasks" disabled><i class="fa-solid fa-tag"></i></button>
-            </li>
-            <li class="main-page__proiority">
-              <button class="main-page__task-proiority cursor fs button-reset deactivate" aria-label="specify proiority of your tasks " title="Proioritize your selected tasks" disabled><i class="fa-solid fa-flag"></i></button>
-            </li>
-            <li class="main-page__more--options">
-              <button class="main-page__more---options button-reset cursor fs deactivate" aria-label="other options to consider" title="click on the ellipsis to see more options">  <i class="fa-solid fa-ellipsis-vertical"></i></button>
-                <ul class="main-page__toolbar-manu">
-                <li class="main-page__delete-operation">
-                  <button class="main-page__delete-tasks button-reset fs pd cursor" aria-label="delete your selected tasks" title="Delete your selected tasks" disabled><i class="fa-solid fa-trash"></i> <span class="main-page__delete-label"></span></button>
-                </li>
-                <li class="main-page__duplicate-operation">
-                  <button class="main-page__duplicate-tasks button-reset fs pd cursor deactivate" aria-label="Duplicate your selected tasks" title="Duplicate your selected tasks" disabled><i class="fa-solid fa-copy"></i> <span class="main-page__duplication-label"></span></button>
-                </li>
-                <li class="main-page__complete-operation">
-                  <button class="main-page__complete-or-uncomplete-tasks button-reset cursor pd fs deactivate" aria-label="Completed-tasks" title="Complete your selected tasks" disabled><i class="fas fa-check-circle"></i> <span class="main-page__completed-or-uncompleted-label"></span></button>
-                </li>
-                <!-- deadline will be implemented as a pro feature later-->
-                <li class="main__oage__deadline">
-                  <button class="main-page__tasks-deadline button-reset cursor pd fs deactivate" aria-label="Set dealine on your selected tasks" title="Add a deadline to your selected tasks" disabled><i class="fas fa-hourglass-half"></i> Deadline</button>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <ul
+          class="main-page__batch-toolbar"
+          data-batch-toolbar
+          data-batch-toolbar-state="closed"
+        >
+          <li class="main-page__date">
+            <button
+              class="main-page__task-date button-reset fs cursor deactivate"
+              aria-label="set a date on your tasks or a task"
+              title="Set date on your selected tasks"
+              data-action="batch-set-date"
+              disabled
+            >
+              <i class="far fa-calendar-alt"></i>
+            </button>
+          </li>
+          <li class="main-page__move-tasks">
+            <button
+              class="main-task__move-to fs cursor button-reset deactivate"
+              aria-label="move your tasks to another list"
+              title="Move your selected tasks to other lists"
+              data-action="batch-move-tasks"
+              disabled
+            >
+              <i class="fa-solid fa-arrows-up-down-left-right"></i>
+            </button>
+          </li>
+          <li class="main-page__label">
+            <button
+              class="main-page__task-label button-reset fs cursor deactivate"
+              aria-label="label your task"
+              title="Add a label to your selected tasks"
+              data-action="batch-add-label"
+              disabled
+            >
+              <i class="fa-solid fa-tag"></i>
+            </button>
+          </li>
+          <li class="main-page__proiority">
+            <button
+              class="main-page__task-proiority cursor fs button-reset deactivate"
+              aria-label="specify proiority of your tasks "
+              title="Proioritize your selected tasks"
+              data-action="batch-set-priority"
+              disabled
+            >
+              <i class="fa-solid fa-flag"></i>
+            </button>
+          </li>
+          <li class="main-page__more--options">
+            <button
+              class="main-page__more---options button-reset cursor fs deactivate"
+              aria-label="other options to consider"
+              title="click on the ellipsis to see more options"
+              data-action="toggle-batch-menu"
+            >
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <ul class="main-page__toolbar-manu" data-batch-menu>
+              <li class="main-page__delete-operation">
+                <button
+                  class="main-page__delete-tasks button-reset fs pd cursor deactivate"
+                  aria-label="delete your selected tasks"
+                  title="Delete your selected tasks"
+                  data-action="batch-delete-tasks"
+                  disabled
+                >
+                  <i class="fa-solid fa-trash"></i>
+                  <span
+                    class="main-page__delete-label"
+                    data-delete-label
+                  ></span>
+                </button>
+              </li>
+              <li class="main-page__duplicate-operation">
+                <button
+                  class="main-page__duplicate-tasks button-reset fs pd cursor deactivate"
+                  aria-label="Duplicate your selected tasks"
+                  title="Duplicate your selected tasks"
+                  data-action="batch-duplicate-tasks"
+                  disabled
+                >
+                  <i class="fa-solid fa-copy"></i>
+                  <span
+                    class="main-page__duplication-label"
+                    data-duplicate-label
+                  ></span>
+                </button>
+              </li>
+              <li class="main-page__complete-operation">
+                <button
+                  class="main-page__complete-or-uncomplete-tasks button-reset cursor pd fs deactivate"
+                  aria-label="Completed-tasks"
+                  title="Complete your selected tasks"
+                  data-action="batch-complete-tasks"
+                  disabled
+                >
+                  <i class="fas fa-check-circle"></i>
+                  <span
+                    class="main-page__completed-or-uncompleted-label"
+                    data-completed-label
+                  ></span>
+                </button>
+              </li>
+              <!-- deadline will be implemented as a pro feature later-->
+              <li class="main__oage__deadline">
+                <button
+                  class="main-page__tasks-deadline button-reset cursor pd fs deactivate"
+                  aria-label="Set dealine on your selected tasks"
+                  title="Add a deadline to your selected tasks"
+                  data-action="batch-set-dealine"
+                  disabled
+                >
+                  <i class="fas fa-hourglass-half"></i> Deadline
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </section>
 
       <article class="keyboard-widget" aria-label="Virtual keyboard widget">
-        <div class="keyboard-section__dismiss-overlay"></div>
-        <section class="keyboard-section">
+        <div
+          class="keyboard-section__dismiss-overlay"
+          data-keyboard-overlay
+          data-overlay-state="inactive"
+        ></div>
+        <section
+          class="keyboard-section"
+          data-keyboard-section
+          data-keyboard-state="closed"
+        >
           <h2 class="keyboard-section__title">
             keyboard section: use keyboard to add a task
           </h2>
-          <div class="keyboard-section__input-container">
-            <div class="keyboard-section__circle"></div>
+          <div class="keyboard-section__input-container" data-input-container>
+            <div class="keyboard-section__circle" data-input-anchor></div>
             <!-- used a div element instead of an input since the input triggers your phone keyboard, and that does not let you use the built-in keyboard of the app properly -->
             <div
               class="keyboard-section__task-input"
@@ -235,64 +384,99 @@
               data-placeholder="Enter a task"
               data-edit-placeholder="Edit your task"
               data-description="Description"
+              data-keyboard-input
               data-draft=""
             ></div>
             <button
               class="keyboard-section__submit-task"
               aria-label="submit your task through app's submit button"
+              data-action="submit-task"
               disabled
             >
               <i class="fa-solid fa-arrow-up"></i>
             </button>
           </div>
 
-          <p class="keyboard-section__input-character-limit"></p>
+          <p
+            class="keyboard-section__input-character-limit"
+            data-character-limit-counter
+            data-character-limit-state="inactive"
+          ></p>
 
-          <div class="keyboard-section__time-options">
+          <div
+            class="keyboard-section__time-options"
+            data-keyboard-time-options
+          >
             <button
               class="keyboard-section__due-date-button"
               aria-label="Set due date for this task"
+              data-action="set-due-date"
             >
               <i class="fas fa-calendar-alt"></i> Set due date
             </button>
             <button
               class="keyboard-section__remind-me-button"
               aria-label="Set a reminder for this task"
+              data-action="set-reminder"
             >
               <i class="fas fa-bell"></i> Remind me
             </button>
             <button
               class="keyboard-section__repeat-task"
               aria-label="Set up repeating schedule for this task"
+              data-action="set-repeat"
             >
               <i class="fas fa-sync-alt"></i> Repeat
             </button>
           </div>
-          <div class="keyboard-section__keyboard"></div>
+          <div class="keyboard-section__keyboard" data-keyboard-container></div>
         </section>
-        <span class="keyboard-section__preview-feedback"></span>
+        <span
+          class="keyboard-section__preview-feedback"
+          data-key-preview
+        ></span>
       </article>
 
-      <section class="warning">
+      <section class="warning" data-warning-popup data-popup-state="inactive">
         <div class="warning__message">
           <h2>Delete task ?</h2>
-          <div class="warning__task-name"></div>
+          <div class="warning__task-name" data-warning-message></div>
           <div class="warning__confirmation">
-            <span class="warning__cancel-deletion cursor hover">CANCEL</span>
-            <span class="warning__confirm-deletion cursor hover">DELETE</span>
+            <button
+              class="warning__cancel-deletion cursor hover"
+              data-action="cancel-deletion"
+            >
+              CANCEL
+            </button>
+            <button
+              class="warning__confirm-deletion cursor hover"
+              data-action="confirm-deletion"
+            >
+              DELETE
+            </button>
           </div>
         </div>
       </section>
-      
-        <section class="undo-completion">
-    <div class="undo-completion__con">
-      <span class="completion-status-label"></span>
-      <button
-        class="undo-completed-task button-reset fs"
-        aria-label="undo the tasks that you completed"
+
+      <section
+        class="undo-completion"
+        data-undo-container
+        data-undo-state="inactive"
       >
-        undo
-      </button>
+        <h2 class="undo-completion__title">
+          Undo completed or uncompleted task
+        </h2>
+        <div class="undo-completion__con">
+          <span class="completion-status-label" data-undo-status></span>
+          <button
+            class="undo-completed-task button-reset fs"
+            aria-label="undo the tasks that you completed"
+            data-action="undo-completion"
+          >
+            undo
+          </button>
+        </div>
+      </section>
     </main>
 
     <script

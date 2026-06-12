@@ -22,7 +22,7 @@
     transform 0.7s ease-in-out;
 }
 
-.close-keyboard {
+[data-overlay-state="active"] {
   position: fixed;
   top: 0;
   width: 100%;
@@ -30,7 +30,11 @@
   z-index: 1;
 }
 
-.keyboard-section--active {
+[data-overlay-state="inactive"] {
+  display: none;
+}
+
+[data-keyboard-state="open"] {
   pointer-events: auto;
   opacity: 1;
   transform: scaleY(1);
@@ -169,28 +173,36 @@
   z-index: 1;
 }
 
-.keyboard__key--dragging {
+[data-dragging-key] {
   opacity: 0.6;
   transform: scale(0.93);
 }
 
-.keyboard__key--highlight {
+[data-dragging-highlight] {
   outline: 2px solid #4da3ff;
 }
 
-.highlight-shift {
+[data-shift-key-state="active"] {
   background-color: gold;
 }
 
-.highlight-shift:active {
+[data-shift-key-state="inactive"] {
+  background-color: white;
+}
+
+[data-shift-key-state="active"]:active {
   background-color: rgb(218, 165, 32);
 }
 
-.keyboard-section__input-character-limit {
+[data-shift-key-state="inactive"]:active {
+  background-color: rgba(255, 255, 255, 0.838);
+}
+
+[data-character-limit-state="inactive"] {
   display: none;
 }
 
-.reached-character-limit {
+[data-character-limit-state="active"] {
   display: block;
   opacity: 1;
   background-color: rgb(0, 0, 0);
@@ -199,7 +211,7 @@
   margin: 0.5rem;
 }
 
-.keyboard-section__task-input--caret::before {
+[data-input-caret]::before {
   content: "|";
   color: blue;
   animation: blink 1s steps(1) infinite;
@@ -209,7 +221,7 @@
   background-color: yellow;
 }
 
-.caret::after {
+[data-caret="active"]::after {
   content: "|";
   color: blue;
   animation: blink 1s steps(1) infinite;
@@ -228,7 +240,10 @@
   .keyboard-section__due-date-button:hover {
     background-color: whitesmoke;
   }
-  .highlight-shift:hover {
+  [data-shift-key-state="active"]:hover {
     background-color: rgb(218, 165, 32);
+  }
+  [data-shift-key-state="inactive"]:hover {
+    background-color: rgba(255, 255, 255, 0.838);
   }
 }

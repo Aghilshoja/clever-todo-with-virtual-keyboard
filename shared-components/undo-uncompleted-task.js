@@ -1,3 +1,4 @@
+import { ACTIONS, ATTR } from "../constants/todo-constants.js";
 import {
   addListeners,
   appStateUi,
@@ -25,7 +26,7 @@ export const undoUncompletedTask = () => {
   );
 
   const checkboxes = removedTaskItem.querySelectorAll(
-    ".task__completed-main-task-checkbox, .task__toolbar-completed-task-checkbox",
+    `[${ACTIONS.UNCOMPLETE_TASK}]`,
   );
 
   checkboxes.forEach((checkbox) => (checkbox.checked = true));
@@ -34,7 +35,7 @@ export const undoUncompletedTask = () => {
   else if (nextEl) nextEl.before(removedTaskItem);
   else {
     const activeList = document.querySelector(
-      `.list[data-id="${activeUlId.ul}"]`,
+      `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
     );
     const nextElementSibling = activeList.nextElementSibling;
     const completedList = nextElementSibling.querySelector("ul");

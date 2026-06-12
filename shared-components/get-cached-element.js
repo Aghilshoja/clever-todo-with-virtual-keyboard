@@ -1,46 +1,68 @@
+import { SPLSASH_HEADER_ATTR } from "../close-splash-screen/hide-splash-screen.js";
+import {
+  KEYBOARD_ACTIONS,
+  ATTRIBUTES,
+} from "../constants/keyboard-constants.js";
+import {
+  ATTR,
+  ATTR_STATES,
+  HIDDEN,
+  ACTIONS,
+} from "../constants/todo-constants.js";
+
 export const getCachedElements = () => {
   const elements = {
-    splashHeader: document.querySelector(".splash-header"),
-    mainPage: document.querySelector(".hidden-main-page"),
-    keyboardContainer: document.querySelector(".keyboard-section__keyboard"),
-    mainPageNewTask: document.querySelector(".main-page__add-task"),
-    mainPageNewTaskCon: document.querySelector(".main-page__new-task"),
-    keyboardSection: document.querySelector(".keyboard-section"),
-    previewFeedback: document.querySelector(
-      ".keyboard-section__preview-feedback",
+    splashHeader: document.querySelector(
+      `[${SPLSASH_HEADER_ATTR.SPLASH_HEADER}]`,
     ),
-    loeaderDot: document.querySelector(".splash-header__loader-dot"),
-    inputElement: document.querySelector(".keyboard-section__task-input"),
-    submitTask: document.querySelector(".keyboard-section__submit-task"),
-    navigation: document.querySelector(".main-page__navigation"),
+    mainPage: document.querySelector(`[${SPLSASH_HEADER_ATTR.MAIN_PAGE}]`),
+    loaderDot: document.querySelector(`[${SPLSASH_HEADER_ATTR.LOADING}]`), // fixed a typo
+    /* end of the related elements to the logo of the app */
+
+    /* elements that are just related to the keyboard */
+    keyboardSection: document.querySelector(`[${ATTRIBUTES.KEYBOARD_SECTION}]`),
+    previewFeedback: document.querySelector(`[${ATTRIBUTES.KEY_PREVIEW}]`),
     keyboardDismissOverlay: document.querySelector(
-      ".keyboard-section__dismiss-overlay",
+      `[${ATTRIBUTES.KEYBOARD_OVERLAY}]`,
     ),
-    mainPageFlexContainer: document.querySelector(".main-page__flex-container"),
-    warningPopup: document.querySelector(".warning"),
+    keyboardContainer: document.querySelector(
+      `[${ATTRIBUTES.KEYBOARD_CONTAINER}]`,
+    ),
     unrelatedKeyboardOptions: document.querySelectorAll(
-      ".keyboard-section__circle, .keyboard-section__repeat-task, .keyboard-section__submit-task, .keyboard-section__due-date-button, .keyboard-section__remind-me-button",
+      `[${ATTRIBUTES.KEYBOARD_TIME_OPTIONS}], [${ATTRIBUTES.INPUT_CONTAINER}]`,
     ),
-    circleEl: document.querySelector(".keyboard-section__circle"),
-    taskCounter: document.querySelector(".main-page__task-counter"),
+    inputElement: document.querySelector(`[${ATTRIBUTES.INPUT}]`),
+    submitTask: document.querySelector(`[${KEYBOARD_ACTIONS.SUBMIT}]`),
     inputCharacterLimit: document.querySelector(
-      ".keyboard-section__input-character-limit",
+      `[${ATTRIBUTES.CHARACTER_LIMIT_COUNT}]`,
     ),
-    undoCompletion: document.querySelector(".undo-completion"),
-    undoCompletedTask: document.querySelector(".undo-completed-task"),
-    completionStatusLabel: document.querySelector(".completion-status-label"),
-    dropDownList: document.querySelector(".main-page__drop-down-list"),
-    selectedTasks: document.querySelector(".main-page__count-selected-tasks"),
-    mainPageToolbar: document.querySelector(".main-page__toolbar"),
+    circleEl: document.querySelector(`[${ATTRIBUTES.INPUT_ANCHOR}]`),
+    unrelatedKeyboardOptions: document.querySelectorAll(
+      `[${ATTRIBUTES.KEYBOARD_TIME_OPTIONS}], [${ATTRIBUTES.INPUT_CONTAINER}]`,
+    ),
+    /* end of the elements that are related to the keyboard */
+
+    /* elements that are just related to the todo app */
     activateToolbarButtons: document.querySelectorAll(
-      ".main-page__task-date, .main-task__move-to, .main-page__task-label, .main-page__task-proiority, .main-page__other--option, .main-page__delete-tasks, .main-page__duplicate-tasks, .main-page__complete-or-uncomplete-tasks",
+      `[${ACTIONS.BATCH_SET_DATE}], [${ACTIONS.BATCH_MOVE_TASKS}], [${ACTIONS.BATCH_ADD_LABEL}], [${ACTIONS.BATCH_SET_PRIORITY}], [${ACTIONS.BATCH_DELETE_TASKS}], [${ACTIONS.BATCH_DUPLICATE_TASKS}], [${ACTIONS.BATCH_COMPLETE_TASKS}]`,
     ),
-    mainPageMoreOptionsOfSelectedTasks: document.querySelector(
-      ".main-page__more--options",
+    mainPageNewTask: document.querySelector(`[${ACTIONS.ADD_TASK}]`),
+    mainPageNewTaskCon: document.querySelector(`[${ATTR.TASK_CREATOR}]`),
+    navigation: document.querySelector(`[${ATTR.NAV}]`),
+    mainPageFlexContainer: document.querySelector(`[${ATTR.HEADER_CONTAINER}]`),
+    warningPopup: document.querySelector(`[${ATTR.WARNING_POPUP}]`),
+    warningMessage: document.querySelector(`[${ATTR.WARNING_MESSAGE}]`),
+    taskCounter: document.querySelector(`[${ATTR.TASKS_COUNTER}]`),
+    undoCompletion: document.querySelector(`[${ATTR.UNDO_CONTAINER}]`),
+    undoCompletedTask: document.querySelector(
+      `[${ACTIONS.UNDO_COMPLETION_BTN}]`,
     ),
-    mainPageSelectedTaskToolbarmanu: document.querySelector(
-      ".main-page__toolbar-manu",
-    ),
+    completionStatusLabel: document.querySelector(`[${ATTR.UNDO_STATUS}]`),
+    dropDownList: document.querySelector(`[${ATTR.MAIN_DROPDOWN_LIST}]`),
+    selectionBar: document.querySelector(`[${ATTR.SELECTION_BAR_CON}]`),
+    batchToolbar: document.querySelector(`[${ATTR.BATCH_TOOLBAR}]`),
+    mainPageBatchMenu: document.querySelector(`[${ATTR.BATCH_MENU}]`),
+    /* end of the elements that are relted to the todo app */
   };
   return elements;
 };

@@ -1,4 +1,5 @@
 import { lists } from "../todos-controller.js/todos-controller.js";
+import { ACTIONS, ATTR, ATTR_STATES } from "../constants/todo-constants.js";
 
 let currentDragImage = null;
 
@@ -11,9 +12,10 @@ const mockTaskImage = (task) => {
   draggedImageWrapper.appendChild(taskWrapper);
   const taskTextEl = document.createElement("p");
   const taskDescriptionEl = document.createElement("p");
-  const taskText = task.querySelector(".task__text").textContent;
-  const taskDescriptionText =
-    task.querySelector(".task__description").textContent;
+  const taskText = task.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`).textContent;
+  const taskDescriptionText = task.querySelector(
+    `[${ATTR.MAIN_TASK_DESCRIPTION}]`,
+  ).textContent;
   taskTextEl.textContent = taskText ? taskText : "";
   taskDescriptionEl.textContent = taskDescriptionText
     ? taskDescriptionText
@@ -24,7 +26,7 @@ const mockTaskImage = (task) => {
 };
 
 export const dragStart = (e) => {
-  const task = e.target.closest(".task");
+  const task = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!task) return;
 
   e.dataTransfer.setData("text/plain", task.dataset.id);
@@ -33,14 +35,14 @@ export const dragStart = (e) => {
 
   const draggedImage = mockTaskImage(task);
 
-  if (e.currentTarget.classList.contains("list")) {
-    const checkBox = task.querySelector(".task__main-task-checkbox");
+  if (e.currentTarget.hasAttribute(ATTR.DEFAULT_LIST)) {
+    const checkBox = task.querySelector(`[${ACTIONS.COMPLETE_TASK}]`);
     if (!checkBox) return;
     const clonedCheckbox = checkBox.cloneNode(false);
     draggedImage.prepend(clonedCheckbox);
     currentDragImage.appendChild(draggedImage);
-  } else if (e.currentTarget.classList.contains("completed-list")) {
-    const checkbox = task.querySelector(".task__completed-main-task-checkbox");
+  } else if (e.currentTarget.hasAttribute(ATTR.COMPLETED_LIST)) {
+    const checkbox = task.querySelector(`[${ACTIONS.UNCOMPLETE_TASK}]`);
     if (!checkbox) return;
     const clonedCheckBox = checkbox.cloneNode(false);
     draggedImage.prepend(clonedCheckBox);
@@ -52,7 +54,7 @@ export const dragStart = (e) => {
   e.dataTransfer.setDragImage(currentDragImage, 20, 10);
 
   setTimeout(() => {
-    task.classList.add("task--dragging");
+    task.dataset[ATTR_STATES.DRAGGING_TASK] = "";
   }, 0);
 };
 
@@ -61,23 +63,26 @@ export const dragOver = (e) => {
 };
 
 export const draggedEnter = (e) => {
-  const dragedEnter = e.target.closest(".task");
+  const dragedEnter = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!dragedEnter) return;
-  dragedEnter.classList.add("task--highlight");
+  dragedEnter.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT] = "";
 };
 
 export const draggedLeave = (e) => {
-  const closestTaskItem = e.target.closest(".task");
+  const closestTaskItem = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!closestTaskItem) return;
-  closestTaskItem.classList.remove("task--highlight");
+  delete closestTaskItem.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
 };
 
 export const draggedEndTask = (e) => {
   document
-    .querySelectorAll(".task--highlight, .task--dragging")
-    .forEach((taskItem) =>
-      taskItem.classList.remove("task--highlight", "task--dragging"),
-    );
+    .querySelectorAll(
+      `[${ATTR_STATES.DRAGGING_TASK}], [${ATTR_STATES.DROP_TARGET_HIGHLIGHT}]`,
+    )
+    .forEach((taskItem) => {
+      delete taskItem.dataset[ATTR_STATES.DRAGGING_TASK];
+      delete taskItem.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
+    });
 
   if (currentDragImage) {
     currentDragImage.remove();
@@ -89,19 +94,23 @@ export const dropTarget = (e) => {
   const taskId = e.dataTransfer.getData("text");
   if (!taskId) return;
 
-  const draggedTask = document.querySelector(`.task[data-id="${taskId}"]`);
+  const draggedTask = document.querySelector(
+    `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
+  );
 
-  const dropT = e.target.closest(".task");
+  const dropT = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   const tasksContainer = e.currentTarget;
   if (!dropT || !draggedTask) return;
 
-  dropT.classList.remove("task--highlight");
-  draggedTask.classList.remove("task--dragging");
+  delete dropT.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
+  delete draggedTask.dataset[ATTR_STATES.DRAGGING_TASK];
 
-  const sourceContainer = draggedTask.closest(".list, .completed-list");
+  const sourceContainer = draggedTask.closest(
+    `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
+  );
   if (!sourceContainer || sourceContainer !== tasksContainer) return;
 
-  const activeList = e.currentTarget.classList.contains("list");
+  const activeList = e.currentTarget.hasAttribute(ATTR.DEFAULT_LIST);
   const currentList = activeList
     ? lists.default.getTasks()
     : lists.default.getCompletedTasks();

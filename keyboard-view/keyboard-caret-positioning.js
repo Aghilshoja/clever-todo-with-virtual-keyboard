@@ -1,5 +1,6 @@
 import { ensureCaret } from "./keyboard-input-caret.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
+import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
 
 export const positionCaret = (e) => {
   const elements = getCachedElements();
@@ -7,9 +8,9 @@ export const positionCaret = (e) => {
 
   const input = elements.inputElement;
   const isTherePlaceholder =
-    input.textContent === "Description" ||
-    input.textContent === "Edit your task" ||
-    input.textContent === "Enter a task";
+    input.textContent === PLACEHOLDERS.DESCRIPTION ||
+    input.textContent === PLACEHOLDERS.EDIT_TASK ||
+    input.textContent === PLACEHOLDERS.ENTER_TASK;
 
   if (isTherePlaceholder) return;
   const caret = ensureCaret(input);

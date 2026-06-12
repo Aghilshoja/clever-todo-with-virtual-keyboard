@@ -1,3 +1,17 @@
+import {
+  ACTIONS,
+  ACTIVE,
+  ATTR,
+  ATTR_STATES,
+  CHECK_STATES,
+  CLOSED,
+  HIDDEN,
+  HIGHLIGHT_SELECTED_TASK,
+  INACTIVE,
+  OPEN,
+  SELECTION_BAR,
+  VISIBLE,
+} from "../constants/todo-constants.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { appStateUi } from "../todos-controller.js/todos-controller.js";
 
@@ -6,52 +20,65 @@ const elements = getCachedElements();
 export const toggleOptions = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
   if (!elements.dropDownList) return;
-
-  if (e.target.closest(".main-page__trigger-options")) {
-    const allTasks = document.querySelectorAll(".task");
+  if (e.target.closest(`[${ACTIONS.TOGGLE_DROPDOWN_LIST}]`)) {
+    const allTasks = document.querySelectorAll(`[${ATTR.TASK_ITEM}]`);
     const getSelectedTaskItem = document.querySelector(
-      ".main-page__select-your-tasks",
+      `[${ATTR.SELECT_TASK_ITEM}]`,
     );
     if (allTasks.length >= 1)
-      getSelectedTaskItem.classList.remove("initially-hidden");
-    else getSelectedTaskItem.classList.add("initially-hidden");
-    elements.dropDownList.classList.toggle("main-page__drop-down-list--active");
+      getSelectedTaskItem.dataset[ATTR_STATES.SELECT_TASK_ITEM_STATE] =
+        VISIBLE.SELECT_TASK_ITEM;
+    else
+      getSelectedTaskItem.dataset[ATTR_STATES.SELECT_TASK_ITEM_STATE] =
+        HIDDEN.SELECT_TASK_ITEM;
+    elements.dropDownList.dataset[ATTR_STATES.DROPDOWN_LIST] =
+      OPEN.MAIN_DROPDOWN;
   } else if (
-    elements.dropDownList.classList.contains(
-      "main-page__drop-down-list--active",
-    )
+    elements.dropDownList.dataset[ATTR_STATES.DROPDOWN_LIST] ===
+    OPEN.MAIN_DROPDOWN
   )
-    elements.dropDownList.classList.remove("main-page__drop-down-list--active");
+    elements.dropDownList.dataset[ATTR_STATES.DROPDOWN_LIST] =
+      CLOSED.MAIN_DROPDOWN;
 };
 
 const fadeNavAndTaskHeader = () => {
   const navigationChildren = Array.from(elements.navigation.children);
-  navigationChildren.forEach((el) => el.classList.add("nav-opacity"));
+  navigationChildren.forEach(
+    (el) =>
+      (el.dataset[ATTR_STATES.UNRELATED_ELS_TO_SELECTION] =
+        HIDDEN.UNRELATED_ELS),
+  );
   const children = Array.from(elements.mainPageFlexContainer.children);
-  children.forEach((el) => el.classList.add("header-opacity"));
+  children.forEach(
+    (el) =>
+      (el.dataset[ATTR_STATES.UNRELATED_ELS_TO_SELECTION] =
+        HIDDEN.UNRELATED_ELS),
+  );
 };
 
 export const triggerTaskSelectionUi = (e) => {
   if (!elements) throw new Error("required DOM was not found");
-  if (e.target.closest(".main-page__select-your-tasks")) {
+  if (e.target.closest(`[${ACTIONS.SELECT_TASK_ITEM}]`)) {
     fadeNavAndTaskHeader();
-    if (!elements.selectedTasks || !elements.mainPageToolbar) return;
-    elements.selectedTasks.classList.add(
-      "main-page__count-selected-tasks--active",
-    );
-    elements.mainPageToolbar.classList.add("main-page__toolbar--active");
-    const lastChild = elements.selectedTasks.lastElementChild;
+    if (!elements.selectionBar || !elements.batchToolbar) return;
+    elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] =
+      ACTIVE.SELECTION_BAR;
+    elements.batchToolbar.dataset[ATTR_STATES.BATCH_TOOLBAR] =
+      OPEN.BATCH_TOOLBAR;
+    const lastChild = elements.selectionBar.lastElementChild;
     lastChild.textContent = "0 selected tasks";
 
     if (elements.mainPageNewTaskCon)
-      elements.mainPageNewTaskCon.classList.add("hide-adding-task-icon");
+      elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
+        HIDDEN.TASK_CREATOR;
   }
 };
 
 export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
   const counter = appStateUi.selectedTasksCounter;
-  const isCompletedList = appStateUi.taskSelectionMode === "on-completed-list";
-  const selectedTasksElement = elements.selectedTasks;
+  const isCompletedList =
+    appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST;
+  const selectedTasksElement = elements.selectionBar;
 
   if (!selectedTasksElement) return;
 
@@ -60,36 +87,31 @@ export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
     counter === 1 ? "1 selected task" : `${counter} selected tasks`;
 
   const operationConfig = {
-    ".main-page__delete-label": (count) =>
+    [`[${ATTR.BATCH_DELETE_LABEL}]`]: (count) =>
       `Delete ${count} task${count !== 1 ? "s" : ""}`,
-    ".main-page__duplication-label": (count) =>
+    [`[${ATTR.BATCH_DUPLICATE_LABEL}]`]: (count) =>
       `Duplicate ${count} task${count !== 1 ? "s" : ""}`,
-    ".main-page__completed-or-uncompleted-label": (count) => {
-      const action = isCompletedList ? "Uncomplete" : "Complete";
-      return `${action} ${count} task${count !== 1 ? "s" : ""}`;
+    [`[${ATTR.BATCH_COMPLETE_LABEL}]`]: (count) => {
+      const label = isCompletedList ? "Uncomplete" : "Complete";
+      return `${label} ${count} task${count !== 1 ? "s" : ""}`;
     },
   };
 
   for (const selector in operationConfig) {
     const el = document.querySelector(selector);
-
     if (el) el.innerHTML = operationConfig[selector](counter);
   }
 };
 
 export const disableOrEnableButtons = () => {
   const allSelectedTasks = document.querySelectorAll(
-    ".highlight-selected-tasks",
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
+
   if (!elements.activateToolbarButtons) return;
   elements.activateToolbarButtons.forEach((el) => {
-    if (allSelectedTasks.length > 0) {
-      el.disabled = false;
-      el.classList.remove("deactivate");
-    } else {
-      el.disabled = true;
-      el.classList.add("deactivate");
-    }
+    if (allSelectedTasks.length > 0) el.disabled = false;
+    else el.disabled = true;
   });
 };
 
@@ -99,10 +121,10 @@ const fadeHighlightedTasksOfCompletedList = (parentOfTarget) => {
   const completedlist = getCompletedlistParent.querySelector("ul");
   if (!completedlist) return;
   const removeHighlightedTaskOfCompletedList = completedlist.querySelectorAll(
-    ".highlight-selected-tasks",
+    `[${CHECK_STATES.SELECTED_TASK}]`,
   );
-  removeHighlightedTaskOfCompletedList.forEach((el) =>
-    el.classList.remove("highlight-selected-tasks"),
+  removeHighlightedTaskOfCompletedList.forEach(
+    (el) => delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
   );
 };
 
@@ -110,10 +132,10 @@ const fadeHighlightedTasksOfActiveList = (parentOfTarget) => {
   const activeList = parentOfTarget.closest("section").previousElementSibling;
   if (!activeList) return;
   const highlightedTasksOfActiveList = activeList.querySelectorAll(
-    ".highlight-selected-tasks",
+    `[${CHECK_STATES.SELECTED_TASK}]`,
   );
-  highlightedTasksOfActiveList.forEach((task) =>
-    task.classList.remove("highlight-selected-tasks"),
+  highlightedTasksOfActiveList.forEach(
+    (task) => delete task.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
   );
 };
 
@@ -121,60 +143,74 @@ const unfadeNavAndTaskHeader = () => {
   if (!elements) throw new Error("Required DOM was not found");
   if (!elements.mainPageFlexContainer) return;
   const mainPageFlexCon = Array.from(elements.mainPageFlexContainer.children);
-  mainPageFlexCon.forEach((el) => el.classList.remove("header-opacity"));
+  mainPageFlexCon.forEach(
+    (el) => delete el.dataset[ATTR_STATES.UNRELATED_ELS_TO_SELECTION],
+  );
   const navChildren = Array.from(elements.navigation.children);
-  navChildren.forEach((el) => el.classList.remove("nav-opacity"));
+  navChildren.forEach(
+    (el) => delete el.dataset[ATTR_STATES.UNRELATED_ELS_TO_SELECTION],
+  );
 };
 
 export const updateCounterAfterCompletingOrUncompletingATask = () => {
-  const selectedTasks = document.querySelectorAll(".highlight-selected-tasks");
+  const selectedTasks = document.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+  );
   appStateUi.selectedTasksCounter = selectedTasks.length;
 };
 
 export const selectTasks = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.selectedTasks) return;
+  if (!elements.selectionBar) return;
   /*
    * If the task-selection counter is not active, then clicking a task should go through the normal toolbar flow, so this selection handler must exit early and avoid highlighting the task.
    */
-  const isSelectedTaskActive = elements.selectedTasks.classList.contains(
-    "main-page__count-selected-tasks--active",
-  );
-  if (!isSelectedTaskActive) return;
-  const selectedTask = e.target.closest(".task");
+  const isSelectionModeActive =
+    elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] ===
+    ACTIVE.SELECTION_BAR;
+  if (!isSelectionModeActive) return;
+  const selectedTask = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!selectedTask) return;
-  selectedTask.classList.toggle("highlight-selected-tasks");
-  const isTheTaskHighlited = selectedTask.classList.contains(
-    "highlight-selected-tasks",
+  const SELECTED_tASK = ATTR_STATES.HIGHLIGHT_SELECTED_TASK;
+  const isCurrentlySelected =
+    selectedTask.dataset[SELECTED_tASK] === HIGHLIGHT_SELECTED_TASK.SELECTED;
+  selectedTask.dataset[SELECTED_tASK] = isCurrentlySelected
+    ? HIGHLIGHT_SELECTED_TASK.UNSELECTED
+    : HIGHLIGHT_SELECTED_TASK.SELECTED;
+  const isSelectedTask =
+    selectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK] ===
+    HIGHLIGHT_SELECTED_TASK.SELECTED;
+
+  const parentOfTarget = selectedTask.closest(
+    `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
   );
-  const parentOfTarget = selectedTask.closest(".list, .completed-list");
   if (!parentOfTarget) return;
   if (
-    parentOfTarget.classList.contains("list") &&
-    !e.target.closest(".task__main-task-checkbox")
+    parentOfTarget.hasAttribute(`${ATTR.DEFAULT_LIST}`) &&
+    !e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`)
   ) {
-    if (appStateUi.taskSelectionMode === "on-completed-list") {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST) {
       appStateUi.selectedTasksCounter = 0;
       fadeHighlightedTasksOfCompletedList(parentOfTarget);
     }
 
-    appStateUi.taskSelectionMode = "on-active-list";
-    if (isTheTaskHighlited) appStateUi.selectedTasksCounter++;
+    appStateUi.taskSelectionMode = SELECTION_BAR.ACTIVE_LIST;
+    if (isSelectedTask) appStateUi.selectedTasksCounter++;
     else appStateUi.selectedTasksCounter--;
   } else if (
-    parentOfTarget.classList.contains("completed-list") &&
-    !e.target.closest(".task__completed-main-task-checkbox")
+    parentOfTarget.hasAttribute(`${ATTR.COMPLETED_LIST}`) &&
+    !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`)
   ) {
     /* 
      when users switche betwwen lists reset counter and show number of selected tasks of the current focused list
     */
-    if (appStateUi.taskSelectionMode === "on-active-list") {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
       fadeHighlightedTasksOfActiveList(parentOfTarget);
       appStateUi.selectedTasksCounter = 0;
     }
 
-    appStateUi.taskSelectionMode = "on-completed-list";
-    if (isTheTaskHighlited) appStateUi.selectedTasksCounter++;
+    appStateUi.taskSelectionMode = SELECTION_BAR.COMPLETED_LIST;
+    if (isSelectedTask) appStateUi.selectedTasksCounter++;
     else appStateUi.selectedTasksCounter--;
   }
 
@@ -185,43 +221,42 @@ export const selectTasks = (e) => {
 
 export const toggleOptionsOfSelectedTasks = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.mainPageSelectedTaskToolbarmanu) return;
-  if (e.target.closest(".main-page__more--options"))
-    elements.mainPageSelectedTaskToolbarmanu.classList.add(
-      "main-page__toolbar-manu--active",
-    );
+  if (!elements.mainPageBatchMenu) return;
+  if (e.target.closest(`[${ACTIONS.TOGGLE_BATCH_MENU}]`))
+    elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] =
+      OPEN.BATCH_MENU;
   else
-    elements.mainPageSelectedTaskToolbarmanu.classList.remove(
-      "main-page__toolbar-manu--active",
-    );
+    elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] =
+      CLOSED.BATCH_MENU;
   updateLabelsOfOperationalButtonsForSelectedTasks();
 };
 
 export const exitTaskSelection = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
-  if (!e.target.closest(".main-page__exit-task-selection")) return;
+  if (!e.target.closest(`[${ACTIONS.EXIT_TASK_SELECTION}]`)) return;
   unfadeNavAndTaskHeader();
-  elements.selectedTasks.classList.remove(
-    "main-page__count-selected-tasks--active",
-  );
-  elements.mainPageToolbar.classList.remove("main-page__toolbar--active");
-  elements.mainPageNewTaskCon.classList.remove("hide-adding-task-icon");
+  elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] =
+    INACTIVE.SELECTION_BAR;
+  elements.batchToolbar.dataset[ATTR_STATES.BATCH_TOOLBAR] =
+    CLOSED.BATCH_TOOLBAR;
+
+  elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
+    VISIBLE.TASK_CREATOR;
 
   const allSelectedTasks = document.querySelectorAll(
-    ".highlight-selected-tasks",
+    `[${CHECK_STATES.SELECTED_TASK}]`,
   );
-  allSelectedTasks.forEach((el) =>
-    el.classList.remove("highlight-selected-tasks"),
+  allSelectedTasks.forEach(
+    (el) => delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
   );
   appStateUi.selectedTasksCounter = 0;
   updateLabelsOfOperationalButtonsForSelectedTasks();
   disableOrEnableButtons();
   const isManuOpen =
-    elements.mainPageSelectedTaskToolbarmanu.classList.contains(
-      "main-page__toolbar-manu--active",
-    );
+    elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] ===
+    OPEN.BATCH_MENU;
+
   if (isManuOpen)
-    elements.mainPageSelectedTaskToolbarmanu.classList.remove(
-      "main-page__toolbar-manu--active",
-    );
+    elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] =
+      CLOSED.BATCH_MENU;
 };

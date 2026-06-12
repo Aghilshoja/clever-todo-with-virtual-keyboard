@@ -3,29 +3,42 @@ import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { cleanupDescriptionAndEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { disableOrEnableSaveBtn } from "../handle-disabling-or-enabling-saving-task-edits.js";
+import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  ATTR,
+  ATTR_STATES,
+  CHECK_STATES,
+  EDIT_MODES,
+  HIDDEN,
+  VISIBLE,
+} from "../../constants/todo-constants.js";
+import {
+  PLACEHOLDERS,
+  ATTRIBUTES,
+} from "../../constants/keyboard-constants.js";
+import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
+
 const elements = getCachedElements();
 
 const editDescription = (descriptionEl, toolbar) => {
   if (!descriptionEl) return;
-  const taskText = toolbar.querySelector(".task__toolbar-task-text");
+  const taskText = toolbar.querySelector(`[${ATTR.TASK_TEXT}]`);
   if (!taskText) return;
   const input = elements.inputElement;
-  taskText.classList.remove("hide-task-text");
-  if (input.textContent !== "Edit your task") {
+  if (!input) return;
+  delete taskText.dataset[ATTR_STATES.TASK_TEXT_STATE];
+  if (input.textContent !== PLACEHOLDERS.EDIT_TASK) {
     taskText.textContent = input.textContent;
   }
-  const doesCaretExist = input.classList.contains(
-    "keyboard-section__task-input--caret",
-  );
 
   // Clear visual caret before description edit (prevents double caret bug)
-  if (doesCaretExist)
-    input.classList.remove("keyboard-section__task-input--caret");
-  descriptionEl.classList.add("hide-task-description");
+  delete input.dataset[ATTRIBUTES.INPUT_CARET];
+  descriptionEl.dataset[ATTR_STATES.DESCRIPTION_STATE] =
+    HIDDEN.TASK_DESCRIPTION;
   descriptionEl.after(input);
-  if (descriptionEl.textContent === "Description") {
-    input.textContent = "Description";
-    input.classList.add("keyboard-section__task-input--caret");
+  if (descriptionEl.textContent === PLACEHOLDERS.DESCRIPTION) {
+    input.textContent = PLACEHOLDERS.DESCRIPTION;
+    input.dataset[ATTRIBUTES.INPUT_CARET] = "";
   } else {
     input.textContent = "";
     const caret = ensureCaret(input);
@@ -36,19 +49,20 @@ const editDescription = (descriptionEl, toolbar) => {
 
 const editTask = (taskEl, toolbar) => {
   if (!taskEl) return;
-  const description = toolbar.querySelector(".task__toolbar-description-text");
+  const description = toolbar.querySelector(`[${ATTR.TASK_DESCRIPTION}]`);
   if (!description) return;
   const input = elements.inputElement;
-  description.classList.remove("hide-task-description");
-  if (input.textContent === "Description") {
-    description.textContent = "Description";
+  if (!input) return;
+  delete description.dataset[ATTR_STATES.DESCRIPTION_STATE];
+  if (input.textContent === PLACEHOLDERS.DESCRIPTION) {
+    description.textContent = PLACEHOLDERS.DESCRIPTION;
   } else {
     description.textContent = input.textContent;
   }
   taskEl.after(input);
-  taskEl.classList.add("hide-task-text");
+  taskEl.dataset[ATTR_STATES.TASK_TEXT_STATE] = HIDDEN.TASK_TEXT;
   input.textContent = "";
-  input.classList.remove("keyboard-section__task-input--caret");
+  delete input.dataset[ATTRIBUTES.INPUT_CARET];
   const caret = ensureCaret(input);
   caret.insertAdjacentText("beforebegin", taskEl.textContent);
 };
@@ -58,32 +72,34 @@ const editTask = (taskEl, toolbar) => {
  * (main task item never changed during edit)
  */
 export const revertTextOfDescriptionAndTaskText = (event) => {
-  const taskItem = event.target.closest(".task");
-  if (!taskItem) return;
-  const taskText = taskItem.querySelector(".task__text");
-  if (!taskText) return;
-  const toolbarTaskText = taskItem.querySelector(".task__toolbar-task-text");
-  if (!toolbarTaskText) return;
-  toolbarTaskText.textContent = taskText.textContent;
-  taskText.dataset.truncateText = toolbarTaskText.textContent;
-  const taskItemDescription = taskItem.querySelector(".task__description");
-  if (!taskItemDescription) return;
-  const toolbarDescription = taskItem.querySelector(
-    ".task__toolbar-description-text",
-  );
-  if (!toolbarDescription) return;
-  toolbarDescription.textContent = taskItemDescription.textContent;
-  taskItemDescription.dataset.truncateText = toolbarDescription.textContent;
+  const toolbar = event.target.closest(`[${ATTR.TASK_TOOLBAR}]`);
+  if (!toolbar) return;
+  const repetitiveEls = getRepetitiveElements(toolbar);
+  const taskItemDescription = repetitiveEls.taskItemDescription;
+  const toolbarDescription = repetitiveEls.description;
+
+  const taskText = repetitiveEls.taskItemText; // visible task text not in the toolbar
+  const toolbarTaskText = repetitiveEls.taskTextEl;
+
+  if (taskItemDescription && toolbarDescription) {
+    toolbarDescription.textContent = taskItemDescription.textContent;
+  }
+
+  if (taskText && toolbarTaskText) {
+    toolbarTaskText.textContent = taskText.textContent;
+  }
 };
 
 export const editDescriptionAndTask = (event) => {
-  const isToolbarActive = event.target.closest(".toolbar--active");
+  const isToolbarActive = event.target.closest(
+    `[${CHECK_STATES.TOOLBAR_FULL_HEIGHT}]`,
+  );
   if (!isToolbarActive) return;
 
-  const isTaskClicked = event.target.closest(".task__toolbar-task-text");
+  const isTaskClicked = event.target.closest(`[${ATTR.TASK_TEXT}]`);
 
   const isDescriptionClicked = event.target.closest(
-    ".task__toolbar-description-text",
+    `[${ATTR.TASK_DESCRIPTION}]`,
   );
 
   if (!isDescriptionClicked && !isTaskClicked) return;
@@ -91,32 +107,36 @@ export const editDescriptionAndTask = (event) => {
   const mixTarget = isDescriptionClicked || isTaskClicked;
   appStateUi.lastClickedElement.lastEl = mixTarget;
 
-  appStateUi.activeMode = "switch";
+  appStateUi.activeMode = EDIT_MODES.SWITCH_BETWEEN_MODES;
 
   if (isDescriptionClicked) {
     editDescription(isDescriptionClicked, isToolbarActive);
-    appStateUi.activePlaceholder = "Description";
+    keyboardUiState.activePlaceholder = PLACEHOLDERS.DESCRIPTION;
   } else if (isTaskClicked) {
     editTask(isTaskClicked, isToolbarActive);
-    appStateUi.activePlaceholder = "Edit-your-task";
+    keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TASK;
   }
 };
 
 const getElements = (toolbar, taskItem) => {
-  const taskItemDescription = taskItem.querySelector(".task__description");
-  const toolbarDescription = toolbar.querySelector(
-    ".task__toolbar-description-text",
-  );
-  if (!toolbarDescription || !taskItemDescription) return;
-  const taskItemTaskEl = taskItem.querySelector(".task__text");
-  const toolbarTaskEl = toolbar.querySelector(".task__toolbar-task-text");
-  if (!taskItemTaskEl || !toolbarTaskEl) return;
-  const isTextTask = appStateUi.lastClickedElement.lastEl.classList.contains(
-    "task__toolbar-task-text",
+  const repetitiveEls = getRepetitiveElements(toolbar);
+  const taskItemDescription = repetitiveEls.taskItemDescription;
+  const toolbarDescription = repetitiveEls.description;
+  const taskItemTaskEl = repetitiveEls.taskItemText;
+  const toolbarTaskEl = repetitiveEls.taskTextEl;
+  if (
+    !taskItemTaskEl ||
+    !toolbarTaskEl ||
+    !toolbarDescription ||
+    !taskItemDescription
+  )
+    return;
+  const isTextTask = appStateUi.lastClickedElement.lastEl.hasAttribute(
+    `${ATTR.TASK_TEXT}`,
   );
 
-  const isDescription = appStateUi.lastClickedElement.lastEl.classList.contains(
-    "task__toolbar-description-text",
+  const isDescription = appStateUi.lastClickedElement.lastEl.hasAttribute(
+    `${ATTR.TASK_DESCRIPTION}`,
   );
   return {
     taskItemDescription,
@@ -144,25 +164,28 @@ const saveEditedDescription = (allElements) => {
   const taskItemDescriptionEl = allElements.taskItemDescription;
   const isDescription = allElements.isDescription;
   const isTaskEl = allElements.isTextTask;
-
   /* update model and UI if the description was the element that was last clicked  */
-  if (isDescription && inputText.trim() !== "" && inputText !== "Description") {
+  if (
+    isDescription &&
+    inputText.trim() !== "" &&
+    inputText !== PLACEHOLDERS.DESCRIPTION
+  ) {
     taskItemDescriptionEl.textContent = inputText;
     toolbarDescriptionEl.textContent = inputText;
     appStateUi.taskObjectToEdit.description = inputText;
     // sync truncattion attribute with latest data
     taskItemDescriptionEl.dataset.truncateText = inputText;
     /* update model and UI if input = Description, and is still on the still on description mode and not switched */
-  } else if (isDescription && inputText === "Description") {
+  } else if (isDescription && inputText === PLACEHOLDERS.DESCRIPTION) {
     taskItemDescriptionEl.textContent = "";
     toolbarDescriptionEl.textContent = "";
     taskItemDescriptionEl.dataset.truncateText = "";
     appStateUi.taskObjectToEdit.description = null;
     /* if  description el = Description  and input = empty or white spcae clear UI and update the model || if description el = Description and switched to edit task text just clear UI and update the model */
   } else if (
-    (toolbarDescriptionEl.textContent === "Description" &&
+    (toolbarDescriptionEl.textContent === PLACEHOLDERS.DESCRIPTION &&
       inputText.trim() === "") ||
-    (toolbarDescriptionEl.textContent === "Description" && isTaskEl)
+    (toolbarDescriptionEl.textContent === PLACEHOLDERS.DESCRIPTION && isTaskEl)
   ) {
     taskItemDescriptionEl.textContent = "";
     toolbarDescriptionEl.textContent = "";
@@ -183,7 +206,11 @@ const saveEditedTask = (allElements) => {
   const toolbarTaskEl = allElements.toolbarTaskEl;
   const taskItemTaskEl = allElements.taskItemTaskEl;
   // update task text if that was the last clicked el
-  if (isTaskEl && inputText.trim() !== "" && inputText !== "Edit your task") {
+  if (
+    isTaskEl &&
+    inputText.trim() !== "" &&
+    inputText !== PLACEHOLDERS.EDIT_TASK
+  ) {
     taskItemTaskEl.textContent = inputText;
     toolbarTaskEl.textContent = inputText;
     taskItemTaskEl.dataset.truncateText = inputText;
@@ -193,7 +220,7 @@ const saveEditedTask = (allElements) => {
     taskItemTaskEl.textContent = appStateUi.taskObjectToEdit.text;
     toolbarTaskEl.textContent = appStateUi.taskObjectToEdit.text;
     taskItemTaskEl.dataset.truncateText = appStateUi.taskObjectToEdit.text;
-  } else if (toolbarTaskEl.textContent !== "Edit your task") {
+  } else if (toolbarTaskEl.textContent !== PLACEHOLDERS.EDIT_TASK) {
     taskItemTaskEl.textContent = toolbarTaskEl.textContent;
     taskItemTaskEl.dataset.truncateText = toolbarTaskEl.textContent;
     appStateUi.taskObjectToEdit.text = toolbarTaskEl.textContent;

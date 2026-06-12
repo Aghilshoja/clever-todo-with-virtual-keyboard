@@ -1,3 +1,9 @@
+import {
+  KEYBOARD_ACTIVE,
+  KEYBOARD_INACTIVE,
+  KEYBOARD_STATES,
+} from "../constants/keyboard-constants.js";
+import { ATTR_STATES } from "../constants/todo-constants.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { getRequiredDom } from "./handle-disabling-or-enabling-saving-task-edits.js";
 
@@ -16,12 +22,16 @@ export const handleTaskCharacterLimit = () => {
   if (textLength > MAX_LIMIT) {
     elements.submitTask.disabled = true;
     if (saveBtn.saveButton) saveBtn.saveButton.disabled = true;
-    elements.inputCharacterLimit.classList.add("reached-character-limit");
+    elements.inputCharacterLimit.dataset[
+      KEYBOARD_STATES.CHARACTER_LIMIT_COUNTER
+    ] = KEYBOARD_ACTIVE.CHARACTER_LIMIT;
     elements.inputCharacterLimit.textContent = `Task name character limit: ${input.textContent.length} / ${MAX_LIMIT}`;
   } else {
     elements.submitTask.disabled = false;
     if (saveBtn.saveButton) saveBtn.saveButton.disabled = false;
-    elements.inputCharacterLimit.classList.remove("reached-character-limit");
+    elements.inputCharacterLimit.dataset[
+      KEYBOARD_STATES.CHARACTER_LIMIT_COUNTER
+    ] = KEYBOARD_INACTIVE.CHARACTER_LIMIT;
     elements.inputCharacterLimit.textContent = "";
   }
 };

@@ -1,57 +1,69 @@
-import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { uiState } from "../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../keyboard-controler/keyboard-controler.js";
+import {
+  ATTRIBUTES,
+  KB_CHECK_STATES,
+  KEYBOARD_STATES,
+} from "../constants/keyboard-constants.js";
 export const handledraggeingKey = (e) => {
-  const draggedKey = e.target.closest(".keyboard__key");
+  const draggedKey = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!draggedKey) return;
-  draggedKey.classList.add("keyboard__key--dragging");
+  draggedKey.dataset[KEYBOARD_STATES.DRAGGING_KEY] = "";
 
   const rowIndex = Number(draggedKey.dataset.row);
   const draggedKeyIndex = Number(draggedKey.dataset.col);
-  uiState.indexs.rowIndex = rowIndex;
-  uiState.indexs.btnIndex = draggedKeyIndex;
+  keyboardUiState.indexs.rowIndex = rowIndex;
+  keyboardUiState.indexs.btnIndex = draggedKeyIndex;
 };
 
 export const handledragEnter = (e) => {
   e.preventDefault();
-  const key = e.target.closest(".keyboard__key");
+  const key = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!key) return;
-  key.classList.add("keyboard__key--highlight");
+  //  highlight drop target
+  key.dataset[KEYBOARD_STATES.DRAGGING_HIGHLIGHT] = "";
 };
 
 export const handledragLeave = (e) => {
-  const key = e.target.closest(".keyboard__key");
+  const key = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!key) return;
   if (!key.contains(e.relatedTarget))
-    key.classList.remove("keyboard__key--highlight");
+    delete key.dataset[KEYBOARD_STATES.DRAGGING_HIGHLIGHT];
 };
 
 export const handledragEnd = (e) => {
-  const key = e.target.closest(".keyboard__key");
+  const key = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!key) return;
-  key.classList.remove("keyboard__key--dragging");
+  delete key.dataset[KEYBOARD_STATES.DRAGGING_KEY];
 
   document
-    .querySelectorAll(".keyboard__key--highlight")
-    .forEach((k) => k.classList.remove("keyboard__key--highlight"));
+    .querySelectorAll(`[${KB_CHECK_STATES.DRAGGING_HIGHLIGHT}]`)
+    .forEach((k) => delete k.dataset[KEYBOARD_STATES.DRAGGING_HIGHLIGHT]);
 
-  uiState.indexs.rowIndex = null;
-  uiState.indexs.btnIndex = null;
-  uiState.dragStartTimer = null;
+  keyboardUiState.indexs.rowIndex = null;
+  keyboardUiState.indexs.btnIndex = null;
+  keyboardUiState.dragStartTimer = null;
 };
 
 export const handleKeyDrop = (e) => {
-  const droppedkey = e.target.closest(".keyboard__key");
+  const droppedkey = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!droppedkey) return;
-  droppedkey.classList.remove("keyboard__key--highlight");
+  delete droppedkey.dataset[KEYBOARD_STATES.DRAGGING_HIGHLIGHT];
   const droppedKeyIndex = Number(droppedkey.dataset.col);
   const rowIndex = Number(droppedkey.dataset.row);
   const keyboardLayout = virtualKeyboard.activelayout;
 
   [
     keyboardLayout.rows[rowIndex][droppedKeyIndex],
-    keyboardLayout.rows[uiState.indexs.rowIndex][uiState.indexs.btnIndex],
+    keyboardLayout.rows[keyboardUiState.indexs.rowIndex][
+      keyboardUiState.indexs.btnIndex
+    ],
   ] = [
-    keyboardLayout.rows[uiState.indexs.rowIndex][uiState.indexs.btnIndex],
+    keyboardLayout.rows[keyboardUiState.indexs.rowIndex][
+      keyboardUiState.indexs.btnIndex
+    ],
     keyboardLayout.rows[rowIndex][droppedKeyIndex],
   ];
   virtualKeyboard.toggleLanguageLayout(keyboardLayout);

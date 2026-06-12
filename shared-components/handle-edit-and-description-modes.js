@@ -20,13 +20,19 @@ import {
   enterEditMode,
 } from "./dom-operations/shared-entering-edit-or-description-modes-ui.js";
 import { adjustActiveTaskTextWidth } from "./reveal-toolbar.js";
+import {
+  ACTIONS,
+  ACTIVE,
+  ATTR,
+  EDIT_MODES,
+} from "../constants/todo-constants.js";
 
 export const implementEditAndDescriptionMode = (event) => {
   const requiredData = detectClickedElementAndGetTaskObject(event);
   if (!requiredData) return;
   appStateUi.originalTaskDescription = requiredData.taskObject.description;
   appStateUi.originalTaskText = requiredData.taskObject.text;
-  if (appStateUi.activeMode === "edit-description") {
+  if (appStateUi.activeMode === EDIT_MODES.DESCRIPTION) {
     enterDescriptionMode(
       requiredData.taskItem.toolbar,
       requiredData.taskObject,
@@ -35,43 +41,43 @@ export const implementEditAndDescriptionMode = (event) => {
     adjustActiveTaskTextWidth();
   }
 
-  if (appStateUi.activeMode === "edit-task") {
+  if (appStateUi.activeMode === EDIT_MODES.EDIT_TASK) {
     enterEditMode(requiredData.taskItem.toolbar, requiredData.taskObject);
   }
   toggleKeyboard(event); // Toggle keyboard - event parameter determines if dismiss overlay is added
 };
 
 export const saveEditedTask = (event) => {
-  if (!event.target.closest(".task__save-edited-task")) return;
-  const toolbar = event.target.closest(".task__toolbar-actions");
-  const taskItem = event.target.closest(".task");
+  if (!event.target.closest(`[${ACTIONS.SAVE_EDIT}]`)) return;
+  const toolbar = event.target.closest(`[${ATTR.TASK_TOOLBAR}]`);
+  const taskItem = event.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!toolbar || !taskItem) return;
-  if (appStateUi.activeMode === "edit-task") {
+  if (appStateUi.activeMode === EDIT_MODES.EDIT_TASK) {
     saveEditedTaskText(toolbar, taskItem, event);
   }
 
-  if (appStateUi.activeMode === "edit-description") {
+  if (appStateUi.activeMode === EDIT_MODES.DESCRIPTION) {
     saveEditedTaskDescription(toolbar, taskItem, event);
   }
 
-  if (appStateUi.activeMode === "switch") {
+  if (appStateUi.activeMode === EDIT_MODES.SWITCH_BETWEEN_MODES) {
     saveEditedDescriptionAndTask(toolbar, taskItem, event);
   }
 };
 
 export const exitEditMode = (event) => {
-  if (!event.target.closest(".task__cancel-editing")) return;
-  const toolbar = event.target.closest(".task__toolbar-actions");
+  if (!event.target.closest(`[${ACTIONS.EXIT_EDIT}]`)) return;
+  const toolbar = event.target.closest(`[${ATTR.TASK_TOOLBAR}]`);
   if (!toolbar) return;
-  if (appStateUi.activeMode === "edit-task") {
+  if (appStateUi.activeMode === EDIT_MODES.EDIT_TASK) {
     cleanupEditUi(toolbar, event);
   }
 
-  if (appStateUi.activeMode === "edit-description") {
+  if (appStateUi.activeMode === EDIT_MODES.DESCRIPTION) {
     cleanupDescriptionUi(toolbar, event);
   }
 
-  if (appStateUi.activeMode === "switch") {
+  if (appStateUi.activeMode === EDIT_MODES.SWITCH_BETWEEN_MODES) {
     cleanupDescriptionAndEditUi(toolbar, event);
     revertTextOfDescriptionAndTaskText(event);
   }
