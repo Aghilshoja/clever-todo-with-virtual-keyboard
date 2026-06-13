@@ -4,8 +4,14 @@ import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.j
 import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-behavior.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { saveInputText } from "../save-drafted-text-input-to-local-storage.js";
-import { PLACEHOLDERS } from "../../constants/keyboard-constants.js";
+import {
+  clearEditSessionState,
+  saveInputText,
+} from "../save-drafted-text-input-to-local-storage.js";
+import {
+  KEYBOARD_STATES,
+  PLACEHOLDERS,
+} from "../../constants/keyboard-constants.js";
 import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTR,
@@ -107,6 +113,7 @@ const restoreDraftBackupAfterEditMode = () => {
     input.textContent = "";
     const caret = ensureCaret(input);
     caret.insertAdjacentText("beforebegin", input.dataset.draft);
+    delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
     saveInputText();
   } else {
     input.textContent = "";
@@ -120,6 +127,7 @@ const resetOtherPartsAsWell = (event) => {
   restoreDraftBackupAfterEditMode();
   disableSubmitIfInputEmpty();
   closeKeyboard();
+  clearEditSessionState();
   appStateUi.activeMode = EDIT_MODES.NO_MODES;
 };
 

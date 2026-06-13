@@ -5,7 +5,10 @@ import { clearPlaceholder } from "./keyboard-input-behavior.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
-import { KEYBOARD_ACTIONS } from "../constants/keyboard-constants.js";
+import {
+  KEYBOARD_ACTIONS,
+  KEYBOARD_STATES,
+} from "../constants/keyboard-constants.js";
 import { PLACEHOLDERS, ATTRIBUTES } from "../constants/keyboard-constants.js";
 
 export const handleSpaceBar = (e) => {
@@ -23,7 +26,7 @@ export const handleSpaceBar = (e) => {
     if (isTherePlaceholder) clearPlaceholder(input);
     const caret = ensureCaret(input);
     caret.before(document.createTextNode(" "));
-    delete input.dataset[ATTRIBUTES.INPUT_CARET];
+    delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
     saveInputText();
     disableSubmitIfInputEmpty();
     disableOrEnableSaveBtn();

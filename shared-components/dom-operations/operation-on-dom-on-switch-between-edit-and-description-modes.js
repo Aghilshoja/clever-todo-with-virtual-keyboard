@@ -15,6 +15,7 @@ import {
 import {
   PLACEHOLDERS,
   ATTRIBUTES,
+  KEYBOARD_STATES,
 } from "../../constants/keyboard-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 
@@ -32,7 +33,7 @@ const editDescription = (descriptionEl, toolbar) => {
   }
 
   // Clear visual caret before description edit (prevents double caret bug)
-  delete input.dataset[ATTRIBUTES.INPUT_CARET];
+  delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   descriptionEl.dataset[ATTR_STATES.DESCRIPTION_STATE] =
     HIDDEN.TASK_DESCRIPTION;
   descriptionEl.after(input);
@@ -62,7 +63,7 @@ const editTask = (taskEl, toolbar) => {
   taskEl.after(input);
   taskEl.dataset[ATTR_STATES.TASK_TEXT_STATE] = HIDDEN.TASK_TEXT;
   input.textContent = "";
-  delete input.dataset[ATTRIBUTES.INPUT_CARET];
+  delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   const caret = ensureCaret(input);
   caret.insertAdjacentText("beforebegin", taskEl.textContent);
 };

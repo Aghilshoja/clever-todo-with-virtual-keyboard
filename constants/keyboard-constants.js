@@ -3,7 +3,6 @@
 export const ATTRIBUTES = {
   INPUT: "data-keyboard-input",
   REGULAR_KEY: "data-key-type",
-  INPUT_CARET: "inputCaret",
   KEYBOARD_TIME_OPTIONS: "data-keyboard-time-options",
   INPUT_CONTAINER: "data-input-container",
   KEYBOARD_SECTION: "data-keyboard-section",
@@ -41,6 +40,7 @@ export const KEYBOARD_STATES = {
   SHIFT_KEY_STATE: "shiftKeyState",
   CHARACTER_LIMIT_COUNTER: "characterLimitState",
   CARET: "caret",
+  INPUT_CARET: "inputCaret",
 };
 
 export const PLACEHOLDERS = {

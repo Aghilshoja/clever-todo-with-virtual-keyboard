@@ -9,6 +9,7 @@ import {
   PLACEHOLDERS,
   ATTRIBUTES,
   KEYBOARD_ACTIONS,
+  KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
 
 export const pressBackspace = (e) => {
@@ -78,7 +79,7 @@ const startContinuousDelete = () => {
 };
 
 const addCaretToInput = (input) => {
-  input.dataset[ATTRIBUTES.INPUT_CARET] = "";
+  input.dataset[KEYBOARD_STATES.INPUT_CARET] = "";
 };
 
 export const ensurePlaceholder = (input) => {
@@ -142,7 +143,7 @@ export const typeIntoInput = (event) => {
   if (!elements) throw new Error("required DOM was not found");
   const input = elements.inputElement;
   if (!input) return;
-  delete input.dataset[ATTRIBUTES.INPUT_CARET];
+  delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   clearPlaceholder(input);
   const caret = ensureCaret(input);
 

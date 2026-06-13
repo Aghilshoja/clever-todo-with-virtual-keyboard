@@ -5,6 +5,7 @@ import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTRIBUTES,
+  KEYBOARD_STATES,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
 import {
@@ -53,6 +54,7 @@ const checkWhatIsClicked = (event) => {
   if (editBtn) {
     appStateUi.activeMode = EDIT_MODES.EDIT_TASK;
     keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TASK;
+    localStorage.setItem("app-state", EDIT_MODES.EDIT_TASK);
   }
   const descriptionBtn = event.target.closest(`[${ACTIONS.DESCRIPTION}]`);
   if (descriptionBtn) {
@@ -128,12 +130,17 @@ const moveInputAndHideTaskText = (toolbar, task) => {
   if (!toolbar) return;
   const input = elements.inputElement;
   if (!input) return;
+  /*
+   * if users save their edited task or exit edit mode the data attribute will restore the drafted new task
+   * else users have refreshed the page while editing a task in that case store the drafted new task in local storage then restore it at the page load
+   */
   input.dataset.draft = input.textContent;
+  localStorage.setItem("new-task-draft", input.dataset.draft);
 
   const repetitiveElements = getRepetitiveElements(toolbar);
   if (!repetitiveElements.taskTextEl) return;
 
-  delete input.dataset[ATTRIBUTES.INPUT_CARET];
+  delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   elements.inputElement.textContent = "";
   repetitiveElements.taskTextEl.dataset[ATTR_STATES.TASK_TEXT_STATE] =
     HIDDEN.TASK_TEXT;
@@ -153,10 +160,10 @@ const moveInputAndHideTaskDescription = (toolbar, task) => {
     HIDDEN.TASK_DESCRIPTION;
   descriptionEl.after(elements.inputElement);
   if (task.description === null) {
-    elements.inputElement.dataset[ATTRIBUTES.INPUT_CARET] = "";
+    elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET] = "";
     elements.inputElement.textContent = PLACEHOLDERS.DESCRIPTION;
   } else if (task.description !== null) {
-    delete elements.inputElement.dataset[ATTRIBUTES.INPUT_CARETS];
+    delete elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET];
     elements.inputElement.textContent = "";
     const caret = ensureCaret(elements.inputElement);
     caret.insertAdjacentText("beforebegin", task.description);
