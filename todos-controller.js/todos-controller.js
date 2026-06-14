@@ -9,7 +9,11 @@ import {
 } from "../shared-components/reveal-toolbar.js";
 import { closeToolbar } from "../shared-components/closeToolbarOnPageClick.js";
 import { uupdatePaddingOfListDynamicallyBasedOnBottomNavbar } from "../shared-components/apply-padding-to-lists-based-on-nvas-offsetHeight.js";
-import { warnDeletion, deleteTask } from "../shared-components/delete-mode.js";
+import {
+  warnDeletion,
+  deleteTask,
+  closeWarningDeletionPopup,
+} from "../shared-components/delete-mode.js";
 import { duplicateTask } from "../shared-components/duplicate-mode.js";
 import { implementEditAndDescriptionMode } from "../shared-components/handle-edit-and-description-modes.js";
 import { saveEditedTask } from "../shared-components/handle-edit-and-description-modes.js";
@@ -19,7 +23,10 @@ import {
   truncateTaskDescription,
   truncateTaskText,
 } from "../shared-components/truncate-task.js";
-import { completeTask } from "../shared-components/complete-mode.js";
+import {
+  completeTask,
+  showNumberOfCompletedTasks,
+} from "../shared-components/complete-mode.js";
 import { handleUndoCompletingAndUncompleting } from "../shared-components/undo-completed-task.js";
 import { moveTaskFromCompletedToActive } from "../shared-components/move-task-rrom-completed-to-active.js";
 import {
@@ -35,14 +42,19 @@ import {
   triggerTaskSelectionUi,
   selectTasks,
   toggleOptionsOfSelectedTasks,
-  exitTaskSelection,
+  handleExitSelectionClick,
 } from "../shared-components/select-tasks.js";
 import {
   ATTR,
+  DELETION_MODES,
   EDIT_MODES,
   SELECTION_BAR,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
+import {
+  deleteSeveralTasks,
+  showSeveralTasksWarning,
+} from "../shared-components/delete-several-tasks.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -67,6 +79,7 @@ export const appStateUi = {
   },
   taskSelectionMode: SELECTION_BAR.ACTIVE_LIST,
   selectedTasksCounter: 0,
+  deletionMode: DELETION_MODES,
 };
 
 const handleListChange = (listChange, eachTask) => {
@@ -111,6 +124,7 @@ const initTodo = () => {
     selectionBar,
     navigation,
     submitTask,
+    batchDeleteTasks,
   } = elements;
 
   if (
@@ -119,7 +133,8 @@ const initTodo = () => {
     !dropDownList ||
     !selectionBar ||
     !navigation ||
-    !submitTask
+    !submitTask ||
+    !batchDeleteTasks
   )
     return;
   // Highlight default on load
@@ -145,7 +160,10 @@ const initTodo = () => {
   document.addEventListener("click", toggleOptions);
   dropDownList.addEventListener("click", triggerTaskSelectionUi);
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
-  selectionBar.addEventListener("click", exitTaskSelection);
+  selectionBar.addEventListener("click", handleExitSelectionClick);
+  batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
+  warningPopup.addEventListener("click", deleteSeveralTasks);
+  warningPopup.addEventListener("click", closeWarningDeletionPopup);
 
   // Navigation Click
   navigation.addEventListener("click", (e) => {

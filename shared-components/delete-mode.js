@@ -9,6 +9,9 @@ import {
   ACTIVE,
   ATTR,
   ATTR_STATES,
+  CHECK_STATES,
+  DELETION_MODES,
+  HIGHLIGHT_SELECTED_TASK,
   INACTIVE,
 } from "../constants/todo-constants.js";
 
@@ -40,7 +43,12 @@ export const handleEmptyTaskStateUi = () => {
 
 export const deleteTask = (e) => {
   if (!elements) throw new Error("Required elemetn was not found");
-  if (e.target.closest(`[${ACTIONS.CONFIRM_DELETION}]`)) {
+  const isSingleTaskDeletion =
+    appStateUi.deletionMode === DELETION_MODES.SINGLE;
+  if (
+    e.target.closest(`[${ACTIONS.CONFIRM_DELETION}]`) &&
+    isSingleTaskDeletion
+  ) {
     const taskItem = document.querySelector(
       `[${ATTR.TASK_ITEM}][data-id="${appStateUi.taskId}"]`,
     );
@@ -48,24 +56,34 @@ export const deleteTask = (e) => {
     lists.default.deleteTask(appStateUi.taskId);
     if (elements.warningPopup)
       elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
-  } else
-    elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
+    appStateUi.deletionMode = DELETION_MODES.NONE;
+  }
 
   handleEmptyTaskStateUi();
   countTasks();
   showNumberOfCompletedTasks();
 };
 
+const showSingleTaskDeletionWarning = (e) => {
+  const taskItem = e.target.closest(`[${ATTR.TASK_ITEM}]`);
+  appStateUi.taskId = taskItem.dataset.id;
+  if (elements.warningPopup)
+    elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = ACTIVE.POPUP;
+  const taskEl = taskItem.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`);
+  if (!taskEl) return;
+  if (!elements.warningMessage || !elements.deleteHeading) return;
+  elements.warningMessage.innerHTML = `This will permanently delete "${taskEl.textContent}" and can't be undone`;
+  elements.deleteHeading.textContent = "Delete task?";
+  appStateUi.deletionMode = DELETION_MODES.SINGLE;
+};
+
 export const warnDeletion = (e) => {
-  if (e.target.closest(`[${ACTIONS.DELETE}]`)) {
-    if (!elements) throw new Error("Required elemetn was not found");
-    const taskItem = e.target.closest(`[${ATTR.TASK_ITEM}]`);
-    appStateUi.taskId = taskItem.dataset.id;
-    if (elements.warningPopup)
-      elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = ACTIVE.POPUP;
-    const taskEl = taskItem.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`);
-    if (!taskEl) return;
-    if (elements.warningMessage)
-      elements.warningMessage.innerHTML = `This will permanently delete "${taskEl.textContent}" and can't be undone`;
-  }
+  if (!elements) throw new Error("Required elemetn was not found");
+  if (e.target.closest(`[${ACTIONS.DELETE}]`)) showSingleTaskDeletionWarning(e);
+};
+
+export const closeWarningDeletionPopup = (e) => {
+  if (e.target.closest(`[${ACTIONS.CONFIRM_DELETION}]`)) return;
+  elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
+  appStateUi.deletionMode = DELETION_MODES.NONE;
 };

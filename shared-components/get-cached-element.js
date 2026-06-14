@@ -46,6 +46,8 @@ export const getCachedElements = () => {
     activateToolbarButtons: document.querySelectorAll(
       `[${ACTIONS.BATCH_SET_DATE}], [${ACTIONS.BATCH_MOVE_TASKS}], [${ACTIONS.BATCH_ADD_LABEL}], [${ACTIONS.BATCH_SET_PRIORITY}], [${ACTIONS.BATCH_DELETE_TASKS}], [${ACTIONS.BATCH_DUPLICATE_TASKS}], [${ACTIONS.BATCH_COMPLETE_TASKS}]`,
     ),
+    deleteHeading: document.querySelector(`[${ATTR.WARNING_HEADING}]`),
+    batchDeleteTasks: document.querySelector(`[${ACTIONS.BATCH_DELETE_TASKS}]`),
     mainPageNewTask: document.querySelector(`[${ACTIONS.ADD_TASK}]`),
     mainPageNewTaskCon: document.querySelector(`[${ATTR.TASK_CREATOR}]`),
     navigation: document.querySelector(`[${ATTR.NAV}]`),

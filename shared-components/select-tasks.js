@@ -231,9 +231,8 @@ export const toggleOptionsOfSelectedTasks = (e) => {
   updateLabelsOfOperationalButtonsForSelectedTasks();
 };
 
-export const exitTaskSelection = (e) => {
+export const exitTaskSelection = () => {
   if (!elements) throw new Error("Required DOM was not found");
-  if (!e.target.closest(`[${ACTIONS.EXIT_TASK_SELECTION}]`)) return;
   unfadeNavAndTaskHeader();
   elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] =
     INACTIVE.SELECTION_BAR;
@@ -259,4 +258,9 @@ export const exitTaskSelection = (e) => {
   if (isManuOpen)
     elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] =
       CLOSED.BATCH_MENU;
+};
+
+export const handleExitSelectionClick = (e) => {
+  if (!e.target.closest(`[${ACTIONS.EXIT_TASK_SELECTION}]`)) return;
+  exitTaskSelection();
 };

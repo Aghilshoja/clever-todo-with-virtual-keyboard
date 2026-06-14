@@ -36,6 +36,10 @@ export class TaskList {
     }
   }
 
+  deleteSeveralTasks(taskIds) {
+    this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+  }
+
   duplicateTask(taskId) {
     const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
     const foundTask = allTypesOfTasks.find((t) => t.id === taskId);

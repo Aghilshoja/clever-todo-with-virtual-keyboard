@@ -40,6 +40,8 @@ export const ATTR = {
   BATCH_DUPLICATE_LABEL: "data-duplicate-label",
   BATCH_COMPLETE_LABEL: "data-completed-label",
   TASKS_COUNTER: "data-task-counter",
+
+  WARNING_HEADING: "data-warning-heading",
 };
 
 // elements that perform actions
@@ -205,4 +207,10 @@ export const SELECTION_BAR = {
 export const HIGHLIGHT_SELECTED_TASK = {
   SELECTED: "true",
   UNSELECTED: "false",
+};
+
+export const DELETION_MODES = {
+  NONE: "none",
+  SINGLE: "single",
+  BATCH: "batch",
 };
