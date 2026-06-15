@@ -8,6 +8,7 @@ import {
   INACTIVE,
 } from "../constants/todo-constants.js";
 import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { getCachedElements } from "./get-cached-element.js";
@@ -60,5 +61,6 @@ export const deleteSeveralTasks = (e) => {
     exitTaskSelection();
     handleEmptyTaskStateUi();
     countTasks();
+    showNumberOfCompletedTasks();
   }
 };

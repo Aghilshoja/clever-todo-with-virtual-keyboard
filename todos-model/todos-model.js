@@ -38,6 +38,9 @@ export class TaskList {
 
   deleteSeveralTasks(taskIds) {
     this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+    this.completedTasks = this.completedTasks.filter(
+      (task) => !taskIds.includes(task.id),
+    );
   }
 
   duplicateTask(taskId) {
