@@ -68,6 +68,46 @@ export class TaskList {
     return duplicatedTask;
   }
 
+  duplicateSeveralTasks(taskIds) {
+    const copiesOfDuplicatedTasks = [];
+
+    // Determine which list we're working with
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const firstTask = allTasks.find((t) => taskIds.includes(t.id));
+    const isCompletedList = firstTask?.isCompleted === true;
+
+    // Work on the correct list
+    const sourceList = isCompletedList
+      ? this.getCompletedTasks()
+      : this.getTasks();
+    const newList = [];
+
+    sourceList.forEach((task) => {
+      newList.push(task);
+
+      if (taskIds.includes(task.id)) {
+        const duplicatedTask = {
+          id: this.generateId(),
+          text: task.text,
+          createdAt: Date.now(),
+          isCompleted: isCompletedList,
+          description: task.description,
+        };
+        copiesOfDuplicatedTasks.push(duplicatedTask);
+        newList.push(duplicatedTask);
+      }
+    });
+
+    // Update the correct list
+    if (isCompletedList) {
+      this.completedTasks = newList;
+    } else {
+      this.tasks = newList;
+    }
+
+    return copiesOfDuplicatedTasks;
+  }
+
   markTaskAsCompleted(taskId) {
     const taskToComplete = this.getTasks().find((t) => t.id === taskId);
     if (!taskToComplete) throw new Error("Task object was not found");

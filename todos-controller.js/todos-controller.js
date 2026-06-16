@@ -55,6 +55,7 @@ import {
   deleteSeveralTasks,
   showSeveralTasksWarning,
 } from "../shared-components/delete-several-tasks.js";
+import { duplicateSeveralTasks } from "../shared-components/duplicate-several-tasks.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -125,6 +126,7 @@ const initTodo = () => {
     navigation,
     submitTask,
     batchDeleteTasks,
+    batchDuplicateTasks,
   } = elements;
 
   if (
@@ -134,7 +136,8 @@ const initTodo = () => {
     !selectionBar ||
     !navigation ||
     !submitTask ||
-    !batchDeleteTasks
+    !batchDeleteTasks ||
+    !batchDuplicateTasks
   )
     return;
   // Highlight default on load
@@ -162,6 +165,7 @@ const initTodo = () => {
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
   selectionBar.addEventListener("click", handleExitSelectionClick);
   batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
+  batchDuplicateTasks.addEventListener("click", duplicateSeveralTasks);
   warningPopup.addEventListener("click", deleteSeveralTasks);
   warningPopup.addEventListener("click", closeWarningDeletionPopup);
 

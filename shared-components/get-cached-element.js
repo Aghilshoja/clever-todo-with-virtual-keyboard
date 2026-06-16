@@ -48,6 +48,9 @@ export const getCachedElements = () => {
     ),
     deleteHeading: document.querySelector(`[${ATTR.WARNING_HEADING}]`),
     batchDeleteTasks: document.querySelector(`[${ACTIONS.BATCH_DELETE_TASKS}]`),
+    batchDuplicateTasks: document.querySelector(
+      `[${ACTIONS.BATCH_DUPLICATE_TASKS}]`,
+    ),
     mainPageNewTask: document.querySelector(`[${ACTIONS.ADD_TASK}]`),
     mainPageNewTaskCon: document.querySelector(`[${ATTR.TASK_CREATOR}]`),
     navigation: document.querySelector(`[${ATTR.NAV}]`),
@@ -64,7 +67,7 @@ export const getCachedElements = () => {
     selectionBar: document.querySelector(`[${ATTR.SELECTION_BAR_CON}]`),
     batchToolbar: document.querySelector(`[${ATTR.BATCH_TOOLBAR}]`),
     mainPageBatchMenu: document.querySelector(`[${ATTR.BATCH_MENU}]`),
-    /* end of the elements that are relted to the todo app */
+    /* end of the elements that are related to the todo app */
   };
   return elements;
 };
