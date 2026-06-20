@@ -42,6 +42,9 @@ export const ATTR = {
   TASKS_COUNTER: "data-task-counter",
 
   WARNING_HEADING: "data-warning-heading",
+
+  DRAGGING_TASK: "data-dragging-task",
+  DROP_TARGET_HIGHLIGHT: "data-drop-target-highlight",
 };
 
 // elements that perform actions

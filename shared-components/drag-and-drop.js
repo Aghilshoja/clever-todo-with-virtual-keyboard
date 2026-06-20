@@ -1,7 +1,32 @@
 import { lists } from "../todos-controller.js/todos-controller.js";
-import { ACTIONS, ATTR, ATTR_STATES } from "../constants/todo-constants.js";
+import {
+  ACTIONS,
+  ATTR,
+  ATTR_STATES,
+  CHECK_STATES,
+  OPEN,
+} from "../constants/todo-constants.js";
 
 let currentDragImage = null;
+
+const exitDragAndDropIfToolbarActive = () => {
+  const activeToolbar = document.querySelector(
+    `[${CHECK_STATES.TASK_TOOLBAR}='${OPEN.TASK_TOOLBAR}']`,
+  );
+
+  return activeToolbar || null;
+};
+
+const clearDragState = () => {
+  document
+    .querySelectorAll(
+      `[${ATTR.DRAGGING_TASK}], [${ATTR.DROP_TARGET_HIGHLIGHT}]`,
+    )
+    .forEach((taskItem) => {
+      delete taskItem.dataset[ATTR_STATES.DRAGGING_TASK];
+      delete taskItem.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
+    });
+};
 
 const mockTaskImage = (task) => {
   const draggedImageWrapper = document.createElement("div");
@@ -28,6 +53,12 @@ const mockTaskImage = (task) => {
 export const dragStart = (e) => {
   const task = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!task) return;
+
+  const activeToolbar = exitDragAndDropIfToolbarActive();
+  if (activeToolbar) {
+    e.preventDefault();
+    return;
+  }
 
   e.dataTransfer.setData("text/plain", task.dataset.id);
 
@@ -75,14 +106,7 @@ export const draggedLeave = (e) => {
 };
 
 export const draggedEndTask = (e) => {
-  document
-    .querySelectorAll(
-      `[${ATTR_STATES.DRAGGING_TASK}], [${ATTR_STATES.DROP_TARGET_HIGHLIGHT}]`,
-    )
-    .forEach((taskItem) => {
-      delete taskItem.dataset[ATTR_STATES.DRAGGING_TASK];
-      delete taskItem.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
-    });
+  clearDragState();
 
   if (currentDragImage) {
     currentDragImage.remove();
@@ -102,8 +126,7 @@ export const dropTarget = (e) => {
   const tasksContainer = e.currentTarget;
   if (!dropT || !draggedTask) return;
 
-  delete dropT.dataset[ATTR_STATES.DROP_TARGET_HIGHLIGHT];
-  delete draggedTask.dataset[ATTR_STATES.DRAGGING_TASK];
+  clearDragState();
 
   const sourceContainer = draggedTask.closest(
     `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
