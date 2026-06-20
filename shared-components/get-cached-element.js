@@ -51,6 +51,9 @@ export const getCachedElements = () => {
     batchDuplicateTasks: document.querySelector(
       `[${ACTIONS.BATCH_DUPLICATE_TASKS}]`,
     ),
+    batchCompletedTasks: document.querySelector(
+      `[${ACTIONS.BATCH_COMPLETE_TASKS}]`,
+    ),
     mainPageNewTask: document.querySelector(`[${ACTIONS.ADD_TASK}]`),
     mainPageNewTaskCon: document.querySelector(`[${ATTR.TASK_CREATOR}]`),
     navigation: document.querySelector(`[${ATTR.NAV}]`),

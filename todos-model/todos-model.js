@@ -132,6 +132,23 @@ export class TaskList {
     };
   }
 
+  markSeveralTasksAsCompleted(taskIds) {
+    const tasksToComplete = this.tasks.filter((task) =>
+      taskIds.includes(task.id),
+    );
+
+    this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+
+    tasksToComplete.forEach((task) => {
+      const completedTask = {
+        ...task,
+        isCompleted: true,
+        createdAt: Date.now(),
+      };
+      this.getCompletedTasks().push(completedTask);
+    });
+  }
+
   moveTaskFromCompletedToActive(taskId) {
     const taskToUncomplete = this.getCompletedTasks().find(
       (t) => t.id === taskId,
@@ -156,6 +173,25 @@ export class TaskList {
     };
   }
 
+  uncompleteSeveralTasks(taskIds) {
+    const tasksToUncomplete = this.completedTasks.filter((task) =>
+      taskIds.includes(task.id),
+    );
+
+    this.completedTasks = this.completedTasks.filter(
+      (task) => !taskIds.includes(task.id),
+    );
+
+    tasksToUncomplete.forEach((task) => {
+      const uncompletedTask = {
+        ...task,
+        isCompleted: false,
+        createAt: Date.now(),
+      };
+      this.getTasks().push(uncompletedTask);
+    });
+  }
+
   undoCompletedTask(taskObject, index, completedTaskId) {
     if (this.getTasks().length === 0) this.getTasks().push(taskObject);
     else if (this.getTasks().length > 0)
@@ -166,6 +202,14 @@ export class TaskList {
     );
   }
 
+  undoSeveralCompletedTasks(originalTasksOrder, taskIds) {
+    this.completedTasks = this.completedTasks.filter(
+      (task) => !taskIds.includes(task.id),
+    );
+
+    this.tasks = originalTasksOrder;
+  }
+
   undoUncompletedTask(originalTaskObject, index, uncompletedTaskId) {
     if (this.getCompletedTasks().length === 0)
       this.getCompletedTasks().push(originalTaskObject);
@@ -173,6 +217,13 @@ export class TaskList {
       this.getCompletedTasks().splice(index, 0, originalTaskObject);
 
     this.tasks = this.tasks.filter((t) => t.id !== uncompletedTaskId);
+  }
+
+  undoSeveralUncompletedTasks(originalTasksOrder, taskIds) {
+    this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+
+    // restore the original order of completed tasks after undo by snapshot taken before uncompleting tasks
+    this.completedTasks = originalTasksOrder;
   }
 
   generateId() {

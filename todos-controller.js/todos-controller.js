@@ -56,6 +56,8 @@ import {
   showSeveralTasksWarning,
 } from "../shared-components/delete-several-tasks.js";
 import { duplicateSeveralTasks } from "../shared-components/duplicate-several-tasks.js";
+import { handleSeveralTasksCompletionOrUncompletion } from "../shared-components/handle-several-tasks-completion-or-uncompletion.js";
+import { handleSeveralCompletedAndUncompletedTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -81,6 +83,12 @@ export const appStateUi = {
   taskSelectionMode: SELECTION_BAR.ACTIVE_LIST,
   selectedTasksCounter: 0,
   deletionMode: DELETION_MODES,
+  // snapshots are used for undo operation
+  snapshots: {
+    domSnapshot: null,
+    dataSnapshot: null,
+    IdsOfSelectedTasks: null,
+  },
 };
 
 const handleListChange = (listChange, eachTask) => {
@@ -127,6 +135,7 @@ const initTodo = () => {
     submitTask,
     batchDeleteTasks,
     batchDuplicateTasks,
+    batchCompletedTasks,
   } = elements;
 
   if (
@@ -137,7 +146,8 @@ const initTodo = () => {
     !navigation ||
     !submitTask ||
     !batchDeleteTasks ||
-    !batchDuplicateTasks
+    !batchDuplicateTasks ||
+    !batchCompletedTasks
   )
     return;
   // Highlight default on load
@@ -159,6 +169,10 @@ const initTodo = () => {
     "click",
     handleUndoCompletingAndUncompleting,
   );
+  undoCompletedTask.addEventListener(
+    "click",
+    handleSeveralCompletedAndUncompletedTasksUndo,
+  );
 
   document.addEventListener("click", toggleOptions);
   dropDownList.addEventListener("click", triggerTaskSelectionUi);
@@ -166,6 +180,10 @@ const initTodo = () => {
   selectionBar.addEventListener("click", handleExitSelectionClick);
   batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
   batchDuplicateTasks.addEventListener("click", duplicateSeveralTasks);
+  batchCompletedTasks.addEventListener(
+    "click",
+    handleSeveralTasksCompletionOrUncompletion,
+  );
   warningPopup.addEventListener("click", deleteSeveralTasks);
   warningPopup.addEventListener("click", closeWarningDeletionPopup);
 

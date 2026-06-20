@@ -132,6 +132,7 @@ export const ATTR_STATES = {
   COMPLETED_LIST_SECTION: "completedSectionState",
   POPUP_STATE: "popupState",
   TASKS_COUNTER: "taskCounterState",
+  CHECKbOX: "checkbox",
 };
 
 export const VISIBLE = {
@@ -194,8 +195,10 @@ export const EDIT_MODES = {
 };
 
 export const UNDO_STATES = {
-  UNDO_COMPLETED: "completed",
-  UNDO_UNCOMPLETED: "uncompleted",
+  UNDO_COMPLETED: "single-completed",
+  UNDO_UNCOMPLETED: "single-uncompleted",
+  UNDO_SEVERAL_COMPLETED: "several-completed",
+  UNDO_SEVERAL_UNCOMPLETED: "several-uncompleted",
   NO_UNDO: "none",
 };
 
