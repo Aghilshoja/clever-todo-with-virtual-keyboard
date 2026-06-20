@@ -71,6 +71,7 @@ virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_ROWS, createRows);
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CREATE_KEYS, createKeys);
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.UPDATE_KEYS, updateKeysText);
 virtualKeyboard.loadNewKeyboardlayout();
+virtualKeyboard.currentCapsLock();
 
 const initApp = () => {
   if (!elements) throw new Error("required DOM wasn't found");

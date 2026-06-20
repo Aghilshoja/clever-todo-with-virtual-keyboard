@@ -18,6 +18,8 @@ export class KeyboardApp {
     this.keyboard = new KeyboardStructure();
     this.activelang = "en";
     this.capsLock = KeyboardApp.CAPS_LOCK.LOWERCASE;
+    this.capsLockOnKeyboardLoad = true;
+    this.localStorageDraftKey = "save-drafted-text";
     this.listeners = {
       createRows: [],
       createKeys: [],
@@ -66,19 +68,33 @@ export class KeyboardApp {
     this.loadNewKeyboardlayout(lang);
   }
 
-  currentCapsLock() {
-    const LOWERCASE = KeyboardApp.CAPS_LOCK.LOWERCASE;
-    const UPPERCASE = KeyboardApp.CAPS_LOCK.UPPERCASE;
-    const CAPS = KeyboardApp.CAPS_LOCK.CAPS;
-    if (this.capsLock === LOWERCASE) this.capsLock = CAPS;
-    else if (this.capsLock === CAPS) this.capsLock = UPPERCASE;
-    else this.capsLock = LOWERCASE;
-
+  renderCapsLock() {
     this.emitChange(
       KeyboardApp.EVENTS.UPDATE_KEYS,
       this.capsLock,
       KeyboardApp.CAPS_LOCK,
     );
+  }
+
+  currentCapsLock() {
+    const LOWERCASE = KeyboardApp.CAPS_LOCK.LOWERCASE;
+    const UPPERCASE = KeyboardApp.CAPS_LOCK.UPPERCASE;
+    const CAPS = KeyboardApp.CAPS_LOCK.CAPS;
+    const isDraftEmpty =
+      localStorage.getItem(this.localStorageDraftKey) === "Enter a task";
+    if (this.capsLockOnKeyboardLoad) {
+      this.capsLockOnKeyboardLoad = false;
+
+      if (isDraftEmpty) this.capsLock = CAPS;
+
+      this.renderCapsLock();
+
+      return;
+    } else if (this.capsLock === LOWERCASE) this.capsLock = CAPS;
+    else if (this.capsLock === CAPS) this.capsLock = UPPERCASE;
+    else this.capsLock = LOWERCASE;
+
+    this.renderCapsLock();
   }
 
   onKeyPressed() {
