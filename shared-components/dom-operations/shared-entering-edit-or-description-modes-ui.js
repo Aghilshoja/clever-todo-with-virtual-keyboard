@@ -155,8 +155,8 @@ const moveInputAndHideTaskText = (toolbar, task) => {
   const caret = ensureCaret(elements.inputElement);
   virtualKeyboard.caretManeger.text = task.text;
   virtualKeyboard.caretManeger.caretPosition = task.text.length;
-
   updateTextEditor(input, caret);
+  virtualKeyboard.updateAutoCaps();
 };
 
 const moveInputAndHideTaskDescription = (toolbar, task) => {
@@ -180,6 +180,7 @@ const moveInputAndHideTaskDescription = (toolbar, task) => {
     virtualKeyboard.caretManeger.text = task.description;
     virtualKeyboard.caretManeger.caretPosition = task.description.length;
     updateTextEditor(elements.inputElement, caret);
+    virtualKeyboard.updateAutoCaps();
   }
 };
 

@@ -1,6 +1,6 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
+import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
@@ -139,6 +139,7 @@ const deleteLastCharacterOfInput = () => {
   saveInputText();
   disableSubmitIfInputEmpty();
   handleTaskCharacterLimit();
+  virtualKeyboard.updateAutoCaps();
 };
 
 export const insertText = (input, char, caret) => {
@@ -181,4 +182,5 @@ export const typeIntoInput = (event) => {
   disableOrEnableSaveBtn();
   handleTaskCharacterLimit();
   saveInputText();
+  virtualKeyboard.updateAutoCaps();
 };

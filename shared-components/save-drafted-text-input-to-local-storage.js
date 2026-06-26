@@ -51,6 +51,7 @@ const loadDraft = (input, draft) => {
   updateTextEditor(input, caret);
   disableSubmitIfInputEmpty();
   handleTaskCharacterLimit();
+  virtualKeyboard.updateAutoCaps();
 };
 
 const restoreInputPlaceholder = (input) => {

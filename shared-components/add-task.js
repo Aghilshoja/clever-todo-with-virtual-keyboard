@@ -18,6 +18,7 @@ export const addTask = () => {
   elements.inputElement.textContent = "";
 
   virtualKeyboard.resetCaretState();
+  virtualKeyboard.updateAutoCaps();
 
   ensurePlaceholder(elements.inputElement);
   saveInputText();

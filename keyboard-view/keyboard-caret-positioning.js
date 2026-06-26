@@ -65,4 +65,6 @@ export const positionCaret = (e) => {
       virtualKeyboard.caretManeger.caretPosition,
     );
   }
+
+  virtualKeyboard.updateAutoCaps();
 };

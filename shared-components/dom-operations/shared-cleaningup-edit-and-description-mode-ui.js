@@ -129,6 +129,7 @@ const restoreDraftBackupAfterEditMode = () => {
     virtualKeyboard.resetCaretState();
   }
   updateEditorState("appState", null);
+  virtualKeyboard.updateAutoCaps();
 };
 
 const resetOtherPartsAsWell = (event) => {

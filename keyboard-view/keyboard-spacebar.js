@@ -13,6 +13,7 @@ import {
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
 import { PLACEHOLDERS, ATTRIBUTES } from "../constants/keyboard-constants.js";
+import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 
 export const handleSpaceBar = (e) => {
   const elements = getCachedElements();
@@ -35,5 +36,6 @@ export const handleSpaceBar = (e) => {
     disableSubmitIfInputEmpty();
     disableOrEnableSaveBtn();
     handleTaskCharacterLimit();
+    virtualKeyboard.updateAutoCaps();
   }
 };

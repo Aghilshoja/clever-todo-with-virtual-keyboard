@@ -70,6 +70,7 @@ export class KeyboardApp {
 
   setLang(lang) {
     this.loadNewKeyboardlayout(lang);
+    this.renderCapsLock(); // reapply caps after language switch
   }
 
   renderCapsLock() {
@@ -103,6 +104,34 @@ export class KeyboardApp {
     } else if (this.capsLock === LOWERCASE) this.capsLock = CAPS;
     else if (this.capsLock === CAPS) this.capsLock = UPPERCASE;
     else this.capsLock = LOWERCASE;
+
+    this.renderCapsLock();
+  }
+
+  updateAutoCaps() {
+    // If locked in uppercase, don't change
+    if (this.capsLock === KeyboardApp.CAPS_LOCK.UPPERCASE) return;
+
+    const beforeCaret = this.caretManeger.text.slice(
+      0,
+      this.caretManeger.caretPosition,
+    );
+
+    const trimmed = beforeCaret.trimEnd();
+
+    const shouldEnableCaps =
+      beforeCaret.endsWith(". ") ||
+      beforeCaret.endsWith("? ") ||
+      beforeCaret.endsWith("! ") ||
+      beforeCaret.length === 0 ||
+      beforeCaret.trimEnd().length === 0 ||
+      trimmed.endsWith(".") ||
+      trimmed.endsWith("?") ||
+      trimmed.endsWith("!");
+
+    this.capsLock = shouldEnableCaps
+      ? KeyboardApp.CAPS_LOCK.CAPS
+      : KeyboardApp.CAPS_LOCK.LOWERCASE;
 
     this.renderCapsLock();
   }
