@@ -89,20 +89,61 @@ export class KeyboardStructure {
           },
         },
       },
-      symbols: {
+      symbolsPage1: {
         rows: [
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
-          ["+", "*", "=", "-", "_", "?", "/", "[", "]", "|"],
-          ["'", ":", ";", "$", "@", ")", "(", "}", "{"],
-          ["shift", "`", ">", "<", '"', "~", "&", "^", "backspace"],
+          ["+", "×", "÷", "=", "/", "_", "€", "£", "¥", "₩"],
+          ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"],
+          ["1/2", "-", "'", '"', ":", ";", "?", "backspace"],
           ["ABC", ",", "English (US)", "space", ".", "Done"],
         ],
         specialKeys: {
-          shift: {
-            class: "keyboard__shift-key",
-            label: "Shift key, capitalize letters",
-            icon: "fa-solid fa-arrow-up",
-            dataAction: "caps-lock",
+          "1/2": {
+            class: "keyboard__symbol-page-switcher",
+            label: "Switch to page 2 of symbols",
+            dataAction: "switch-first-page-symbols",
+          },
+          backspace: {
+            class: "keyboard__backspace-key",
+            label: "backspace key",
+            icon: "fa-solid fa-delete-left",
+            dataAction: "backspace",
+          },
+          ABC: {
+            class: "keyboard__reverse-switcher",
+            label: "switch to the English",
+            dataAction: "switch-to-en",
+          },
+          "English (US)": {
+            class: "keyboard__english-layout",
+            label: "Current language English. Switch to Persian keyboard.",
+            dataAction: "switch-to-en",
+          },
+          space: {
+            class: "keyboard__spacebar",
+            label: "space key",
+            dataAction: "space-bar",
+          },
+          Done: {
+            class: "keyboard__submit-button",
+            label: "Enter key, submit input",
+            dataAction: "done",
+          },
+        },
+      },
+      symbolsPage2: {
+        rows: [
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
+          ["`", "~", "\\", "|", "<", ">", "{", "}", "[", "]"],
+          ["°", "•", "○", "●", "□", "■", "♤", "♡", "◇", "♧"],
+          ["2/2", "☆", "¤", "《", "》", "¡", "¿", "backspace"],
+          ["ABC", ",", "English (US)", "space", ".", "Done"],
+        ],
+        specialKeys: {
+          "2/2": {
+            class: "keyboard__symbol-page-switcher",
+            label: "Switch to page 1 of symbols",
+            dataAction: "switch-second-page-symbols",
           },
           backspace: {
             class: "keyboard__backspace-key",

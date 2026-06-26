@@ -26,6 +26,8 @@ export const KEYBOARD_ACTIONS = {
   SET_DUE_DATE: "data-action='set-due-date'",
   SET_REMINDER: "data-action='set-reminder'",
   SET_REPEAT: "data-action='set-repeat'",
+  SECOND_SYMBOLS_PAGE: "data-action='switch-second-page-symbols'",
+  FIRST_SYMBOLS_PAGE: "data-action='switch-first-page-symbols'",
 };
 
 export const KB_CHECK_STATES = {

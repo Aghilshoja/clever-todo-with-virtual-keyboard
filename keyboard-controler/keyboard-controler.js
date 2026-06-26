@@ -131,7 +131,13 @@ const initApp = () => {
       virtualKeyboard.setLang("en");
 
     if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_SYM}]`))
-      virtualKeyboard.setLang("symbols");
+      virtualKeyboard.setLang("symbolsPage1");
+
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.FIRST_SYMBOLS_PAGE}]`))
+      virtualKeyboard.setLang("symbolsPage2");
+
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.SECOND_SYMBOLS_PAGE}]`))
+      virtualKeyboard.setLang("symbolsPage1");
 
     if (e.target.closest(`[${KEYBOARD_ACTIONS.SWITCH_TO_EN}]`))
       virtualKeyboard.setLang("en");
