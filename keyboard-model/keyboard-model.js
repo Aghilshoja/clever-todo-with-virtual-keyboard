@@ -19,7 +19,11 @@ export class KeyboardApp {
     this.activelang = "en";
     this.capsLock = KeyboardApp.CAPS_LOCK.LOWERCASE;
     this.capsLockOnKeyboardLoad = true;
-    this.localStorageDraftKey = "save-drafted-text";
+    this.localStorageDraftKey = "text-editor-states";
+    this.caretManeger = {
+      caretPosition: 0,
+      text: "",
+    };
     this.listeners = {
       createRows: [],
       createKeys: [],
@@ -80,12 +84,18 @@ export class KeyboardApp {
     const LOWERCASE = KeyboardApp.CAPS_LOCK.LOWERCASE;
     const UPPERCASE = KeyboardApp.CAPS_LOCK.UPPERCASE;
     const CAPS = KeyboardApp.CAPS_LOCK.CAPS;
-    const isDraftEmpty =
-      localStorage.getItem(this.localStorageDraftKey) === "Enter a task";
+    const newTaskDraft =
+      JSON.parse(localStorage.getItem(this.localStorageDraftKey)) || {};
+
     if (this.capsLockOnKeyboardLoad) {
       this.capsLockOnKeyboardLoad = false;
 
-      if (isDraftEmpty) this.capsLock = CAPS;
+      const noDraftYet = newTaskDraft.draftedNewTask === undefined;
+      const isDraftEmpty = newTaskDraft.draftedNewTask === "";
+
+      const shouldEnableCaps = noDraftYet || isDraftEmpty;
+
+      if (shouldEnableCaps) this.capsLock = CAPS;
 
       this.renderCapsLock();
 
@@ -108,6 +118,11 @@ export class KeyboardApp {
         KeyboardApp.CAPS_LOCK,
       );
     }
+  }
+
+  resetCaretState() {
+    this.caretManeger.text = "";
+    this.caretManeger.caretPosition = 0;
   }
 
   toggleLanguageLayout(langs) {

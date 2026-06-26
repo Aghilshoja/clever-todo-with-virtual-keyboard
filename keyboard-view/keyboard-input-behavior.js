@@ -4,7 +4,10 @@ import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
-import { keyboardUiState } from "../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../keyboard-controler/keyboard-controler.js";
 import {
   PLACEHOLDERS,
   ATTRIBUTES,
@@ -138,16 +141,41 @@ const deleteLastCharacterOfInput = () => {
   handleTaskCharacterLimit();
 };
 
+export const insertText = (input, char, caret) => {
+  const caretState = virtualKeyboard.caretManeger;
+  const textBeforeCaret = caretState.text.slice(0, caretState.caretPosition);
+  const textAfterCaret = caretState.text.slice(caretState.caretPosition);
+
+  caretState.text = textBeforeCaret + char + textAfterCaret;
+
+  caretState.caretPosition += char.length;
+
+  const before = document.createTextNode(
+    caretState.text.slice(0, caretState.caretPosition),
+  );
+
+  const after = document.createTextNode(
+    caretState.text.slice(caretState.caretPosition),
+  );
+
+  input.replaceChildren(before, caret, after);
+};
+
 export const typeIntoInput = (event) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
   const input = elements.inputElement;
   if (!input) return;
+
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
+
   clearPlaceholder(input);
+
   const caret = ensureCaret(input);
 
-  caret.insertAdjacentText("beforebegin", event.target.textContent);
+  const char = event.target.textContent;
+
+  insertText(input, char, caret);
 
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();

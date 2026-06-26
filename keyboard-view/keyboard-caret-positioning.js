@@ -1,6 +1,24 @@
 import { ensureCaret } from "./keyboard-input-caret.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
+import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { appStateUi } from "../todos-controller.js/todos-controller.js";
+import { EDIT_MODES } from "../constants/todo-constants.js";
+import { updateEditorState } from "../shared-components/save-drafted-text-input-to-local-storage.js";
+
+export const updateTextEditor = (input, caret) => {
+  const caretState = virtualKeyboard.caretManeger;
+
+  const textBeforeCaret = document.createTextNode(
+    caretState.text.slice(0, caretState.caretPosition),
+  );
+
+  const textAfterCaret = document.createTextNode(
+    caretState.text.slice(caretState.caretPosition),
+  );
+
+  input.replaceChildren(textBeforeCaret, caret, textAfterCaret);
+};
 
 export const positionCaret = (e) => {
   const elements = getCachedElements();
@@ -22,9 +40,29 @@ export const positionCaret = (e) => {
 
   if (offsetNode.nodeType !== Node.TEXT_NODE) return;
 
-  // Split the text node at click position
-  offsetNode.splitText(offset);
+  let position = offset;
 
-  // Insert caret between the split parts
-  offsetNode.after(caret);
+  let node = offsetNode.previousSibling;
+
+  while (node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      position += node.textContent.length;
+    }
+
+    node = node.previousSibling;
+  }
+
+  virtualKeyboard.caretManeger.caretPosition = position;
+
+  updateTextEditor(input, caret);
+
+  const isEditModeActive = appStateUi.activeMode === EDIT_MODES.NO_MODES;
+
+  // Only persist caret positions for new-task drafts, not task edits.
+  if (isEditModeActive) {
+    updateEditorState(
+      "caretPosition",
+      virtualKeyboard.caretManeger.caretPosition,
+    );
+  }
 };

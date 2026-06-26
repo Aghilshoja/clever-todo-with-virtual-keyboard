@@ -69,3 +69,7 @@ export const KEYBOARD_INACTIVE = {
   SHIFT_KEY: "inactive",
   CHARACTER_LIMIT: "inactive",
 };
+
+export const LOCAL_STORAGE_KEY = {
+  TEXT_EDITOR: "text-editor-states",
+};

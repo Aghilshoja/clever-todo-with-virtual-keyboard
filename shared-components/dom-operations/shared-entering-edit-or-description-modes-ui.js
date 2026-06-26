@@ -2,7 +2,10 @@ import { lists } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { appStateUi } from "../../todos-controller.js/todos-controller.js";
-import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTRIBUTES,
   KEYBOARD_STATES,
@@ -19,6 +22,8 @@ import {
   OPEN,
 } from "../../constants/todo-constants.js";
 import { renderKeyPreviewPopup } from "../../keyboard-view/keyboard-feedback-overlay.js";
+import { updateEditorState } from "../save-drafted-text-input-to-local-storage.js";
+import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 
 const elements = getCachedElements();
 
@@ -54,7 +59,6 @@ const checkWhatIsClicked = (event) => {
   if (editBtn) {
     appStateUi.activeMode = EDIT_MODES.EDIT_TASK;
     keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TASK;
-    localStorage.setItem("app-state", EDIT_MODES.EDIT_TASK);
   }
   const descriptionBtn = event.target.closest(`[${ACTIONS.DESCRIPTION}]`);
   if (descriptionBtn) {
@@ -106,6 +110,16 @@ const activiateToolbar = (toolbar) => {
   toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = OPEN.TASK_TOOLBAR;
   // Set full height for edit mode
   toolbar.dataset[ATTR_STATES.TOOLBAR_FULL_HEIGHT] = "";
+
+  updateEditorState("appState", EDIT_MODES.EDIT_TASK);
+
+  if (virtualKeyboard.caretManeger.text.length > 0) {
+    updateEditorState("draftedNewTask", virtualKeyboard.caretManeger.text);
+    updateEditorState(
+      "caretPosition",
+      virtualKeyboard.caretManeger.caretPosition,
+    );
+  }
   const repetitiveElements = getRepetitiveElements(toolbar);
   const actionBtnsContainer = repetitiveElements.actionButtonsContainer;
   const description = repetitiveElements.description;
@@ -130,23 +144,19 @@ const moveInputAndHideTaskText = (toolbar, task) => {
   if (!toolbar) return;
   const input = elements.inputElement;
   if (!input) return;
-  /*
-   * if users save their edited task or exit edit mode the data attribute will restore the drafted new task
-   * else users have refreshed the page while editing a task in that case store the drafted new task in local storage then restore it at the page load
-   */
-  input.dataset.draft = input.textContent;
-  localStorage.setItem("new-task-draft", input.dataset.draft);
 
   const repetitiveElements = getRepetitiveElements(toolbar);
   if (!repetitiveElements.taskTextEl) return;
 
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
-  elements.inputElement.textContent = "";
   repetitiveElements.taskTextEl.dataset[ATTR_STATES.TASK_TEXT_STATE] =
     HIDDEN.TASK_TEXT;
   repetitiveElements.taskTextEl.after(elements.inputElement);
   const caret = ensureCaret(elements.inputElement);
-  caret.insertAdjacentText("beforebegin", task.text);
+  virtualKeyboard.caretManeger.text = task.text;
+  virtualKeyboard.caretManeger.caretPosition = task.text.length;
+
+  updateTextEditor(input, caret);
 };
 
 const moveInputAndHideTaskDescription = (toolbar, task) => {
@@ -162,11 +172,14 @@ const moveInputAndHideTaskDescription = (toolbar, task) => {
   if (task.description === null) {
     elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET] = "";
     elements.inputElement.textContent = PLACEHOLDERS.DESCRIPTION;
+    virtualKeyboard.resetCaretState();
   } else if (task.description !== null) {
     delete elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET];
-    elements.inputElement.textContent = "";
     const caret = ensureCaret(elements.inputElement);
-    caret.insertAdjacentText("beforebegin", task.description);
+
+    virtualKeyboard.caretManeger.text = task.description;
+    virtualKeyboard.caretManeger.caretPosition = task.description.length;
+    updateTextEditor(elements.inputElement, caret);
   }
 };
 
@@ -184,12 +197,12 @@ export const detectClickedElementAndGetTaskObject = (event) => {
 
 export const enterEditMode = (toolbar, taskObject) => {
   hideUnrelatedElements(toolbar);
-  moveInputAndHideTaskText(toolbar, taskObject);
   activiateToolbar(toolbar);
+  moveInputAndHideTaskText(toolbar, taskObject);
 };
 
 export const enterDescriptionMode = (toolbar, taskObject) => {
   hideUnrelatedElements(toolbar);
-  moveInputAndHideTaskDescription(toolbar, taskObject);
   activiateToolbar(toolbar);
+  moveInputAndHideTaskDescription(toolbar, taskObject);
 };

@@ -1,6 +1,9 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret } from "./keyboard-input-caret.js";
-import { disableSubmitIfInputEmpty } from "./keyboard-input-behavior.js";
+import {
+  disableSubmitIfInputEmpty,
+  insertText,
+} from "./keyboard-input-behavior.js";
 import { clearPlaceholder } from "./keyboard-input-behavior.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
@@ -25,7 +28,8 @@ export const handleSpaceBar = (e) => {
 
     if (isTherePlaceholder) clearPlaceholder(input);
     const caret = ensureCaret(input);
-    caret.before(document.createTextNode(" "));
+
+    insertText(input, " ", caret);
     delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
     saveInputText();
     disableSubmitIfInputEmpty();

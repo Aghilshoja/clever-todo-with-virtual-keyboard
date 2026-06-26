@@ -5,14 +5,18 @@ import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-be
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import {
-  clearEditSessionState,
   saveInputText,
+  updateEditorState,
 } from "../save-drafted-text-input-to-local-storage.js";
 import {
   KEYBOARD_STATES,
+  LOCAL_STORAGE_KEY,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
-import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTR,
   ATTR_STATES,
@@ -24,6 +28,7 @@ import {
 } from "../../constants/todo-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
+import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 
 const elements = getCachedElements();
 
@@ -105,21 +110,25 @@ const deactiviateToolbar = (toolbar) => {
 /* Discards any edits made to an existing task and reinserts the previously saved draft into the input field. */
 const restoreDraftBackupAfterEditMode = () => {
   const input = elements.inputElement;
+  const savedData = JSON.parse(
+    localStorage.getItem(LOCAL_STORAGE_KEY.TEXT_EDITOR),
+  );
   if (!input) return;
-  if (
-    input.dataset.draft !== "" &&
-    input.dataset.draft !== PLACEHOLDERS.ENTER_TASK
-  ) {
-    input.textContent = "";
+
+  if ((savedData.draftedNewTask ?? "").length > 0) {
     const caret = ensureCaret(input);
-    caret.insertAdjacentText("beforebegin", input.dataset.draft);
+    virtualKeyboard.caretManeger.text = savedData.draftedNewTask;
+    virtualKeyboard.caretManeger.caretPosition = savedData.caretPosition;
+    updateTextEditor(input, caret);
     delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
     saveInputText();
   } else {
     input.textContent = "";
     ensurePlaceholder(input);
     saveInputText();
+    virtualKeyboard.resetCaretState();
   }
+  updateEditorState("appState", null);
 };
 
 const resetOtherPartsAsWell = (event) => {
@@ -127,7 +136,6 @@ const resetOtherPartsAsWell = (event) => {
   restoreDraftBackupAfterEditMode();
   disableSubmitIfInputEmpty();
   closeKeyboard();
-  clearEditSessionState();
   appStateUi.activeMode = EDIT_MODES.NO_MODES;
 };
 

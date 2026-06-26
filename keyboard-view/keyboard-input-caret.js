@@ -3,6 +3,8 @@ import {
   KEYBOARD_ACTIVE,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
+import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { updateTextEditor } from "./keyboard-caret-positioning.js";
 
 export const ensureCaret = (input) => {
   let caret = input.querySelector(`[${ATTRIBUTES.CARET}]`);
@@ -19,12 +21,14 @@ export const deleteCharBeforeCaret = (input) => {
   const caret = input.querySelector(`[${ATTRIBUTES.CARET}]`);
   if (!caret) return;
 
-  let previousNode = caret.previousSibling;
+  const caretState = virtualKeyboard.caretManeger;
+  if (caretState.caretPosition === 0) return;
 
-  // Check if the previous node is a TEXT_NODE
-  if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
-    previousNode.textContent = previousNode.textContent.slice(0, -1);
+  caretState.text =
+    caretState.text.slice(0, caretState.caretPosition - 1) +
+    caretState.text.slice(caretState.caretPosition);
 
-    if (previousNode.textContent === "") previousNode.remove();
-  }
+  caretState.caretPosition--;
+
+  updateTextEditor(input, caret);
 };

@@ -3,7 +3,10 @@ import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { cleanupDescriptionAndEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { disableOrEnableSaveBtn } from "../handle-disabling-or-enabling-saving-task-edits.js";
-import { keyboardUiState } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTR,
   ATTR_STATES,
@@ -18,6 +21,7 @@ import {
   KEYBOARD_STATES,
 } from "../../constants/keyboard-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
+import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 
 const elements = getCachedElements();
 
@@ -28,7 +32,7 @@ const editDescription = (descriptionEl, toolbar) => {
   const input = elements.inputElement;
   if (!input) return;
   delete taskText.dataset[ATTR_STATES.TASK_TEXT_STATE];
-  if (input.textContent !== PLACEHOLDERS.EDIT_TASK) {
+  if (virtualKeyboard.caretManeger.text !== "") {
     taskText.textContent = input.textContent;
   }
 
@@ -39,11 +43,15 @@ const editDescription = (descriptionEl, toolbar) => {
   descriptionEl.after(input);
   if (descriptionEl.textContent === PLACEHOLDERS.DESCRIPTION) {
     input.textContent = PLACEHOLDERS.DESCRIPTION;
-    input.dataset[ATTRIBUTES.INPUT_CARET] = "";
+    input.dataset[KEYBOARD_STATES.INPUT_CARET] = "";
+    virtualKeyboard.resetCaretState();
   } else {
-    input.textContent = "";
     const caret = ensureCaret(input);
-    caret.insertAdjacentText("beforebegin", descriptionEl.textContent);
+    virtualKeyboard.caretManeger.text = descriptionEl.textContent;
+    virtualKeyboard.caretManeger.caretPosition =
+      descriptionEl.textContent.length;
+
+    updateTextEditor(input, caret);
   }
   disableOrEnableSaveBtn();
 };
@@ -58,14 +66,17 @@ const editTask = (taskEl, toolbar) => {
   if (input.textContent === PLACEHOLDERS.DESCRIPTION) {
     description.textContent = PLACEHOLDERS.DESCRIPTION;
   } else {
-    description.textContent = input.textContent;
+    description.textContent = virtualKeyboard.caretManeger.text;
   }
   taskEl.after(input);
   taskEl.dataset[ATTR_STATES.TASK_TEXT_STATE] = HIDDEN.TASK_TEXT;
-  input.textContent = "";
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   const caret = ensureCaret(input);
-  caret.insertAdjacentText("beforebegin", taskEl.textContent);
+
+  virtualKeyboard.caretManeger.text = taskEl.textContent;
+  virtualKeyboard.caretManeger.caretPosition = taskEl.textContent.length;
+
+  updateTextEditor(input, caret);
 };
 
 /**
