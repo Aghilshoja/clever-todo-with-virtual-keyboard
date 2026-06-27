@@ -37,7 +37,9 @@ import {
   KEYBOARD_ACTIONS,
   ATTRIBUTES,
   PLACEHOLDERS,
+  KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
+
 export const virtualKeyboard = new KeyboardApp();
 
 export const keyboardUiState = {
@@ -146,10 +148,13 @@ const initApp = () => {
       virtualKeyboard.currentCapsLock();
     }
 
-    if (e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`)) {
-      typeIntoInput(e);
+    const newLineKey = e.target.closest(`[${KEYBOARD_ACTIONS.ADD_NEW_LINE}]`);
+    const regularKey = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
+
+    if (regularKey || newLineKey) {
+      const text = newLineKey ? "\n" : regularKey.textContent;
+      typeIntoInput(text);
       virtualKeyboard.onKeyPressed();
-      saveInputText();
     }
 
     if (e.target.closest(`[${ATTRIBUTES.INPUT}]`)) {

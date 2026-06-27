@@ -162,7 +162,7 @@ export const insertText = (input, char, caret) => {
   input.replaceChildren(before, caret, after);
 };
 
-export const typeIntoInput = (event) => {
+export const typeIntoInput = (char) => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM was not found");
   const input = elements.inputElement;
@@ -173,8 +173,6 @@ export const typeIntoInput = (event) => {
   clearPlaceholder(input);
 
   const caret = ensureCaret(input);
-
-  const char = event.target.textContent;
 
   insertText(input, char, caret);
 

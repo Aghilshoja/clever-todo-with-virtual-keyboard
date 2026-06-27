@@ -28,6 +28,7 @@ export const KEYBOARD_ACTIONS = {
   SET_REPEAT: "data-action='set-repeat'",
   SECOND_SYMBOLS_PAGE: "data-action='switch-second-page-symbols'",
   FIRST_SYMBOLS_PAGE: "data-action='switch-first-page-symbols'",
+  ADD_NEW_LINE: "data-action='add-new-line'",
 };
 
 export const KB_CHECK_STATES = {

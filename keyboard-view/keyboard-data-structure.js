@@ -8,7 +8,7 @@ export class KeyboardStructure {
           ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
           ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
           ["shift", "z", "x", "c", "v", "b", "n", "m", "backspace"],
-          ["!#1", ",", "English (US)", "space", ".", "Done"],
+          ["!#1", ",", "English (US)", "space", ".", "newLine"],
         ],
         specialKeys: {
           shift: {
@@ -39,10 +39,11 @@ export class KeyboardStructure {
             label: "space key",
             dataAction: "space-bar",
           },
-          Done: {
-            class: "keyboard__submit-button",
-            label: "Enter key, submit input",
-            dataAction: "done",
+          newLine: {
+            class: "keyboard__add-new-line",
+            label: "Enter a new line",
+            dataAction: "add-new-line",
+            icon: "fa-solid fa-arrow-turn-down",
           },
         },
       },
@@ -52,7 +53,7 @@ export class KeyboardStructure {
           ["ص", "ث", "ق", "ف", "ع", "ه", "خ", "ح", "ج", "ج"],
           ["ش", "س", "ی", "ب", "ل", "ا", "ت", "ن", "م", "پ"],
           ["shift", "ط", "ز", "ر", "د", "و", "ک", "گ", "backspace"],
-          ["!#1", ",", "فارسی (Persian)", "space", ".", "Done"],
+          ["!#1", ",", "فارسی (Persian)", "space", ".", "newLine"],
         ],
         specialKeys: {
           shift: {
@@ -82,10 +83,11 @@ export class KeyboardStructure {
             label: "space key",
             dataAction: "space-bar",
           },
-          Done: {
-            class: "keyboard__submit-button",
-            label: "Enter key, submit input",
-            dataAction: "done",
+          newLine: {
+            class: "keyboard__add-new-line",
+            label: "Enter a new line",
+            dataAction: "add-new-line",
+            icon: "fa-solid fa-arrow-turn-down",
           },
         },
       },
@@ -95,7 +97,7 @@ export class KeyboardStructure {
           ["+", "×", "÷", "=", "/", "_", "€", "£", "¥", "₩"],
           ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"],
           ["1/2", "-", "'", '"', ":", ";", "?", "backspace"],
-          ["ABC", ",", "English (US)", "space", ".", "Done"],
+          ["ABC", ",", "English (US)", "space", ".", "newLine"],
         ],
         specialKeys: {
           "1/2": {
@@ -124,10 +126,11 @@ export class KeyboardStructure {
             label: "space key",
             dataAction: "space-bar",
           },
-          Done: {
-            class: "keyboard__submit-button",
-            label: "Enter key, submit input",
-            dataAction: "done",
+          newLine: {
+            class: "keyboard__add-new-line",
+            label: "Enter a new line",
+            dataAction: "add-new-line",
+            icon: "fa-solid fa-arrow-turn-down",
           },
         },
       },
@@ -137,7 +140,7 @@ export class KeyboardStructure {
           ["`", "~", "\\", "|", "<", ">", "{", "}", "[", "]"],
           ["°", "•", "○", "●", "□", "■", "♤", "♡", "◇", "♧"],
           ["2/2", "☆", "¤", "《", "》", "¡", "¿", "backspace"],
-          ["ABC", ",", "English (US)", "space", ".", "Done"],
+          ["ABC", ",", "English (US)", "space", ".", "newLine"],
         ],
         specialKeys: {
           "2/2": {
@@ -166,10 +169,11 @@ export class KeyboardStructure {
             label: "space key",
             dataAction: "space-bar",
           },
-          Done: {
-            class: "keyboard__submit-button",
-            label: "Enter key, submit input",
-            dataAction: "done",
+          newLine: {
+            class: "keyboard__add-new-line",
+            label: "Enter a new line",
+            dataAction: "add-new-line",
+            icon: "fa-solid fa-arrow-turn-down",
           },
         },
       },
