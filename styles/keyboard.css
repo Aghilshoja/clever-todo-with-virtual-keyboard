@@ -6,7 +6,9 @@
   /* === primary color===  */
   --PRIMARY-COLOR: white;
   /*===  fonts === */
-  --FONT-SIZE: 1.2rem;
+  --KEYBOARD-FONT-SIZE: 1.3rem;
+  /* === font weight === */
+  --KEYBOARD-FONT-WEIGHT: 600;
 }
 
 .keyboard-section {
@@ -40,7 +42,7 @@
   transform: scaleY(1);
   transform-origin: center;
   width: 100%;
-  background-color: rgba(128, 128, 128, 0.721);
+  background-color: #d1d1d6;
   box-shadow: 20px 10px 3000px 20px rgba(0, 0, 0, 0.14);
   z-index: 1;
 }
@@ -57,10 +59,20 @@
 .keys-layout {
   flex-grow: 1;
   background-color: var(--PRIMARY-COLOR);
-  height: 39px;
+  height: 52px;
   margin: 0.2rem;
-  font-size: var(--FONT-SIZE);
+  font-size: var(--KEYBOARD-FONT-SIZE);
+  font-weight: var(--KEYBOARD-FONT-WEIGHT);
   border-radius: 4px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.12);
+
   user-select: none;
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
@@ -134,7 +146,7 @@
 .keyboard-section__submit-task {
   border: var(--BORDER-NONE);
   background: var(--BACKGROUND);
-  font-size: var(--FONT-SIZE);
+  font-size: var(--KEYBOARD-FONT-SIZE);
   background-color: black;
   color: var(--PRIMARY-COLOR);
   padding: 0 0.5rem 0 0.5rem;
@@ -151,22 +163,20 @@
   background-color: grey;
 }
 
-.toggle-visiblity {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .keyboard-section__preview-feedback {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: none;
+  border: var(--BORDER-NONE);
   background-color: var(--PRIMARY-COLOR);
-  font-size: 1.5rem;
-  font-weight: 700;
-  height: 50px;
-  padding: 1rem;
-  width: 40px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  height: 65px;
+
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.12);
+
   border-radius: 10px;
   position: fixed;
   opacity: 0;
@@ -187,7 +197,7 @@
 }
 
 [data-shift-key-state="inactive"] {
-  background-color: white;
+  background-color: var(--PRIMARY-COLOR);
 }
 
 [data-shift-key-state="active"]:active {

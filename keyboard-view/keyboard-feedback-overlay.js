@@ -4,6 +4,24 @@ import { keyboardUiState } from "../keyboard-controler/keyboard-controler.js";
 
 const elements = getCachedElements();
 
+const addPaddingToCornerKeyPreview = (rect) => {
+  // Get viewport width
+  const viewportWidth = window.innerWidth;
+
+  // Check if key is near the right edge of the viewport
+  const isNearRightEdge = rect.right > viewportWidth - 50; // Within 50px of right edge
+  const isNearLeftEdge = rect.left < 50; // Within 50px of left edge
+
+  // Reset transform
+  elements.previewFeedback.style.transform = "";
+
+  if (isNearRightEdge) {
+    elements.previewFeedback.style.transform = "translateX(-0.9rem)";
+  } else if (isNearLeftEdge) {
+    elements.previewFeedback.style.transform = "translateX(0.9rem)";
+  }
+};
+
 export const renderKeyPreviewPopup = (keyElement) => {
   if (!keyElement) throw new Error("event hasn't passed correctly");
   if (!elements || !elements.previewFeedback)
@@ -15,13 +33,16 @@ export const renderKeyPreviewPopup = (keyElement) => {
   }
   const keysOffsetWidth = keyElement.offsetWidth;
   const rect = keyElement.getBoundingClientRect();
+
+  addPaddingToCornerKeyPreview(rect);
+
   elements.previewFeedback.textContent = keyElement.textContent;
   elements.previewFeedback.style.bottom = `${rect.bottom}px`;
-  elements.previewFeedback.style.top = `${rect.top - 55}px`;
+  elements.previewFeedback.style.top = `${rect.top - 75}px`;
   elements.previewFeedback.style.right = `${rect.right}px`;
   elements.previewFeedback.style.left = `${rect.left - 7}px`;
   elements.previewFeedback.style.opacity = "1";
-  elements.previewFeedback.style.width = `${keysOffsetWidth}px`;
+  elements.previewFeedback.style.width = `${keysOffsetWidth + 17}px`;
 };
 
 export const hideKeyPreview = () => {
