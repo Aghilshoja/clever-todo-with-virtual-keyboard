@@ -45,6 +45,9 @@ export const ATTR = {
 
   DRAGGING_TASK: "data-dragging-task",
   DROP_TARGET_HIGHLIGHT: "data-drop-target-highlight",
+
+  SELECTED_COUNT: "data-selected-count",
+  SELECTION_BAR_MENU: "data-selection-menu",
 };
 
 // elements that perform actions
@@ -87,6 +90,7 @@ export const ACTIONS = {
   BATCH_MOVE_TASKS: "data-action='batch-move-tasks'",
   BATCH_ADD_LABEL: "data-action='batch-add-label'",
   BATCH_SET_PRIORITY: "data-action='batch-set-priority'",
+  SELECTION_MENU_TOGGLER: "data-action='toggle-selection-menu'",
 };
 
 // check states using selectors
@@ -136,12 +140,16 @@ export const ATTR_STATES = {
   POPUP_STATE: "popupState",
   TASKS_COUNTER: "taskCounterState",
   CHECKbOX: "checkbox",
+  SELECTION_BAR_MENU: "toggleSelectionMenu",
+  SELECTION_BAR_MENU_STATE: "selectionMenuState",
+  SELECTION_ELLIPSIS_VISIBILITY: "ellipsisVisibility",
 };
 
 export const VISIBLE = {
   ACTION_BUTTONS_CON: "visible",
   SELECT_TASK_ITEM: "visible",
   TASK_CREATOR: "visible",
+  SELECTION_ELLIPSIS: "visible",
 };
 
 export const HIDDEN = {
@@ -153,6 +161,7 @@ export const HIDDEN = {
   /* some elements do not have visible state because they are temprary and once a mode is over they get deleted */
   TASK_TEXT: "hidden",
   TASK_DESCRIPTION: "hidden",
+  SELECTION_ELLIPSIS: "hidden",
 };
 
 export const OPEN = {
@@ -162,6 +171,7 @@ export const OPEN = {
   MAIN_DROPDOWN: "open",
   BATCH_TOOLBAR: "open",
   BATCH_MENU: "open",
+  SELECTION_BAR_MENU: "open",
 };
 
 export const CLOSED = {
@@ -170,6 +180,7 @@ export const CLOSED = {
   MAIN_DROPDOWN: "closed",
   BATCH_TOOLBAR: "closed",
   BATCH_MENU: "closed",
+  SELECTION_BAR_MENU: "closed",
 };
 
 export const ACTIVE = {

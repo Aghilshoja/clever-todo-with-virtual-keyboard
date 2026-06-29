@@ -70,6 +70,11 @@ export const getCachedElements = () => {
     selectionBar: document.querySelector(`[${ATTR.SELECTION_BAR_CON}]`),
     batchToolbar: document.querySelector(`[${ATTR.BATCH_TOOLBAR}]`),
     mainPageBatchMenu: document.querySelector(`[${ATTR.BATCH_MENU}]`),
+    selectedTasksCount: document.querySelector(`[${ATTR.SELECTED_COUNT}]`),
+    toggleSelectionMenu: document.querySelector(
+      `[${ACTIONS.SELECTION_MENU_TOGGLER}]`,
+    ),
+    selectionBarMenu: document.querySelector(`[${ATTR.SELECTION_BAR_MENU}]`),
     /* end of the elements that are related to the todo app */
   };
   return elements;

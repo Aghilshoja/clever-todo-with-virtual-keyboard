@@ -114,14 +114,64 @@
           data-selection-bar
           data-selection-bar-state="inactive"
         >
+          <div class="selection-bar__left-group">
+            <button
+              class="main-page__exit-task-selection button-reset cursor fs"
+              aria-label="exit task selection"
+              data-action="exit-task-selection"
+            >
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <p
+              class="main-page__number-of-selected-tasks fs"
+              data-selected-count
+            ></p>
+          </div>
           <button
-            class="main-page__exit-task-selection button-reset cursor fs"
-            aria-label="exit task selection"
-            data-action="exit-task-selection"
+            class="main-page__toggle-selection-bar-menu fs button-reset cursor"
+            aria-label="open dropdown list of selection bar"
+            title="open dropdonw list of the selection bar"
+            data-action="toggle-selection-menu"
+            data-ellipsis-visibility="hidden"
           >
-            <i class="fas fa-arrow-left"></i>
+            <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
-          <p class="main-page__number-of-selected-tasks fs"></p>
+          <ul
+            class="selection-menu__list"
+            data-selection-menu
+            data-selection-menu-state="closed"
+          >
+            <li class="selection-menu__item">
+              <button
+                class="main-page__add-task-above button-reset pd fs cursor"
+                aria-label="add a task above your selected task"
+                title="add a task above your selected task"
+                data-action="add-task-above"
+              >
+                add task above
+              </button>
+            </li>
+            <li class="selection-menu__item">
+              <button
+                class="main-page__add-task-below button-reset pd fs cursor"
+                aria-label="add a task below your selected task"
+                title="add a task below your selected task"
+                data-action="add-task-below"
+              >
+                add task below
+              </button>
+            </li>
+            <li class="selection-menu__item">
+              <button
+                class="main-page__add-subtask button-reset pd fs cursor"
+                aria-label="add a subtask to your selected task"
+                title="add a subtask to your selected task"
+                data-action="selected-task-subtask"
+              >
+                add subtask
+              </button>
+            </li>
+          </ul>
         </div>
 
         <section class="main-page__default-list">

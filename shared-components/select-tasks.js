@@ -17,7 +17,7 @@ import { appStateUi } from "../todos-controller.js/todos-controller.js";
 
 const elements = getCachedElements();
 
-export const toggleOptions = (e) => {
+export const toggleBatchOptions = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
   if (!elements.dropDownList) return;
   if (e.target.closest(`[${ACTIONS.TOGGLE_DROPDOWN_LIST}]`)) {
@@ -39,6 +39,22 @@ export const toggleOptions = (e) => {
   )
     elements.dropDownList.dataset[ATTR_STATES.DROPDOWN_LIST] =
       CLOSED.MAIN_DROPDOWN;
+};
+
+export const toggleSelectionBarMenu = (e) => {
+  const selectionBarMenu = elements.selectionBarMenu;
+  if (!selectionBarMenu) return;
+  const isSelectionMenuOpen =
+    selectionBarMenu.dataset[ATTR_STATES.SELECTION_BAR_MENU_STATE] ===
+    OPEN.SELECTION_BAR_MENU;
+
+  if (e.target.closest(`[${ACTIONS.SELECTION_MENU_TOGGLER}]`)) {
+    selectionBarMenu.dataset[ATTR_STATES.SELECTION_BAR_MENU_STATE] =
+      OPEN.SELECTION_BAR_MENU;
+  } else if (isSelectionMenuOpen) {
+    selectionBarMenu.dataset[ATTR_STATES.SELECTION_BAR_MENU_STATE] =
+      CLOSED.SELECTION_BAR_MENU;
+  }
 };
 
 const fadeNavAndTaskHeader = () => {
@@ -65,8 +81,9 @@ export const triggerTaskSelectionUi = (e) => {
       ACTIVE.SELECTION_BAR;
     elements.batchToolbar.dataset[ATTR_STATES.BATCH_TOOLBAR] =
       OPEN.BATCH_TOOLBAR;
-    const lastChild = elements.selectionBar.lastElementChild;
-    lastChild.textContent = "0 selected tasks";
+
+    if (elements.selectedTasksCount)
+      elements.selectedTasksCount.textContent = "0 selected tasks";
 
     if (elements.mainPageNewTaskCon)
       elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
@@ -82,9 +99,9 @@ export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
 
   if (!selectedTasksElement) return;
 
-  const numberOfSelectedTasksDisplay = selectedTasksElement.lastElementChild;
-  numberOfSelectedTasksDisplay.textContent =
-    counter === 1 ? "1 selected task" : `${counter} selected tasks`;
+  if (elements.selectedTasksCount)
+    elements.selectedTasksCount.textContent =
+      counter === 1 ? "1 selected task" : `${counter} selected tasks`;
 
   const operationConfig = {
     [`[${ATTR.BATCH_DELETE_LABEL}]`]: (count) =>
@@ -159,6 +176,22 @@ export const updateCounterAfterCompletingOrUncompletingATask = () => {
   appStateUi.selectedTasksCounter = selectedTasks.length;
 };
 
+const showOrHideEllipsis = () => {
+  const selectedTasks = document.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+  );
+
+  const ellipsisBtn = elements.toggleSelectionMenu;
+
+  if (selectedTasks.length === 1) {
+    ellipsisBtn.dataset[ATTR_STATES.SELECTION_ELLIPSIS_VISIBILITY] =
+      VISIBLE.SELECTION_ELLIPSIS;
+  } else {
+    ellipsisBtn.dataset[ATTR_STATES.SELECTION_ELLIPSIS_VISIBILITY] =
+      HIDDEN.SELECTION_ELLIPSIS;
+  }
+};
+
 export const selectTasks = (e) => {
   if (!elements) throw new Error("Required DOM was not found");
   if (!elements.selectionBar) return;
@@ -217,6 +250,7 @@ export const selectTasks = (e) => {
   disableOrEnableButtons();
 
   updateLabelsOfOperationalButtonsForSelectedTasks();
+  showOrHideEllipsis();
 };
 
 export const toggleOptionsOfSelectedTasks = (e) => {

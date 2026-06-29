@@ -38,11 +38,12 @@ import {
   draggedEndTask,
 } from "../shared-components/drag-and-drop.js";
 import {
-  toggleOptions,
+  toggleBatchOptions,
   triggerTaskSelectionUi,
   selectTasks,
   toggleOptionsOfSelectedTasks,
   handleExitSelectionClick,
+  toggleSelectionBarMenu,
 } from "../shared-components/select-tasks.js";
 import {
   ATTR,
@@ -174,7 +175,8 @@ const initTodo = () => {
     handleSeveralCompletedAndUncompletedTasksUndo,
   );
 
-  document.addEventListener("click", toggleOptions);
+  document.addEventListener("click", toggleBatchOptions);
+  document.addEventListener("click", toggleSelectionBarMenu);
   dropDownList.addEventListener("click", triggerTaskSelectionUi);
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
   selectionBar.addEventListener("click", handleExitSelectionClick);
