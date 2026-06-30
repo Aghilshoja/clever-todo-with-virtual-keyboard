@@ -60,7 +60,7 @@ import {
 import { duplicateSeveralTasks } from "../shared-components/duplicate-several-tasks.js";
 import { handleSeveralTasksCompletionOrUncompletion } from "../shared-components/handle-several-tasks-completion-or-uncompletion.js";
 import { handleSeveralCompletedAndUncompletedTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
-import { openKeyboardToAddATask } from "../shared-components/add-task-after-selected-task.js";
+import { openKeyboardToAddATask } from "../shared-components/add-task-relative-to-selected-task.js";
 
 export const lists = {
   default: new TaskList("default"),

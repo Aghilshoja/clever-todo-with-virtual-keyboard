@@ -92,6 +92,7 @@ export const ACTIONS = {
   BATCH_SET_PRIORITY: "data-action='batch-set-priority'",
   SELECTION_MENU_TOGGLER: "data-action='toggle-selection-menu'",
   ADD_TASK_ABOVE: "data-action='add-task-above'",
+  ADD_TASK_BELOW: "data-action='add-task-below'",
 };
 
 // check states using selectors
@@ -108,6 +109,7 @@ export const CHECK_STATES = {
   SELECTED_TASK: "data-selected-tasks",
 
   ADD_TASK_ABOVE: "add-task-above",
+  ADD_TASK_BELOW: "add-task-below",
 };
 
 // get or set state attributes in JS

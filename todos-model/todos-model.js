@@ -243,42 +243,49 @@ export class TaskList {
     return taskTodEdit;
   }
 
-  addTaskAfterSelectedTask(selectedTaskId, text) {
+  createInsertionContext(selectedTaskId, text) {
     const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-
     const selectedTask = allTasks.find((task) => task.id === selectedTaskId);
+
     if (!selectedTask) return;
 
-    const isCompletedList = selectedTask.isCompleted === true;
+    const targetList = selectedTask.isCompleted
+      ? this.getCompletedTasks()
+      : this.getTasks();
 
-    const newTaskAfterSelectedTask = {
+    const newTask = {
       id: this.generateId(),
-      text: text, // Should this be empty? Or copy text?
+      text: text,
       createdAt: Date.now(),
-      isCompleted: isCompletedList,
+      isCompleted: selectedTask.isCompleted,
       description: null,
     };
 
-    if (isCompletedList) {
-      const indexOfSelectedTask =
-        this.getCompletedTasks().indexOf(selectedTask);
-      // ✅ Insert AFTER the selected task
-      this.getCompletedTasks().splice(
-        indexOfSelectedTask + 1,
-        0,
-        newTaskAfterSelectedTask,
-      );
-    } else {
-      const indexOfSelectedTask = this.getTasks().indexOf(selectedTask);
-      // ✅ Insert AFTER the selected task
-      this.getTasks().splice(
-        indexOfSelectedTask + 1,
-        0,
-        newTaskAfterSelectedTask,
-      );
-    }
+    const selectedIndex = targetList.indexOf(selectedTask);
 
-    return newTaskAfterSelectedTask;
+    return {
+      newTask,
+      selectedIndex,
+      targetList,
+    };
+  }
+
+  addTaskAboveSelectedTask(selectedTaskId, text) {
+    const taskToAdd = this.createInsertionContext(selectedTaskId, text);
+    const { newTask, targetList, selectedIndex } = taskToAdd;
+
+    targetList.splice(selectedIndex + 1, 0, newTask);
+
+    return newTask;
+  }
+
+  addTaskBelowSelectedTask(selectedTaskId, text) {
+    const taskToAdd = this.createInsertionContext(selectedTaskId, text);
+    const { newTask, targetList, selectedIndex } = taskToAdd;
+
+    targetList.splice(selectedIndex, 0, newTask);
+
+    return newTask;
   }
 
   addTask(text) {

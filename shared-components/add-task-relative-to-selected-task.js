@@ -14,8 +14,6 @@ const performDOMOperationOfAddingNewTask = (selectedTask, newTask) => {
   cloneSelectedTask.dataset.id = newTask.id;
   delete cloneSelectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
 
-  selectedTask.before(cloneSelectedTask);
-
   const taskTextEls = cloneSelectedTask.querySelectorAll(
     `[${ATTR.MAIN_TASK_TEXT}], [${ATTR.TASK_TEXT}]`,
   );
@@ -28,6 +26,8 @@ const performDOMOperationOfAddingNewTask = (selectedTask, newTask) => {
   const children = cloneSelectedTask.querySelectorAll(`[data-id]`);
 
   children.forEach((el) => (el.dataset.id = newTask.id));
+
+  return cloneSelectedTask;
 };
 
 const getSelectedTask = () => {
@@ -42,14 +42,38 @@ export const addTaskAboveSelectedTask = (text) => {
 
   const selectedTaskId = selectedTask.dataset.id;
 
-  const newTask = lists.default.addTaskAfterSelectedTask(selectedTaskId, text);
+  const newTask = lists.default.addTaskAboveSelectedTask(selectedTaskId, text);
 
-  performDOMOperationOfAddingNewTask(selectedTask, newTask);
+  const newTaskAboveSelectedTask = performDOMOperationOfAddingNewTask(
+    selectedTask,
+    newTask,
+  );
+  if (!newTaskAboveSelectedTask) return;
+  selectedTask.before(newTaskAboveSelectedTask);
+};
+
+export const addTaskBelowSelectedTask = (text) => {
+  const selectedTask = getSelectedTask();
+  if (!selectedTask) return;
+
+  const selectedTaskId = selectedTask.dataset.id;
+
+  const newTask = lists.default.addTaskBelowSelectedTask(selectedTaskId, text);
+
+  const newTaskBelowSelectedTask = performDOMOperationOfAddingNewTask(
+    selectedTask,
+    newTask,
+  );
+
+  selectedTask.after(newTaskBelowSelectedTask);
 };
 
 export const openKeyboardToAddATask = (e) => {
   if (e.target.dataset.action === CHECK_STATES.ADD_TASK_ABOVE) {
     appStateUi.addTaskModes = ADD_TASK_MODE.ADD_ABOVE;
+    toggleKeyboard();
+  } else if (e.target.dataset.action === CHECK_STATES.ADD_TASK_BELOW) {
+    appStateUi.addTaskModes = ADD_TASK_MODE.ADD_BELOW;
     toggleKeyboard();
   }
 };

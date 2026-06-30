@@ -7,7 +7,10 @@ import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
 import { truncateTaskDescription, truncateTaskText } from "./truncate-task.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import { ADD_TASK_MODE } from "../constants/todo-constants.js";
-import { addTaskAboveSelectedTask } from "./add-task-after-selected-task.js";
+import {
+  addTaskAboveSelectedTask,
+  addTaskBelowSelectedTask,
+} from "./add-task-relative-to-selected-task.js";
 
 export const addTask = () => {
   const elements = getCachedElements();
@@ -21,7 +24,11 @@ export const addTask = () => {
   const shouldAddTaskAbove =
     appStateUi.addTaskModes === ADD_TASK_MODE.ADD_ABOVE;
 
+  const shouldAddTaskBelow =
+    appStateUi.addTaskModes === ADD_TASK_MODE.ADD_BELOW;
+
   if (shouldAddTaskAbove) addTaskAboveSelectedTask(value);
+  else if (shouldAddTaskBelow) addTaskBelowSelectedTask(value);
   else lists.default.addTask(value);
 
   elements.inputElement.textContent = "";
