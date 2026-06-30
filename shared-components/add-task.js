@@ -1,11 +1,13 @@
 import { getCachedElements } from "./get-cached-element.js";
 import { ensurePlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
 import { countTasks } from "./count-tasks.js";
 import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
 import { truncateTaskDescription, truncateTaskText } from "./truncate-task.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { ADD_TASK_MODE } from "../constants/todo-constants.js";
+import { addTaskAboveSelectedTask } from "./add-task-after-selected-task.js";
 
 export const addTask = () => {
   const elements = getCachedElements();
@@ -13,7 +15,14 @@ export const addTask = () => {
   if (!elements.inputElement) return;
 
   const value = virtualKeyboard.caretManeger.text.trim();
-  if (value !== "") lists.default.addTask(value);
+
+  if (value === "") return;
+
+  const shouldAddTaskAbove =
+    appStateUi.addTaskModes === ADD_TASK_MODE.ADD_ABOVE;
+
+  if (shouldAddTaskAbove) addTaskAboveSelectedTask(value);
+  else lists.default.addTask(value);
 
   elements.inputElement.textContent = "";
 

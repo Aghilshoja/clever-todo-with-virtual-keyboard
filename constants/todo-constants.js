@@ -91,6 +91,7 @@ export const ACTIONS = {
   BATCH_ADD_LABEL: "data-action='batch-add-label'",
   BATCH_SET_PRIORITY: "data-action='batch-set-priority'",
   SELECTION_MENU_TOGGLER: "data-action='toggle-selection-menu'",
+  ADD_TASK_ABOVE: "data-action='add-task-above'",
 };
 
 // check states using selectors
@@ -105,6 +106,8 @@ export const CHECK_STATES = {
   TOOLBAR_FULL_HEIGHT: "data-toolbar-full-height",
   // highlighted task items
   SELECTED_TASK: "data-selected-tasks",
+
+  ADD_TASK_ABOVE: "add-task-above",
 };
 
 // get or set state attributes in JS
@@ -230,4 +233,10 @@ export const DELETION_MODES = {
   NONE: "none",
   SINGLE: "single",
   BATCH: "batch",
+};
+
+export const ADD_TASK_MODE = {
+  ADD_ABOVE: "above",
+  ADD_BELOW: "below",
+  REGULAR: "regular",
 };

@@ -243,6 +243,44 @@ export class TaskList {
     return taskTodEdit;
   }
 
+  addTaskAfterSelectedTask(selectedTaskId, text) {
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+
+    const selectedTask = allTasks.find((task) => task.id === selectedTaskId);
+    if (!selectedTask) return;
+
+    const isCompletedList = selectedTask.isCompleted === true;
+
+    const newTaskAfterSelectedTask = {
+      id: this.generateId(),
+      text: text, // Should this be empty? Or copy text?
+      createdAt: Date.now(),
+      isCompleted: isCompletedList,
+      description: null,
+    };
+
+    if (isCompletedList) {
+      const indexOfSelectedTask =
+        this.getCompletedTasks().indexOf(selectedTask);
+      // ✅ Insert AFTER the selected task
+      this.getCompletedTasks().splice(
+        indexOfSelectedTask + 1,
+        0,
+        newTaskAfterSelectedTask,
+      );
+    } else {
+      const indexOfSelectedTask = this.getTasks().indexOf(selectedTask);
+      // ✅ Insert AFTER the selected task
+      this.getTasks().splice(
+        indexOfSelectedTask + 1,
+        0,
+        newTaskAfterSelectedTask,
+      );
+    }
+
+    return newTaskAfterSelectedTask;
+  }
+
   addTask(text) {
     const newTask = {
       id: this.generateId(),

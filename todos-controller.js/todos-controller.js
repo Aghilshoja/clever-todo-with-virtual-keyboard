@@ -46,6 +46,7 @@ import {
   toggleSelectionBarMenu,
 } from "../shared-components/select-tasks.js";
 import {
+  ADD_TASK_MODE,
   ATTR,
   DELETION_MODES,
   EDIT_MODES,
@@ -59,6 +60,7 @@ import {
 import { duplicateSeveralTasks } from "../shared-components/duplicate-several-tasks.js";
 import { handleSeveralTasksCompletionOrUncompletion } from "../shared-components/handle-several-tasks-completion-or-uncompletion.js";
 import { handleSeveralCompletedAndUncompletedTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
+import { openKeyboardToAddATask } from "../shared-components/add-task-after-selected-task.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -90,6 +92,7 @@ export const appStateUi = {
     dataSnapshot: null,
     IdsOfSelectedTasks: null,
   },
+  addTaskModes: ADD_TASK_MODE.REGULAR,
 };
 
 const handleListChange = (listChange, eachTask) => {
@@ -137,6 +140,7 @@ const initTodo = () => {
     batchDeleteTasks,
     batchDuplicateTasks,
     batchCompletedTasks,
+    selectionBarMenu,
   } = elements;
 
   if (
@@ -148,7 +152,8 @@ const initTodo = () => {
     !submitTask ||
     !batchDeleteTasks ||
     !batchDuplicateTasks ||
-    !batchCompletedTasks
+    !batchCompletedTasks ||
+    !selectionBarMenu
   )
     return;
   // Highlight default on load
@@ -188,6 +193,8 @@ const initTodo = () => {
   );
   warningPopup.addEventListener("click", deleteSeveralTasks);
   warningPopup.addEventListener("click", closeWarningDeletionPopup);
+
+  selectionBarMenu.addEventListener("click", openKeyboardToAddATask);
 
   // Navigation Click
   navigation.addEventListener("click", (e) => {

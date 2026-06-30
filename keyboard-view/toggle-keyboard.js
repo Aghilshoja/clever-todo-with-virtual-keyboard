@@ -12,7 +12,7 @@ import {
 } from "../constants/todo-constants.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 
-export const toggleKeyboard = (e) => {
+export const toggleKeyboard = () => {
   const elements = getCachedElements();
   if (!elements) throw new Error("required DOM wasn't found");
 
