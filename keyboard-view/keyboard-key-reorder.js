@@ -67,4 +67,5 @@ export const handleKeyDrop = (e) => {
     keyboardLayout.rows[rowIndex][droppedKeyIndex],
   ];
   virtualKeyboard.toggleLanguageLayout(keyboardLayout);
+  virtualKeyboard.updateAutoCaps();
 };
