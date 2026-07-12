@@ -1,47 +1,38 @@
-# Clever Todo
-*A todo app with a custom keyboard*
+# Clever Task Manager
+*A task manager built to explore a custom virtual keyboard and task history.*
 
-Clever Todo is a simple todo application built with Vanilla JavaScript that experiments with a custom keyboard for task entry.  
-Unlike most todo apps, it is designed to preserve task history, so work is never truly lost.
+Clever Task Manager is a Vanilla JavaScript project that began as an experiment to understand how a custom virtual keyboard could be designed, implemented, and integrated into a real-world application. Rather than building the keyboard in isolation, I chose to integrate it into a task manager where I could explore real interactions such as creating, editing, scheduling, and organizing tasks. The project also explores ideas around task history and long-term activity tracking as part of the overall learning proces
 
 ## Live Demo
 👉 [Live Demo](https://aghilshoja.github.io/clever-todo-with-virtual-keyboard/)
 
 ## Project Goal
 
-The goal of this project is to explore better ways of entering and managing tasks by:
+The goal of this project is to explore how my ideas can be implemented in a real-world application while strengthening my understanding of Vanilla JavaScript
 
-- Making task input more engaging with a custom keyboard
-- Preserving the full history of tasks (created, edited, completed, and deleted)
+- Through this project, I wanted to learn and experiment with:
+- Building a custom virtual keyboard from scratch.
+- Implementing text editing and caret  management without relying on browser defaults.
+- Designing task management and scheduling interactions.
+
+- Exploring different approaches to preserving task histor
 
 ## Why This Project?
 
-Most todo apps feel like typing into a spreadsheet, and deleted tasks disappear forever.
-
-This project aims to:
-
-1. Make task entry more enjoyable and efficient  
-2. Ensure that no task history is lost  
+This project started as a way to explore ideas that I wanted to understand more deeply rather than simply recreate an existing application.
+Instead of building isolated demos, I wanted to experiment with these ideas inside a practical task manager where different features could interact with each other.
+The project serves as a playground for exploring topics such as custom text editing, virtual keyboard interactions, task scheduling, interface design, and state management while continuously expanding it as I learn.
 
 ## Why Vanilla JavaScript?
 
-This project is built using plain JavaScript to focus on mastering core web fundamentals—such as DOM manipulation, event handling, and basic state management—before moving on to frameworks.
-
-The emphasis is on understanding how things work under the hood rather than relying on abstractions.
+I chose to build this project with Vanilla JavaScript to deepen my understanding of how web applications work before moving on to frameworks. Instead of relying on abstractions, I wanted to implement features myself and gain hands-on experience with DOM manipulation, event handling, state management, text editing, custom UI interactions, and application architecture.
 
 ## Current Status
 
-🚧 In Development
+🚧 Actively in Development
 
-### Working Now
-
-- Initial UI
-- Launch animation
-
-### Planned
-
-- Custom keyboard implementation
-- Task history system
+This project is under active development and is being built incrementally. New features, UI refinements, and architectural improvements are added continuously as I experiment with different approaches and refine existing implementations.
+The repository reflects the project's development journey, with regular commits documenting its progression over time.
 
 ## Tech Stack
 
