@@ -12,6 +12,7 @@ export const ATTR = {
   OTHER_ACTIONS: "data-other-actions-list",
   TASK_COMMENT_CON: "data-task-comment",
   TASK_INBOX_CON: "data-task-inbox-container",
+  TASK_DATE_BTN_CON: "data-task-date-btn-container",
   ACTION_BUTTONS_CON: "data-action-buttons-container",
   ACTIVE_SAVE_BTN: "data-save-button-active",
   TASK_TOOLBAR: "data-task-toolbar",
@@ -48,6 +49,24 @@ export const ATTR = {
 
   SELECTED_COUNT: "data-selected-count",
   SELECTION_BAR_MENU: "data-selection-menu",
+  TODAY_LABEL: "data-today-label",
+  TOMORROW_LABEL: "data-tomorrow-label",
+  NEXT_WEEK_LABEL: "data-next-week-label",
+  DATE_CONTAINER: "data-date-container",
+  CALENDAR_CONTAINER: "data-calendar-container",
+  CALENDAR_HEADER: "data-calendar-header",
+  QUICK_OPTIONS_CONTAINER: "data-quick-options",
+  SAVE_BUTTON_CONTAINER: "data-save-button-container",
+  DATA_SUGGESTION: "data-suggestion",
+  VISIBLE_DUE_DATE: "data-visible-due-date",
+  NO_DATE_CONTAINER: "data-task-date-container",
+  TODAY_CONTANIER: "data-today-container",
+  TOMORROW_CONTAINER: "data-tomorrow-container",
+  NEXT_WEEK_CONTAINER: "data-next-week-container",
+
+  NEXT_WEEK_TIME_LABEL: "data-next-week-time-label",
+  TOMORROW_TIME_LABEL: "data-tomorrow-time-label",
+  TODAY_TIME_LABEL: "data-today-time-label",
 };
 
 // elements that perform actions
@@ -93,6 +112,19 @@ export const ACTIONS = {
   SELECTION_MENU_TOGGLER: "data-action='toggle-selection-menu'",
   ADD_TASK_ABOVE: "data-action='add-task-above'",
   ADD_TASK_BELOW: "data-action='add-task-below'",
+  EDIT_TASK_DATE: "data-action='edit-due-date'",
+  SET_TODAY: 'data-action="set-today"',
+  SET_TOMORROW: 'data-action="set-tomorrow"',
+  SET_NEXT_WEEK: 'data-action="set-next-week"',
+  TOGGLE_PREVIOUS_MONTH: 'data-action="toggle-previous-month"',
+  TOGGLE_NEXT_MONTH: 'data-action="toggle-next-month"',
+  ADD_TIME: 'data-action="add-time-to-selected-task"',
+  REPEAT_CURRENT_TASK: 'data-action="repeat-current-date"',
+  SAVE_TASK_DATE: 'data-action="save-task-date"',
+  EXIT_DATE_PICKER: 'data-action="exit-date-picker"',
+  NO_DATE_BTN: "data-action='remove-task-date'",
+  REMOVE_TASK_TIME: 'data-action="remove-task-time"',
+  SELECT_WEEK_DAY: "data-action='select-week-day'",
 };
 
 // check states using selectors
@@ -110,6 +142,9 @@ export const CHECK_STATES = {
 
   ADD_TASK_ABOVE: "add-task-above",
   ADD_TASK_BELOW: "add-task-below",
+  SELECTED_WEEK_DAY: "data-selected-week-day",
+  TOGGLE_TIME_VISIBILITY: "data-remove-time-state",
+  TASK_OVERdUE: "data-due-state",
 };
 
 // get or set state attributes in JS
@@ -148,6 +183,19 @@ export const ATTR_STATES = {
   SELECTION_BAR_MENU: "toggleSelectionMenu",
   SELECTION_BAR_MENU_STATE: "selectionMenuState",
   SELECTION_ELLIPSIS_VISIBILITY: "ellipsisVisibility",
+  DATE_CONTAINER: "dateState",
+  HIDE_DUE_DATE_BTN: "hideDueDate",
+  QUICK_OPTIONS_CONTAINER: "quickOptionsState",
+  DATA_SUGGESTION: "suggestionState",
+  NO_DATE_CONTAINER: "taskDateState",
+  TODAY_CONTAINER: "todayState",
+  TOMORROW_CONTAINER: "tomorrowState",
+  NEXT_WEEK_CONTAINER: "nextWeekContainerState",
+  // overdue or upcoming
+  TASK_DUE_STATE: "dueState",
+  REMOVE_TASK_TIME: "removeTimeState",
+  SELECTED_WEEK_DAY: "selectedWeekDay",
+  REMOVE_TIME_LABEL: "removeTimeState",
 };
 
 export const VISIBLE = {
@@ -155,6 +203,8 @@ export const VISIBLE = {
   SELECT_TASK_ITEM: "visible",
   TASK_CREATOR: "visible",
   SELECTION_ELLIPSIS: "visible",
+  QUICK_OPTIONS_CONTAINER: "visible",
+  DATA_SUGGESTION: "visible",
 };
 
 export const HIDDEN = {
@@ -162,11 +212,13 @@ export const HIDDEN = {
   ACTION_BUTTONS_CON: "hidden",
   SELECT_TASK_ITEM: "hidden",
   TASK_CREATOR: "hidden",
+  QUICK_OPTIONS_CONTAINER: "hidden",
 
   /* some elements do not have visible state because they are temprary and once a mode is over they get deleted */
   TASK_TEXT: "hidden",
   TASK_DESCRIPTION: "hidden",
   SELECTION_ELLIPSIS: "hidden",
+  DATA_SUGGESTION: "hidden",
 };
 
 export const OPEN = {
@@ -195,6 +247,13 @@ export const ACTIVE = {
   COMPLETED_SECTION: "active",
   POPUP: "active",
   TASKS_COUNTER: "active",
+  DATE_CONTAINER: "active",
+  NO_DATE_CONTAINER: "active",
+  TODAY_CONTAINER: "active",
+  TOMORROW_CONTAINER: "active",
+  NEXT_WEEK_CONTAINER: "active",
+  REMOVE_TASK_TIME: "active",
+  REMOVE_TIME_LABEL: "active",
 };
 
 export const INACTIVE = {
@@ -204,12 +263,21 @@ export const INACTIVE = {
   COMPLETED_SECTION: "inactive",
   POPUP: "inactive",
   TASKS_COUNTER: "inactive",
+  DATE_CONTAINER: "inactive",
+  NO_DATE_CONTAINER: "inactive",
+  TODAY_CONTAINER: "inactive",
+  TOMORROW_CONTAINER: "inactive",
+  NEXT_WEEK_CONTAINER: "inactive",
+  REMOVE_TASK_TIME: "inactive",
+  REMOVE_TIME_LABEL: "inactive",
 };
 
 export const EDIT_MODES = {
   EDIT_TASK: "edit-task",
   DESCRIPTION: "Description",
   SWITCH_BETWEEN_MODES: "switch-between-modes",
+  DATE_MODE: "active",
+  EDIT_TASK_DATE: "edit-task-date",
   NO_MODES: "none",
 };
 
@@ -241,4 +309,9 @@ export const ADD_TASK_MODE = {
   ADD_ABOVE: "above",
   ADD_BELOW: "below",
   REGULAR: "regular",
+};
+
+export const DUE_DATE_STATES = {
+  OVERDUE: "overdue",
+  UPCOMING: "upcoming",
 };

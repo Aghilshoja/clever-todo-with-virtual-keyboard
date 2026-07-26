@@ -39,6 +39,7 @@ import {
   PLACEHOLDERS,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
+import { showDateKeyboard } from "../shared-components/costume-calendar/show-date-keyboard.js";
 
 export const virtualKeyboard = new KeyboardApp();
 
@@ -159,6 +160,7 @@ const initApp = () => {
 
     if (e.target.closest(`[${ATTRIBUTES.INPUT}]`)) {
       positionCaret(e);
+      showDateKeyboard();
     }
   });
 

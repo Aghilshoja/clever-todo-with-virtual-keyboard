@@ -434,6 +434,7 @@
               data-placeholder="Enter a task"
               data-edit-placeholder="Edit your task"
               data-description="Description"
+              data-edit-task-date="etc... Aug 29"
               data-keyboard-input
             ></div>
             <button
@@ -523,6 +524,197 @@
             data-action="undo-completion"
           >
             undo
+          </button>
+        </div>
+      </section>
+
+      <section class="task-date" data-date-container data-date-state="inactive">
+        <div class="header-container">
+          <h2 class="task-date__title">Date</h2>
+          <button
+            class="task-date__exit-date-picker button-reset fs cursor"
+            aria-label="Exit date picker"
+            title="Exit date picker"
+            data-action="exit-date-picker"
+          >
+            X
+          </button>
+        </div>
+        <div class="task-date__editor pd">
+          <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp;
+          <button
+            class="task-date__enter-task-date button-reset fs cursor"
+            title="Enter due date for your task"
+            aria-label="Enter due date for your task"
+            data-action="edit-due-date"
+          >
+            July 10 2027
+          </button>
+        </div>
+        <div
+          class="task-date__show-suggestion"
+          data-suggestion
+          data-suggestion-state="hidden"
+        >
+          <button
+            class="task-date__suggestion button-reset fs"
+            aria-label="show due date suggestion based what is typed into the input"
+            title="how due date suggestion based what is typed into the input"
+            data-actoin="show-date-suggestion"
+          >
+            Type a date like <strong>tomorrow 10</strong> or
+            <strong>on Monday</strong>
+          </button>
+        </div>
+        <div
+          class="task-date__quick-options"
+          data-quick-options
+          data-quick-options-state="visible"
+        >
+          <div class="task-date__scrollable-area">
+            <div
+              class="task-date__today-container"
+              data-today-container
+              data-today-state="active"
+            >
+              <button
+                class="task-date__today button-reset fs cursor padding"
+                aria-label="set due date on this task for today"
+                title="set due date on this task for today"
+                data-action="set-today"
+              >
+                <i class="fas fa-calendar-day" aria-hidden="true"></i> Today
+              </button>
+              <div class="task-date__date-info">
+                <span class="task-date__day-name" data-today-label></span>
+                <span
+                  class="task-date__time"
+                  data-today-time-label
+                  data-remove-time-state="inactive"
+                ></span>
+              </div>
+            </div>
+            <div
+              class="task-date__tomorrow-container"
+              data-tomorrow-container
+              data-tomorrow-state="active"
+            >
+              <button
+                class="task-date__tomorrow button-reset fs cursor padding"
+                aria-label="set due date on this task for tomorrow"
+                title="set due date on this task for tomorrow"
+                data-action="set-tomorrow"
+              >
+                <i class="fas fa-sun" aria-hidden="true"></i> Tomorrow
+              </button>
+              <div class="task-date__date-info">
+                <span class="task-date__day-name" data-tomorrow-label></span>
+                <span
+                  class="task-date__time"
+                  data-tomorrow-time-label
+                  data-remove-time-state="inactive"
+                ></span>
+              </div>
+            </div>
+            <div
+              class="task-date__next-week-container"
+              data-next-week-container
+              data-next-week-container-state="active"
+            >
+              <button
+                class="task-date__next-week-date button-reset fs cursor padding"
+                data-action="set-next-week"
+                aria-label="Set due date for next week"
+                title="Set due date for next week"
+              >
+                <i class="fas fa-calendar-week" aria-hidden="true"></i> Next
+                week
+              </button>
+              <div class="task-date__date-info">
+                <span class="task-date__day-name" data-next-week-label></span>
+                <span
+                  class="task-date__time"
+                  data-next-week-time-label
+                  data-remove-time-state="inactive"
+                ></span>
+              </div>
+            </div>
+            <div
+              class="task_date__no-date-container"
+              data-task-date-container
+              data-task-date-state="inactive"
+            >
+              <button
+                class="task-date__no-date button-reset fs cursor padding"
+                aria-label="remove your current task date"
+                title="remove your current task date"
+                data-action="remove-task-date"
+              >
+                <i class="fa fa-ban" aria-hidden="true"></i> No date
+              </button>
+            </div>
+            <div class="task-date__calendar-head">
+              <button
+                class="task-date__previous-month button-reset fs cursor padding"
+                aria-label="see previous month"
+                title="see previous month"
+                data-action="toggle-previous-month"
+              >
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <h2 class="task-date__calander-heading" data-calendar-header></h2>
+              <button
+                class="task-date__next button-reset fs cursor padding"
+                aria-label="see next month"
+                title="see next month"
+                data-action="toggle-next-month"
+              >
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="task-date__calendar" data-calendar-container></div>
+          </div>
+          <div class="task-date__time-picker padding">
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            <div class="task-date__time-actions">
+              <button
+                class="task-date__add-time button-reset fs cursor"
+                aria-label="add time to your task"
+                title="add time to your task"
+                data-action="add-time-to-selected-task"
+              >
+                Add time
+              </button>
+              <button
+                class="task-date__remove-time button-reset fs cursor padding"
+                aria-label="remove your task time"
+                title="remove your task time"
+                data-action="remove-task-time"
+                data-remove-time-state="inactive"
+              >
+                x
+              </button>
+            </div>
+          </div>
+          <div class="task-date__repeat-due-date">
+            <button
+              class="task-date__repeat-date button-reset fs cursor padding"
+              aria-label="repeat your previous date"
+              title="repeat your previous date"
+              data-action="repeat-current-date"
+            >
+              <i class="fas fa-sync-alt"></i> Repeat
+            </button>
+          </div>
+        </div>
+        <div class="task-date__save" data-save-button-container>
+          <button
+            class="task-date__save-new-date button-reset fs cursor padding"
+            aria-label="save new task' date"
+            title="save new task' date"
+            data-action="save-task-date"
+          >
+            Save
           </button>
         </div>
       </section>

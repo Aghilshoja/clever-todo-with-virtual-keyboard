@@ -28,7 +28,8 @@ export const positionCaret = (e) => {
   const isTherePlaceholder =
     input.textContent === PLACEHOLDERS.DESCRIPTION ||
     input.textContent === PLACEHOLDERS.EDIT_TASK ||
-    input.textContent === PLACEHOLDERS.ENTER_TASK;
+    input.textContent === PLACEHOLDERS.ENTER_TASK ||
+    input.textContent === PLACEHOLDERS.EDIT_TASK_DATE;
 
   if (isTherePlaceholder) return;
   const caret = ensureCaret(input);

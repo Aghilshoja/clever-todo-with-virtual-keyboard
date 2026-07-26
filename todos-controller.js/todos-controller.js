@@ -18,7 +18,6 @@ import { duplicateTask } from "../shared-components/duplicate-mode.js";
 import { implementEditAndDescriptionMode } from "../shared-components/handle-edit-and-description-modes.js";
 import { saveEditedTask } from "../shared-components/handle-edit-and-description-modes.js";
 import { editDescriptionAndTask } from "../shared-components/dom-operations/operation-on-dom-on-switch-between-edit-and-description-modes.js";
-import { exitEditMode } from "../shared-components/handle-edit-and-description-modes.js";
 import {
   truncateTaskDescription,
   truncateTaskText,
@@ -61,6 +60,22 @@ import { duplicateSeveralTasks } from "../shared-components/duplicate-several-ta
 import { handleSeveralTasksCompletionOrUncompletion } from "../shared-components/handle-several-tasks-completion-or-uncompletion.js";
 import { handleSeveralCompletedAndUncompletedTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
 import { openKeyboardToAddATask } from "../shared-components/add-task-relative-to-selected-task.js";
+import {
+  decrementYearAndMonth,
+  incrementYearAndMonth,
+} from "../shared-components/costume-calendar/navigate-month.js";
+import { exitEditMode } from "../shared-components/handle-edit-and-description-modes.js";
+import { selectDate } from "../shared-components/costume-calendar/handle-date-selection.js";
+import {
+  handleExitEditingTaskDateOrDateMode,
+  showCostumeCalendar,
+} from "../shared-components/costume-calendar/calendar-controller.js";
+import { saveTaskDueDate } from "../shared-components/save-task-due-date.js";
+import {
+  quickDateActions,
+  quickDateLabels,
+} from "../shared-components/costume-calendar/quick-date-options.js";
+import { markTaskAsDue } from "../shared-components/costume-calendar/mark-task-due.js";
 
 export const lists = {
   default: new TaskList("default"),
@@ -93,15 +108,21 @@ export const appStateUi = {
     IdsOfSelectedTasks: null,
   },
   addTaskModes: ADD_TASK_MODE.REGULAR,
+  draftedDate: null,
+  hasTime: null,
+  timeRemoval: false,
 };
 
-const handleListChange = (listChange, eachTask) => {
+const handleListChange = (eachTask, listChange) => {
   if (listChange.id !== activeUlId.ul) return;
 
   renderTasks(listChange.getTasks(), eachTask);
 };
 
-lists.default.subscribe(handleListChange);
+lists.default.subscribe(TaskList.EVENTS.RENDER_TASK, handleListChange);
+lists.default.subscribe(TaskList.EVENTS.MARK_TASK_AS_DUE, markTaskAsDue);
+
+lists.default.initializeNotifications();
 
 export const addListeners = (list) => {
   list.addEventListener("click", revealManu);
@@ -116,6 +137,7 @@ export const addListeners = (list) => {
   list.addEventListener("click", completeTask);
   list.addEventListener("click", moveTaskFromCompletedToActive);
   list.addEventListener("click", selectTasks);
+  list.addEventListener("click", showCostumeCalendar);
 };
 
 const addDragAndDropListeners = (list) => {
@@ -141,6 +163,16 @@ const initTodo = () => {
     batchDuplicateTasks,
     batchCompletedTasks,
     selectionBarMenu,
+    previousMonthBtn,
+    nextMonthBtn,
+    calendarContainer,
+    dateContainer,
+    saveTaskDate,
+    todayBtn,
+    tomorrowBtn,
+    nextWeekBtn,
+    noDateBtn,
+    removeTimeBtn,
   } = elements;
 
   if (
@@ -153,7 +185,17 @@ const initTodo = () => {
     !batchDeleteTasks ||
     !batchDuplicateTasks ||
     !batchCompletedTasks ||
-    !selectionBarMenu
+    !selectionBarMenu ||
+    !previousMonthBtn ||
+    !nextMonthBtn ||
+    !calendarContainer ||
+    !dateContainer ||
+    !saveTaskDate ||
+    !todayBtn ||
+    !tomorrowBtn ||
+    !nextWeekBtn ||
+    !noDateBtn ||
+    !noDateBtn
   )
     return;
   // Highlight default on load
@@ -195,6 +237,31 @@ const initTodo = () => {
   warningPopup.addEventListener("click", closeWarningDeletionPopup);
 
   selectionBarMenu.addEventListener("click", openKeyboardToAddATask);
+
+  nextMonthBtn.addEventListener("click", incrementYearAndMonth);
+  previousMonthBtn.addEventListener("click", decrementYearAndMonth);
+
+  calendarContainer.addEventListener("click", selectDate);
+
+  dateContainer.addEventListener("click", handleExitEditingTaskDateOrDateMode);
+
+  saveTaskDate.addEventListener("click", saveTaskDueDate);
+
+  todayBtn.addEventListener("click", quickDateActions.handleTodaySelection);
+
+  tomorrowBtn.addEventListener(
+    "click",
+    quickDateActions.handleTomorrowSelection,
+  );
+
+  nextWeekBtn.addEventListener(
+    "click",
+    quickDateActions.handleNextWeekSelection,
+  );
+
+  noDateBtn.addEventListener("click", quickDateActions.handleNoDate);
+
+  removeTimeBtn.addEventListener("click", quickDateLabels.syncQuickDateOptions);
 
   // Navigation Click
   navigation.addEventListener("click", (e) => {

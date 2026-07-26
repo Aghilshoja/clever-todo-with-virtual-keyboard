@@ -8,6 +8,7 @@ import {
   ATTR_STATES,
   HIDDEN,
   ACTIONS,
+  CHECK_STATES,
 } from "../constants/todo-constants.js";
 
 export const getCachedElements = () => {
@@ -75,6 +76,42 @@ export const getCachedElements = () => {
       `[${ACTIONS.SELECTION_MENU_TOGGLER}]`,
     ),
     selectionBarMenu: document.querySelector(`[${ATTR.SELECTION_BAR_MENU}]`),
+    dateContainer: document.querySelector(`[${ATTR.DATE_CONTAINER}]`),
+    calendarContainer: document.querySelector(`[${ATTR.CALENDAR_CONTAINER}]`),
+    calendarHeader: document.querySelector(`[${ATTR.CALENDAR_HEADER}]`),
+    previousMonthBtn: document.querySelector(
+      `[${ACTIONS.TOGGLE_PREVIOUS_MONTH}]`,
+    ),
+    nextMonthBtn: document.querySelector(`[${ACTIONS.TOGGLE_NEXT_MONTH}]`),
+    todayLabel: document.querySelector(`[${ATTR.TODAY_LABEL}]`),
+    tomorrowLabel: document.querySelector(`[${ATTR.TOMORROW_LABEL}]`),
+    nextWeekLabel: document.querySelector(`[${ATTR.NEXT_WEEK_LABEL}]`),
+    editDueDateBtn: document.querySelector(`[${ACTIONS.EDIT_TASK_DATE}]`),
+    quickOptionsContainer: document.querySelector(
+      `[${ATTR.QUICK_OPTIONS_CONTAINER}]`,
+    ),
+    saveTaskDate: document.querySelector(`[${ACTIONS.SAVE_TASK_DATE}]`),
+    saveButtonContainer: document.querySelector(
+      `[${ATTR.SAVE_BUTTON_CONTAINER}]`,
+    ),
+    taskDateSuggestion: document.querySelector(`[${ATTR.DATA_SUGGESTION}]`),
+    noDateBtnContainer: document.querySelector(`[${ATTR.NO_DATE_CONTAINER}]`),
+    todayContainer: document.querySelector(`[${ATTR.TODAY_CONTANIER}]`),
+    tomorrowContainer: document.querySelector(`[${ATTR.TOMORROW_CONTAINER}]`),
+    nextWeekContainer: document.querySelector(`[${ATTR.NEXT_WEEK_CONTAINER}]`),
+    todayBtn: document.querySelector(`[${ACTIONS.SET_TODAY}]`),
+    tomorrowBtn: document.querySelector(`[${ACTIONS.SET_TOMORROW}]`),
+    nextWeekBtn: document.querySelector(`[${ACTIONS.SET_NEXT_WEEK}]`),
+    noDateBtn: document.querySelector(`[${ACTIONS.NO_DATE_BTN}]`),
+    addTimeBtn: document.querySelector(`[${ACTIONS.ADD_TIME}]`),
+    removeTimeBtn: document.querySelector(`[${ACTIONS.REMOVE_TASK_TIME}]`),
+    nextWeekTimeLabel: document.querySelector(`[${ATTR.NEXT_WEEK_TIME_LABEL}]`),
+    todayTimeLabel: document.querySelector(`[${ATTR.TODAY_TIME_LABEL}]`),
+    tomorrowTimeLabel: document.querySelector(`[${ATTR.TOMORROW_TIME_LABEL}]`),
+
+    toggleTimeVisibility: document.querySelectorAll(
+      `[${CHECK_STATES.TOGGLE_TIME_VISIBILITY}]`,
+    ),
     /* end of the elements that are related to the todo app */
   };
   return elements;

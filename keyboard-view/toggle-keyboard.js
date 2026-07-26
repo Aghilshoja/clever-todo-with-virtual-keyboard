@@ -7,10 +7,12 @@ import {
   ATTR,
   ATTR_STATES,
   CHECK_STATES,
+  EDIT_MODES,
   HIDDEN,
   OPEN,
 } from "../constants/todo-constants.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
+import { appStateUi } from "../todos-controller.js/todos-controller.js";
 
 export const toggleKeyboard = () => {
   const elements = getCachedElements();
@@ -23,12 +25,11 @@ export const toggleKeyboard = () => {
       HIDDEN.TASK_CREATOR;
   }
 
-  // if app is in edit mode don't allow dismiss overlay block interaction with the toolbar and hide the keyboard
-  const taskToolbar = document.querySelector(
-    `[${CHECK_STATES.TASK_TOOLBAR}='${OPEN.TASK_TOOLBAR}']`,
-  );
+  const isEditMode =
+    appStateUi.activeMode === EDIT_MODES.DESCRIPTION ||
+    appStateUi.activeMode === EDIT_MODES.EDIT_TASK;
 
-  if (taskToolbar) return;
+  if (isEditMode) return;
   if (elements.keyboardDismissOverlay) {
     elements.keyboardSection.addEventListener(
       "transitionend",

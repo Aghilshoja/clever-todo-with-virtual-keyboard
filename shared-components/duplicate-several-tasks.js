@@ -20,16 +20,22 @@ export const duplicateSeveralTasks = () => {
 
   const duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds);
 
-  selectedTaskElements.forEach((selectedTask, index) => {
-    const clonedSelectedTasks = selectedTask.cloneNode(true);
-    clonedSelectedTasks.dataset.id = duplicatedTasks[index].id;
-    const clonedSelectedTaskChildren =
-      clonedSelectedTasks.querySelectorAll("[data-id]");
-    clonedSelectedTaskChildren.forEach(
-      (el) => (el.dataset.id = duplicatedTasks[index].id),
-    );
-    selectedTask.after(clonedSelectedTasks);
+  selectedTaskElements.forEach((selectedTask) => {
+    const originalId = selectedTask.dataset.id;
+
+    const duplicated = duplicatedTasks.find((t) => t.originalId === originalId);
+
+    const clone = selectedTask.cloneNode(true);
+
+    clone.dataset.id = duplicated.id;
+
+    clone.querySelectorAll("[data-id]").forEach((el) => {
+      el.dataset.id = duplicated.id;
+    });
+
+    selectedTask.after(clone);
   });
+
   exitTaskSelection();
   countTasks();
   showNumberOfCompletedTasks();

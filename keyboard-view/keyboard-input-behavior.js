@@ -14,6 +14,7 @@ import {
   KEYBOARD_ACTIONS,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
+import { showDateSuggestion } from "../shared-components/costume-calendar/show-date-suggestion.js";
 
 export const pressBackspace = (e) => {
   if (e.target.closest(`[${KEYBOARD_ACTIONS.BACKSPACE}]`)) {
@@ -86,9 +87,18 @@ const addCaretToInput = (input) => {
 };
 
 export const ensurePlaceholder = (input) => {
+  const isInputEmpty = input.textContent === "";
+  if (
+    keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TASK_DATE &&
+    isInputEmpty
+  ) {
+    addCaretToInput(input);
+    input.textContent = input.dataset.editTaskDate;
+  }
+
   if (
     keyboardUiState.activePlaceholder === PLACEHOLDERS.DESCRIPTION &&
-    input.textContent === ""
+    isInputEmpty
   ) {
     addCaretToInput(input);
     input.textContent = input.dataset.description;
@@ -96,7 +106,7 @@ export const ensurePlaceholder = (input) => {
 
   if (
     keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TASK &&
-    input.textContent === ""
+    isInputEmpty
   ) {
     addCaretToInput(input);
     input.textContent = input.dataset.editPlaceholder;
@@ -104,7 +114,7 @@ export const ensurePlaceholder = (input) => {
 
   if (
     keyboardUiState.activePlaceholder === PLACEHOLDERS.ENTER_TASK &&
-    input.textContent === ""
+    isInputEmpty
   ) {
     addCaretToInput(input);
     input.textContent = input.dataset.placeholder;
@@ -140,6 +150,7 @@ const deleteLastCharacterOfInput = () => {
   disableSubmitIfInputEmpty();
   handleTaskCharacterLimit();
   virtualKeyboard.updateAutoCaps();
+  showDateSuggestion();
 };
 
 export const insertText = (input, char, caret) => {
@@ -176,6 +187,7 @@ export const typeIntoInput = (char) => {
 
   insertText(input, char, caret);
 
+  showDateSuggestion();
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();
   handleTaskCharacterLimit();

@@ -50,6 +50,7 @@ export const PLACEHOLDERS = {
   EDIT_TASK: "Edit your task",
   ENTER_TASK: "Enter a task",
   DESCRIPTION: "Description",
+  EDIT_TASK_DATE: "etc... Aug 29",
 };
 
 export const KEYBOARD_OPEN = {

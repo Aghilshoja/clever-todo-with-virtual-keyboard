@@ -6,8 +6,12 @@ import {
   ATTR_STATES,
   CHECK_STATES,
   CLOSED,
+  DUE_DATE_STATES,
   HIDDEN,
 } from "../constants/todo-constants.js";
+import { formatTimeDisplay } from "./costume-calendar/parse-time.js";
+import { daysOfWeek, months } from "./costume-calendar/create-calendar.js";
+import { format24HourTime } from "./costume-calendar/prepare-date-editor.js";
 
 export const activeUlId = {
   ul: "default",
@@ -59,6 +63,31 @@ const formatExactDate = (timestamp) => {
     hour: "2-digit",
     minute: "2-digit",
   });
+};
+
+const formatTaskDueDate = (task) => {
+  if (!task.dueDate) return "";
+
+  const dueDate = new Date(task.dueDate);
+
+  const time = task.hasTime
+    ? `${format24HourTime(dueDate.getHours(), dueDate.getMinutes())}`
+    : "";
+
+  return `<i class="fa fa-calendar" aria-hidden="true"></i> ${daysOfWeek[dueDate.getDay()]}, ${
+    months[dueDate.getMonth()]
+  } ${dueDate.getDate()} ${dueDate.getFullYear() === 2026 ? "" : dueDate.getFullYear()} ${time}`;
+};
+
+const getDueDateStateAttribute = (task) => {
+  const now = Date.now();
+
+  if (task.dueDate === null) return `${CHECK_STATES.TASK_OVERdUE}=""`;
+  else if (now < task.dueDate) {
+    return `${CHECK_STATES.TASK_OVERdUE}="${DUE_DATE_STATES.UPCOMING}"`;
+  } else if (now > task.dueDate) {
+    return `${CHECK_STATES.TASK_OVERdUE}="${DUE_DATE_STATES.OVERDUE}"`;
+  }
 };
 
 const createMoreOptions = (task) => {
@@ -117,8 +146,8 @@ const createToolbar = (task) => {
     <li class="task__toolbar--description">
       <p class="task__toolbar-description-text word-wrap color" ${ATTR.TASK_DESCRIPTION}  data-truncate-text="${task.description ? task.description : ""}">${task.description ? task.description : ""}</p>
     </li>
-    <li class="task__date pd">
-    <input type="date" ${ACTIONS.TASK_DATE}>
+    <li class="task__date" ${ATTR.TASK_DATE_BTN_CON}>
+    <button class="task__set-due-date fs button-reset cursor" ${getDueDateStateAttribute(task)}  ${ACTIONS.TASK_DATE} aria-label="set due date" data-id="${task.id}">${task.dueDate === null ? `<i class="fa fa-calendar" aria-hidden="true"></i>  Date` : formatTaskDueDate(task)}</button>
     </li>
     <li class="task__other-actions">
     <ul class="task__other-actions-list flex overflow" ${ATTR.OTHER_ACTIONS}>
@@ -184,6 +213,7 @@ export const renderTasks = (task, eachTask) => {
     <div class="task__wrap-task-and-description">
     <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${eachTask.text}">${eachTask.text}</p>
     <p class="task__description color word-wrap" ${ATTR.MAIN_TASK_DESCRIPTION} data-truncate-text="${eachTask.description ? eachTask.description : ""}">${eachTask.description ? eachTask.description : ""}</p>
+    <p class="task__visible-due-date" data-id="${eachTask.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(eachTask)}>${formatTaskDueDate(eachTask)}</p>
     </div>
     </div>
     <button class="task__important button-reset cursor" aria-label="mark your active task as important" data-id="${eachTask.id}" ${ACTIONS.IMPORTANT_TASK}><i class="fa-regular fa-star"></i></button>
@@ -212,6 +242,7 @@ export const renderCompletedTask = (eachCompletedTask) => {
     <div class="task__wrap-task-and-description">
     <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${eachCompletedTask.text}">${eachCompletedTask.text}</p>
     <p class="task__description color word-wrap" ${ATTR.MAIN_TASK_DESCRIPTION} data-truncate-text="${eachCompletedTask.description ? eachCompletedTask.description : ""}">${eachCompletedTask.description ? eachCompletedTask.description : ""}</p>
+      <p class="task__visible-due-date" data-id="${eachCompletedTask.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(eachCompletedTask)}> ${formatTaskDueDate(eachCompletedTask)}</p>
     </div>
     </div>
     <button class="task__important button-reset cursor"><i class="fa-regular fa-star" aria-label="mark your completed task as important" data-id="${eachCompletedTask.id}" ${ACTIONS.IMPORTANT_TASK}></i></button>

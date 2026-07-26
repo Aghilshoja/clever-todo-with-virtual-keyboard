@@ -1,17 +1,27 @@
 export class TaskList {
+  static EVENTS = {
+    MARK_TASK_AS_DUE: "markTaskAsDue",
+    RENDER_TASK: "renderTask",
+  };
+
   constructor(id) {
     this.id = id;
     this.tasks = [];
     this.completedTasks = [];
-    this.listeners = [];
+    this.notifiedTasks = new Set();
+    this.listeners = {
+      renderTask: [],
+      markTaskAsDue: [],
+    };
   }
 
-  subscribe(listeners) {
-    this.listeners.push(listeners);
+  subscribe(eventType, listeners) {
+    if (this.listeners[eventType]) this.listeners[eventType].push(listeners);
   }
 
-  emitChange(eachTask) {
-    this.listeners.forEach((listener) => listener(this, eachTask));
+  emitChange(eventType, taskInfo) {
+    if (this.listeners[eventType])
+      this.listeners[eventType].forEach((listener) => listener(taskInfo, this));
   }
 
   getTasks() {
@@ -27,6 +37,9 @@ export class TaskList {
     const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
     const foundTask = allTypesOfTasks.find((t) => t.id === taskId);
     if (!foundTask) throw new Error("task object was not found");
+
+    this.removeNotifications(taskId);
+
     const isCompleted = foundTask.isCompleted === true;
 
     if (isCompleted) {
@@ -36,11 +49,21 @@ export class TaskList {
     }
   }
 
+  removeNotifications(taskIds) {
+    const ids = Array.isArray(taskIds) ? taskIds : [taskIds];
+
+    for (const taskId of ids) {
+      this.notifiedTasks.delete(taskId);
+    }
+  }
+
   deleteSeveralTasks(taskIds) {
     this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
     this.completedTasks = this.completedTasks.filter(
       (task) => !taskIds.includes(task.id),
     );
+
+    this.removeNotifications(taskIds);
   }
 
   duplicateTask(taskId) {
@@ -87,11 +110,11 @@ export class TaskList {
 
       if (taskIds.includes(task.id)) {
         const duplicatedTask = {
+          ...task,
           id: this.generateId(),
-          text: task.text,
           createdAt: Date.now(),
           isCompleted: isCompletedList,
-          description: task.description,
+          originalId: task.id,
         };
         copiesOfDuplicatedTasks.push(duplicatedTask);
         newList.push(duplicatedTask);
@@ -115,12 +138,12 @@ export class TaskList {
       (t) => t.id === taskId,
     );
     if (completedTaskIndex === -1) return;
+
     this.tasks = this.tasks.filter((t) => t.id !== taskId);
     const copyCompletedTask = {
+      ...taskToComplete,
       id: this.generateId(),
-      text: taskToComplete.text,
       isCompleted: true,
-      description: taskToComplete.description,
       completedAt: Date.now(),
     };
 
@@ -159,10 +182,9 @@ export class TaskList {
     if (indexOfTaskToUncomplete === -1) return;
     this.completedTasks = this.completedTasks.filter((t) => t.id !== taskId);
     const activeTask = {
+      ...taskToUncomplete,
       id: this.generateId(),
-      text: taskToUncomplete.text,
       isCompleted: false,
-      description: taskToUncomplete.description,
       createdAt: Date.now(),
     };
     this.getTasks().push(activeTask);
@@ -288,6 +310,68 @@ export class TaskList {
     return newTask;
   }
 
+  setDueDate(taskId, taskDueDate, hasTime) {
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const taskToSetItsDueDate = allTasks.find((task) => task.id === taskId);
+    if (!taskToSetItsDueDate) throw new Error("task object was not found");
+
+    if (!(taskDueDate instanceof Date)) throw new Error("no date object !");
+
+    taskToSetItsDueDate.hasTime = hasTime;
+    this.removeNotifications(taskId);
+    taskToSetItsDueDate.dueDate = taskDueDate.getTime();
+  }
+
+  showNotification(task) {
+    const image = "app-logo.png";
+    const title = "Clever Task Manager";
+    const body = `${task.text} is due now`;
+
+    const notification = new Notification(title, {
+      body: body,
+      tag: `task-${task.id}`,
+      icon: image,
+      requireInteraction: true,
+    });
+
+    notification.onclick = () => {
+      window.focus();
+    };
+  }
+
+  checkDueDates() {
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const now = Date.now();
+
+    for (const task of allTasks) {
+      if (!task.dueDate) continue;
+
+      if (this.notifiedTasks.has(task.id)) continue;
+
+      if (task.dueDate <= now) {
+        this.showNotification(task);
+        this.notifiedTasks.add(task.id);
+        this.emitChange(TaskList.EVENTS.MARK_TASK_AS_DUE, task.id);
+      }
+    }
+  }
+
+  async initializeNotifications() {
+    const permission = await Notification.requestPermission();
+
+    if (permission !== "granted") return;
+
+    setInterval(() => {
+      this.checkDueDates();
+    }, 1000);
+  }
+
+  getTask(taskId) {
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+
+    return allTasks.find((task) => task.id === taskId) || null;
+  }
+
   addTask(text) {
     const newTask = {
       id: this.generateId(),
@@ -295,8 +379,9 @@ export class TaskList {
       createdAt: Date.now(),
       isCompleted: false,
       description: null,
+      dueDate: null,
     };
     this.getTasks().push(newTask);
-    this.emitChange(newTask);
+    this.emitChange(TaskList.EVENTS.RENDER_TASK, newTask);
   }
 }

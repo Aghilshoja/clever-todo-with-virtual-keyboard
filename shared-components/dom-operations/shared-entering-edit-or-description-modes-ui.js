@@ -94,7 +94,7 @@ const hideUnrelatedElements = (toolbar) => {
         (fade.dataset[ATTR_STATES.UNRELATED_ELS] = HIDDEN.UNRELATED_ELS),
     );
   const hideUnrelatedElements = toolbar.querySelectorAll(
-    `[${ATTR.OTHER_ACTIONS}], [${ATTR.TASK_INBOX_CON}], [${ATTR.SUB_TASK_CON}], [${ACTIONS.TASK_DATE}], [${ATTR.TASK_COMMENT_CON}]`,
+    `[${ATTR.OTHER_ACTIONS}], [${ATTR.TASK_INBOX_CON}], [${ATTR.SUB_TASK_CON}], [${ATTR.TASK_DATE_BTN_CON}], [${ATTR.TASK_COMMENT_CON}]`,
   );
 
   if (hideUnrelatedElements)
