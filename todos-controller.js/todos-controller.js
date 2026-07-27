@@ -68,6 +68,7 @@ import { exitEditMode } from "../shared-components/handle-edit-and-description-m
 import { selectDate } from "../shared-components/costume-calendar/handle-date-selection.js";
 import {
   handleExitEditingTaskDateOrDateMode,
+  openTaskCalendar,
   showCostumeCalendar,
 } from "../shared-components/costume-calendar/calendar-controller.js";
 import { saveTaskDueDate } from "../shared-components/save-task-due-date.js";
@@ -76,6 +77,9 @@ import {
   quickDateLabels,
 } from "../shared-components/costume-calendar/quick-date-options.js";
 import { markTaskAsDue } from "../shared-components/costume-calendar/mark-task-due.js";
+import { registerServiceWorker } from "../service-worker/register-service-worker.js";
+
+registerServiceWorker();
 
 export const lists = {
   default: new TaskList("default"),
@@ -111,6 +115,7 @@ export const appStateUi = {
   draftedDate: null,
   hasTime: null,
   timeRemoval: false,
+  activeTaskId: null,
 };
 
 const handleListChange = (eachTask, listChange) => {
@@ -262,6 +267,13 @@ const initTodo = () => {
   noDateBtn.addEventListener("click", quickDateActions.handleNoDate);
 
   removeTimeBtn.addEventListener("click", quickDateLabels.syncQuickDateOptions);
+
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    const taskId = event.data.taskId;
+    if (!taskId) return;
+    appStateUi.activeTaskId = taskId;
+    openTaskCalendar();
+  });
 
   // Navigation Click
   navigation.addEventListener("click", (e) => {

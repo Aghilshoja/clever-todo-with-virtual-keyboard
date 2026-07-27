@@ -94,12 +94,10 @@ export class TaskList {
   duplicateSeveralTasks(taskIds) {
     const copiesOfDuplicatedTasks = [];
 
-    // Determine which list we're working with
     const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
     const firstTask = allTasks.find((t) => taskIds.includes(t.id));
     const isCompletedList = firstTask?.isCompleted === true;
 
-    // Work on the correct list
     const sourceList = isCompletedList
       ? this.getCompletedTasks()
       : this.getTasks();
@@ -121,7 +119,6 @@ export class TaskList {
       }
     });
 
-    // Update the correct list
     if (isCompletedList) {
       this.completedTasks = newList;
     } else {
@@ -322,24 +319,29 @@ export class TaskList {
     taskToSetItsDueDate.dueDate = taskDueDate.getTime();
   }
 
-  showNotification(task) {
+  async showNotification(task) {
     const image = "app-logo.png";
     const title = "Clever Task Manager";
     const body = `${task.text} is due now`;
 
-    const notification = new Notification(title, {
-      body: body,
-      tag: `task-${task.id}`,
-      icon: image,
-      requireInteraction: true,
-    });
+    try {
+      const registration = await navigator.serviceWorker.ready;
 
-    notification.onclick = () => {
-      window.focus();
-    };
+      await registration.showNotification(title, {
+        body,
+        tag: `task-${task.id}`,
+        icon: image,
+        requireInteraction: true,
+        data: {
+          taskId: task.id,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  checkDueDates() {
+  async checkDueDates() {
     const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
     const now = Date.now();
 
@@ -349,7 +351,7 @@ export class TaskList {
       if (this.notifiedTasks.has(task.id)) continue;
 
       if (task.dueDate <= now) {
-        this.showNotification(task);
+        await this.showNotification(task);
         this.notifiedTasks.add(task.id);
         this.emitChange(TaskList.EVENTS.MARK_TASK_AS_DUE, task.id);
       }

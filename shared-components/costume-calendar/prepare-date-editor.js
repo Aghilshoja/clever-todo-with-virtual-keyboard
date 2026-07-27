@@ -28,7 +28,9 @@ const loadExistingDueDate = (task) => {
     ? format24HourTime(date.getHours(), date.getMinutes())
     : "";
 
-  const taskDueDate = `${months[date.getMonth()]} ${date.getDate()} ${date.getFullYear() === 2026 ? "" : date.getFullYear()} ${time}`;
+  const currentYear = new Date().getFullYear();
+
+  const taskDueDate = `${months[date.getMonth()]} ${date.getDate()} ${date.getFullYear() === currentYear ? "" : date.getFullYear()} ${time}`;
 
   virtualKeyboard.caretManeger.text = taskDueDate.trim();
 

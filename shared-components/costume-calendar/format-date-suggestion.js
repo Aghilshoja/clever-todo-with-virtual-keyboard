@@ -61,7 +61,9 @@ const getMonthAndDay = (dateInfo) => {
   const monthIndex = getMonthIndex(dateInfo.month);
   if (monthIndex === -1) return;
 
-  const date = new Date(requiredDates.refYear, monthIndex, day);
+  const currentYear = new Date().getFullYear();
+
+  const date = new Date(currentYear, monthIndex, day);
 
   return applyTime(date, dateInfo);
 };

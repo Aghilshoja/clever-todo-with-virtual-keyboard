@@ -32,6 +32,7 @@ const saveTaskDueDate = () => {
   exitEditingDate();
   exitDateMode();
   virtualKeyboard.updateAutoCaps();
+  appStateUi.activeTaskId = null;
 };
 
 export { saveTaskDueDate };

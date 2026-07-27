@@ -1,3 +1,4 @@
+import { KEYBOARD_STATES } from "../../constants/keyboard-constants.js";
 import {
   ACTIONS,
   ACTIVE,
@@ -124,7 +125,9 @@ const quickDateLabels = {
 
     const caret = ensureCaret(elements.inputElement);
 
-    const navigatedDate = `${months[month]} ${day} ${year == 2026 ? "" : year}`;
+    const currentYear = new Date().getFullYear();
+
+    const navigatedDate = `${months[month]} ${day} ${year == currentYear ? "" : year}`;
 
     if (task.hasTime) {
       const date =
@@ -147,9 +150,13 @@ const quickDateLabels = {
   },
 
   removeTimeFromTextEditor() {
+    const currentYear = new Date().getFullYear();
+
     const formatDueDate = `${months[requiredDates.navMonth]} ${requiredDates.navDate} ${
-      requiredDates.navYear === 2026 ? "" : requiredDates.navYear
+      requiredDates.navYear === currentYear ? "" : requiredDates.navYear
     }`;
+
+    delete elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET];
 
     virtualKeyboard.caretManeger.text = formatDueDate;
     virtualKeyboard.caretManeger.caretPosition = formatDueDate.length;

@@ -14,11 +14,25 @@ import { format24HourTime } from "./prepare-date-editor.js";
 const elements = getCachedElements();
 
 const getTaskItem = () => {
+  const taskId = appStateUi.activeTaskId;
+  if (taskId) {
+    return {
+      taskItem: document.querySelector(
+        `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
+      ),
+      taskId,
+    };
+  }
+
   const toolbar = document.querySelector(
     `[${CHECK_STATES.TASK_TOOLBAR}='${OPEN.TASK_TOOLBAR}']`,
   );
 
+  if (!toolbar) return null;
+
   const taskItem = toolbar.closest(`[${ATTR.TASK_ITEM}]`);
+
+  if (!taskItem) return null;
 
   return {
     taskItem,
@@ -54,7 +68,9 @@ const updateDOM = (taskItem) => {
 
   checkOverdueDate(dueDateEls);
 
-  const taskDueDate = `${daysOfWeek[appStateUi.draftedDate.getDay()]}, ${months[appStateUi.draftedDate.getMonth()]} ${appStateUi.draftedDate.getDate()} ${appStateUi.draftedDate.getFullYear() === 2026 ? "" : appStateUi.draftedDate.getFullYear()} ${appStateUi.hasTime === false ? "" : format24HourTime(appStateUi.draftedDate.getHours(), appStateUi.draftedDate.getMinutes())}`;
+  const currentYear = new Date().getFullYear();
+
+  const taskDueDate = `${daysOfWeek[appStateUi.draftedDate.getDay()]}, ${months[appStateUi.draftedDate.getMonth()]} ${appStateUi.draftedDate.getDate()} ${appStateUi.draftedDate.getFullYear() === currentYear ? "" : appStateUi.draftedDate.getFullYear()} ${appStateUi.hasTime === false ? "" : format24HourTime(appStateUi.draftedDate.getHours(), appStateUi.draftedDate.getMinutes())}`;
   dueDateEls.forEach((dateEl) => {
     dateEl.innerHTML = `<i class="fa fa-calendar" aria-hidden="true"></i>  ${taskDueDate}`;
   });

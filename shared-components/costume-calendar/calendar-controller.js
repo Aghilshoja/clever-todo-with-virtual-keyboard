@@ -14,7 +14,10 @@ import {
 } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  lists,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { updateCalendar } from "./create-calendar.js";
 import { exitDateMode, exitEditingDate } from "./exit-date-picker.js";
@@ -32,18 +35,26 @@ const activateCalendar = () => {
   quickDateLabels.updateLabels();
 };
 
-const showCostumeCalendar = (e) => {
-  if (!e.target.closest(`[${ACTIONS.TASK_DATE}]`)) return;
-  const taskDateBtn = e.target.closest(`[${ACTIONS.TASK_DATE}]`);
+const openTaskCalendar = () => {
   quickDateVisibility.updateQuickDateOptions();
-  appStateUi.activeMode = EDIT_MODES.DATE_MODE;
+
   const task = getTaskObject();
+  if (!task) return;
+
+  appStateUi.activeMode = EDIT_MODES.DATE_MODE;
   appStateUi.hasTime = task.hasTime;
   appStateUi.draftedDate = new Date(task.dueDate);
+
   updateCalendar(task);
   activateCalendar();
   showDateEditor();
   initializeDateEditor();
+};
+
+const showCostumeCalendar = (e) => {
+  if (!e.target.closest(`[${ACTIONS.TASK_DATE}]`)) return;
+  const taskDateBtn = e.target.closest(`[${ACTIONS.TASK_DATE}]`);
+  openTaskCalendar();
 };
 
 const handleExitEditingTaskDateOrDateMode = (event) => {
@@ -52,4 +63,8 @@ const handleExitEditingTaskDateOrDateMode = (event) => {
   if (appStateUi.activeMode === EDIT_MODES.EDIT_TASK_DATE) exitEditingDate();
 };
 
-export { showCostumeCalendar, handleExitEditingTaskDateOrDateMode };
+export {
+  showCostumeCalendar,
+  handleExitEditingTaskDateOrDateMode,
+  openTaskCalendar,
+};

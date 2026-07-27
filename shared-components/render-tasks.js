@@ -74,9 +74,11 @@ const formatTaskDueDate = (task) => {
     ? `${format24HourTime(dueDate.getHours(), dueDate.getMinutes())}`
     : "";
 
+  const currentYear = new Date().getFullYear();
+
   return `<i class="fa fa-calendar" aria-hidden="true"></i> ${daysOfWeek[dueDate.getDay()]}, ${
     months[dueDate.getMonth()]
-  } ${dueDate.getDate()} ${dueDate.getFullYear() === 2026 ? "" : dueDate.getFullYear()} ${time}`;
+  } ${dueDate.getDate()} ${dueDate.getFullYear() === currentYear ? "" : dueDate.getFullYear()} ${time}`;
 };
 
 const getDueDateStateAttribute = (task) => {
