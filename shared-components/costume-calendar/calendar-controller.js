@@ -43,7 +43,7 @@ const openTaskCalendar = () => {
 
   appStateUi.activeMode = EDIT_MODES.DATE_MODE;
   appStateUi.hasTime = task.hasTime;
-  appStateUi.draftedDate = new Date(task.dueDate);
+  if (task.dueDate !== null) appStateUi.draftedDate = new Date(task.dueDate);
 
   updateCalendar(task);
   activateCalendar();

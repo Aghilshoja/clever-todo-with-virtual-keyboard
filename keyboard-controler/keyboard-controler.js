@@ -149,6 +149,9 @@ const initApp = () => {
       virtualKeyboard.currentCapsLock();
     }
 
+    if (e.target.closest(`[${KEYBOARD_ACTIONS.NEXT}]`))
+      virtualKeyboard.triggerNextHandler();
+
     const newLineKey = e.target.closest(`[${KEYBOARD_ACTIONS.ADD_NEW_LINE}]`);
     const regularKey = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
 

@@ -5,7 +5,10 @@ import {
   HIDDEN,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
+import {
+  keyboardUiState,
+  virtualKeyboard,
+} from "../../keyboard-controler/keyboard-controler.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
@@ -19,6 +22,12 @@ const showDateKeyboard = () => {
     appStateUi.activeMode !== EDIT_MODES.EDIT_TASK_DATE
   )
     return;
+
+  if (keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TIME) {
+    //toggle number keyboard
+    toggleKeyboard();
+    return;
+  }
 
   const unrelatedElements = elements.unrelatedKeyboardOptions;
   const quickOptionsContainer = elements.quickOptionsContainer;

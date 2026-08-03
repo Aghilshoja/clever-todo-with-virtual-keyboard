@@ -15,6 +15,8 @@ import {
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
 import { showDateSuggestion } from "../shared-components/costume-calendar/show-date-suggestion.js";
+import { updateTextEditor } from "./keyboard-caret-positioning.js";
+import { limitTimeInput } from "../shared-components/costume-clock/validate-time-input.js";
 
 export const pressBackspace = (e) => {
   if (e.target.closest(`[${KEYBOARD_ACTIONS.BACKSPACE}]`)) {
@@ -88,6 +90,17 @@ const addCaretToInput = (input) => {
 
 export const ensurePlaceholder = (input) => {
   const isInputEmpty = input.textContent === "";
+
+  if (
+    keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TIME &&
+    isInputEmpty
+  ) {
+    virtualKeyboard.caretManeger.text = "";
+    virtualKeyboard.caretManeger.caretPosition = "".length;
+    const caret = ensureCaret(input);
+    updateTextEditor(input, caret);
+  }
+
   if (
     keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TASK_DATE &&
     isInputEmpty
@@ -178,7 +191,6 @@ export const typeIntoInput = (char) => {
   if (!elements) throw new Error("required DOM was not found");
   const input = elements.inputElement;
   if (!input) return;
-
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
 
   clearPlaceholder(input);
@@ -187,6 +199,9 @@ export const typeIntoInput = (char) => {
 
   insertText(input, char, caret);
 
+  if (keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TIME) {
+    limitTimeInput();
+  }
   showDateSuggestion();
   disableSubmitIfInputEmpty();
   disableOrEnableSaveBtn();

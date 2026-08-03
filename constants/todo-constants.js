@@ -67,6 +67,16 @@ export const ATTR = {
   NEXT_WEEK_TIME_LABEL: "data-next-week-time-label",
   TOMORROW_TIME_LABEL: "data-tomorrow-time-label",
   TODAY_TIME_LABEL: "data-today-time-label",
+  TIME_CONTAINER: "data-time-container",
+  TIME_HOURS: "data-time-hours",
+  TIME_MINUTES: "data-time-minutes",
+  TIME_PERIOD: "data-time-period",
+  CLOCK_FACE: "data-clock-face",
+  CLOCK_HAND: "data-clock-hand",
+  TIME_AM: "data-time-am",
+  TIME_PM: "data-time-pm",
+  TASK_DATE_EDITOR: "data-task-date-editor",
+  CLOCK_BACKDROP: "data-clock-backdrop",
 };
 
 // elements that perform actions
@@ -125,6 +135,10 @@ export const ACTIONS = {
   NO_DATE_BTN: "data-action='remove-task-date'",
   REMOVE_TASK_TIME: 'data-action="remove-task-time"',
   SELECT_WEEK_DAY: "data-action='select-week-day'",
+  CANCEL_TIME_SELECTION: 'data-action="cancel-time-selection"',
+  SWITCH_TO_MANUAL_TYPE: 'data-action="switch-to-manual-time"',
+  CLOCK_BTN: 'data-action="switch-to-clock"',
+  SAVE_TASK_TIME: 'data-action="save-task-time"',
 };
 
 // check states using selectors
@@ -145,6 +159,10 @@ export const CHECK_STATES = {
   SELECTED_WEEK_DAY: "data-selected-week-day",
   TOGGLE_TIME_VISIBILITY: "data-remove-time-state",
   TASK_OVERdUE: "data-due-state",
+  CLOCK_HOURS: "data-hours-state",
+  CLOCK_MINUTES: "data-minutes-state",
+  TIME_HOUR: "data-time-hour",
+  TIME_MINUTE: "data-time-minute",
 };
 
 // get or set state attributes in JS
@@ -196,6 +214,23 @@ export const ATTR_STATES = {
   REMOVE_TASK_TIME: "removeTimeState",
   SELECTED_WEEK_DAY: "selectedWeekDay",
   REMOVE_TIME_LABEL: "removeTimeState",
+  TIME_CONTAINER: "timeState",
+  TIME_HOURS: "timeHoursState",
+  TIME_MINUTES: "timeMinutesState",
+  CLOCK_MINUTES: "minutesState",
+  CLOCK_HOURS: "hoursState",
+  SELECTED_MINUTE: "selectedMinute",
+  SELECTED_HOUR: "selectedHour",
+  TIME_HOUR: "timeHour",
+  TIME_MINUTE: "timeMinute",
+  TIME_PERIOD: "data-time-state",
+  SELECTED_TIME_PERIOD: "selectedTimePeriod",
+  CLOCK_FACE: "clockFaceState",
+  KEYBOARD_BTN: "keyboardBtnState",
+  CLOCK_BTN: "clockBtnState",
+  MINUTE_VISIBILITY: "minuteVisibility",
+  HOUR_VISIBILITY: "hourVisibility",
+  CLOCK_BACKDROP: "backdrop",
 };
 
 export const VISIBLE = {
@@ -205,6 +240,11 @@ export const VISIBLE = {
   SELECTION_ELLIPSIS: "visible",
   QUICK_OPTIONS_CONTAINER: "visible",
   DATA_SUGGESTION: "visible",
+  CLOCK_MINUTES: "visible",
+  CLOCK_HOURS: "visible",
+  CLOCK_FACE: "visible",
+  KEYBOARD_BTN: "visible",
+  CLOCK_BTN: "visible",
 };
 
 export const HIDDEN = {
@@ -219,6 +259,11 @@ export const HIDDEN = {
   TASK_DESCRIPTION: "hidden",
   SELECTION_ELLIPSIS: "hidden",
   DATA_SUGGESTION: "hidden",
+  CLOCK_MINUTES: "hidden",
+  CLOCK_HOURS: "hidden",
+  CLOCK_FACE: "hidden",
+  KEYBOARD_BTN: "hidden",
+  CLOCK_BTN: "hidden",
 };
 
 export const OPEN = {
@@ -254,6 +299,9 @@ export const ACTIVE = {
   NEXT_WEEK_CONTAINER: "active",
   REMOVE_TASK_TIME: "active",
   REMOVE_TIME_LABEL: "active",
+  TIME_CONTAINER: "active",
+  TIME_HOURS: "active",
+  TIME_MINUTES: "active",
 };
 
 export const INACTIVE = {
@@ -270,6 +318,9 @@ export const INACTIVE = {
   NEXT_WEEK_CONTAINER: "inactive",
   REMOVE_TASK_TIME: "inactive",
   REMOVE_TIME_LABEL: "inactive",
+  TIME_CONTAINER: "inactive",
+  TIME_HOURS: "inactive",
+  TIME_MINUTES: "inactive",
 };
 
 export const EDIT_MODES = {
@@ -314,4 +365,10 @@ export const ADD_TASK_MODE = {
 export const DUE_DATE_STATES = {
   OVERDUE: "overdue",
   UPCOMING: "upcoming",
+};
+
+export const TIME_PERIODS = {
+  PM: "pm",
+  AM: "am",
+  NOT_SELECTED: "none",
 };

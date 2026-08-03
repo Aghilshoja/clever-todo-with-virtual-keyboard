@@ -541,7 +541,7 @@
             X
           </button>
         </div>
-        <div class="task-date__editor pd">
+        <div class="task-date__editor pd" data-task-date-editor>
           <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp;
           <button
             class="task-date__enter-task-date button-reset fs cursor"
@@ -674,6 +674,136 @@
               </button>
             </div>
             <div class="task-date__calendar" data-calendar-container></div>
+          </div>
+          <div data-clock-backdrop>
+            <div
+              class="task-date__time-container"
+              data-time-container
+              data-time-state="inactive"
+            >
+              <span class="task-date__label fs">Select time</span>
+
+              <div class="task-date__selected-time">
+                <div class="task-date__time-display">
+                  <div class="task-date__clock-time">
+                    <button
+                      class="task-date__hours button-reset cursor fs"
+                      aria-label="Set hours"
+                      title="Set hours"
+                      data-time-hours
+                      data-time-hours-state="active"
+                    >
+                      12
+                    </button>
+
+                    <span class="task-date__separator" style="font-size: 3rem"
+                      >:</span
+                    >
+
+                    <button
+                      class="task-date__minutes button-reset cursor fs"
+                      aria-label="Set minutes"
+                      title="Set minutes"
+                      data-time-minutes
+                      data-time-minutes-state="inactive"
+                    >
+                      00
+                    </button>
+                  </div>
+
+                  <div class="task-date__meridiem-options">
+                    <button
+                      class="task-date__meridiem fs button-reset cursor"
+                      aria-label="Choose period"
+                      title="Choose period"
+                      data-time-am
+                      data-time-state="AM"
+                    >
+                      AM
+                    </button>
+                    <button
+                      class="task-date__meridiem fs button-reset cursor"
+                      aria-label="Choose period"
+                      title="Choose period"
+                      data-time-pm
+                    >
+                      PM
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="task-date__clock-face"
+                  data-clock-face
+                  clock-face-state="visible"
+                ></div>
+              </div>
+
+              <div class="task-date__time-mode-toggle" data-time-mode-toggle>
+                <button
+                  class="task-date__switch-to-manual-time button-reset cursor"
+                  aria-label="Switch to manual time entry"
+                  title="Switch to manual time entry"
+                  data-action="switch-to-manual-time"
+                  data-keyboard-btn-state="visible"
+                >
+                  <i class="fas fa-keyboard" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  class="task-date__switch-to-clock button-reset cursor"
+                  aria-label="Switch to analog clock"
+                  title="Switch to analog clock"
+                  data-action="switch-to-clock"
+                  data-clock-btn-state="hidden"
+                >
+                  <i class="fas fa-clock" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div class="task-date__duration-picker">
+                <button
+                  class="task-date__duration button-reset cursor fs"
+                  data-action="open-duration-picker"
+                  aria-label="Set reminder duration"
+                  title="Set reminder duration"
+                >
+                  <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                  Duration
+                </button>
+              </div>
+
+              <div class="task-date__time-actions padding">
+                <button
+                  class="task-date__time-zone button-reset cursor fs"
+                  data-action="add-time-zone"
+                  aria-label="add time zone to your task"
+                  title="add time zone to your task"
+                >
+                  Time zone
+                </button>
+
+                <div class="task-date__grouped-options button-reset cursor fs">
+                  <button
+                    class="task-date__cancel-time button-reset cursor fs"
+                    data-action="cancel-time-selection"
+                    aria-label="cancel time selection"
+                    title="cancel time selection"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    class="task-date__save-time button-reset cursor fs"
+                    data-action="save-task-time"
+                    aria-label="save your task time"
+                    title="save your task time"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="task-date__time-picker padding">
             <i class="fas fa-clock" aria-hidden="true"></i>

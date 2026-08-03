@@ -15,6 +15,7 @@ import {
   enableSaveDateBtn,
   showDateSuggestion,
 } from "./show-date-suggestion.js";
+import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 
 const elements = getCachedElements();
 
@@ -31,25 +32,22 @@ const showSelectedDate = (dayElement) => {
 
   delete elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET];
 
-  const perserveTimeAtSelection = quickDateLabels.perserveTime(
-    year,
-    month,
-    day,
-  );
-  if (perserveTimeAtSelection) return;
-
   const caret = ensureCaret(elements.inputElement);
 
   let date = null;
 
+  const time = appStateUi.hasTime
+    ? `${appStateUi.draftedDate.getHours().toString().padStart(2, "0")}:${appStateUi.draftedDate.getMinutes().toString().padStart(2, "0")}`
+    : "";
+
   if (Number(year) === requiredDates.refYear) {
-    date = `${months[month]}  ${day}`;
-    virtualKeyboard.caretManeger.text = date;
+    date = `${months[month]} ${day} ${time}`;
+    virtualKeyboard.caretManeger.text = date.trim();
     virtualKeyboard.caretManeger.caretPosition = date.length;
     updateTextEditor(elements.inputElement, caret);
   } else {
-    date = `${months[month]} ${day} ${year}`;
-    virtualKeyboard.caretManeger.text = date;
+    date = `${months[month]} ${day} ${year} ${time}`;
+    virtualKeyboard.caretManeger.text = date.trim();
     virtualKeyboard.caretManeger.caretPosition = date.length;
     updateTextEditor(elements.inputElement, caret);
   }

@@ -1,4 +1,5 @@
 import {
+  KEYBOARD_STATES,
   LOCAL_STORAGE_KEY,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
@@ -40,6 +41,7 @@ const resetModesAndEnsurePlaceholder = () => {
       virtualKeyboard.caretManeger.caretPosition = savedData.caretPosition;
       const caret = ensureCaret(elements.inputElement);
       updateTextEditor(elements.inputElement, caret);
+      delete elements.inputElement.dataset[KEYBOARD_STATES.INPUT_CARET];
     } else {
       virtualKeyboard.resetCaretState();
       elements.inputElement.textContent = "";

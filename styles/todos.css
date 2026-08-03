@@ -116,7 +116,10 @@ ul {
 .task__delete button,
 .task__date span,
 .task__toolbar-subtask button,
-.task__date button {
+.task__date button,
+.task-date__repeat-due-date button,
+.task-date__time-mode-toggle [data-keyboard-btn-state="visible"],
+.task-date__time-mode-toggle [data-clock-btn-state="visible"] {
   display: block;
   width: 100%;
   height: 100%;
@@ -130,11 +133,13 @@ ul {
 .task-date__next-week-container button,
 .task-date__tomorrow-container button,
 .task-date__today-container button,
-.task_date__no-date-container button {
+.task_date__no-date-container button,
+.task-date__duration-picker button {
   display: block;
   width: 100%;
   height: 100%;
   text-align: left;
+  padding: 0.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -413,8 +418,9 @@ details[open] summary::after {
 
 .task-date__time-actions {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 0.2rem 0 0.6rem;
+  background-color: white;
 }
 
 .task-date__date-info {
@@ -445,6 +451,237 @@ details[open] summary::after {
 
 .task-date__save {
   margin-top: auto;
+}
+
+/* ===================================
+   timeComponents
+=================================== */
+
+[data-backdrop] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100%;
+  backdrop-filter: blur(1px);
+}
+
+[data-time-state="inactive"] {
+  display: none;
+}
+
+[data-time-state="active"] {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: whitesmoke;
+  border-radius: 20px;
+  z-index: 1;
+
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+
+  width: min(95vw, 300px);
+}
+
+.task-date__time-display {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.task-date__meridiem-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.number-input {
+  display: inline;
+}
+
+.task-date__hours,
+.task-date__minutes,
+.number-input {
+  font-size: 3rem;
+  font-weight: 300;
+  background: none;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 6px;
+  padding: 0.4rem 0.4rem;
+}
+
+.task-date__meridiem {
+  font-size: 1.2rem;
+  font-weight: 300;
+  background: none;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  padding: 0.4rem 0.4rem;
+}
+
+.task-date__grouped-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.task-date__cancel-time,
+.task-date__save-time,
+.task-date__time-zone {
+  color: red;
+}
+
+.task-date__clock-face {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: relative;
+  touch-action: none;
+  background-color: white;
+}
+
+.at-center {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.numbers {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.hour-number {
+  font-weight: bold;
+  color: #333;
+}
+
+.clock-hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 3px;
+  height: 60px;
+  background-color: #333;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(0deg);
+  border-radius: 3px;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.1s ease;
+}
+
+.clock-hand::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid #333;
+}
+
+.task-date__selected-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.task-date__duration-picker {
+  background-color: white;
+}
+
+.task-date__time-mode-toggle {
+  background-color: white;
+}
+
+[data-time-minutes-state="active"],
+[data-time-hours-state="active"],
+[data-selected-time-period="pm"],
+[data-selected-time-period="am"],
+.number-input {
+  background-color: rgba(255, 0, 0, 0.105);
+}
+
+[data-minutes-state="hidden"] {
+  display: none;
+}
+
+[data-clock-btn-state="hidden"] {
+  display: none;
+}
+
+[data-hours-state="hidden"] {
+  display: none;
+}
+
+[data-selected-hour] {
+  color: red;
+}
+
+[data-selected-minute] {
+  display: flex;
+  color: red;
+}
+
+.task-date__duration-picker button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+[data-clock-face-state="hidden"] {
+  display: none;
+}
+
+[data-keyboard-btn-state="hidden"] {
+  display: none;
+}
+
+.task-date__time-mode-toggle [data-clock-btn-state="visible"] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+[data-minute-visibility],
+[data-hour-visibility] {
+  display: none;
 }
 
 /* ========= State Selectors ========= */

@@ -78,6 +78,19 @@ import {
 } from "../shared-components/costume-calendar/quick-date-options.js";
 import { markTaskAsDue } from "../shared-components/costume-calendar/mark-task-due.js";
 import { registerServiceWorker } from "../service-worker/register-service-worker.js";
+import {
+  buildClockUI,
+  cancelTimeSelection,
+  decideTimePeriod,
+  restoreClockView,
+  saveTime,
+  selectTimeByManulType,
+  updateClockDisplay,
+} from "../shared-components/costume-clock/clock-controller.js";
+import {
+  renderHours,
+  renderMinutes,
+} from "../shared-components/costume-clock/clock-view-mode.js";
 
 registerServiceWorker();
 
@@ -116,6 +129,8 @@ export const appStateUi = {
   hasTime: null,
   timeRemoval: false,
   activeTaskId: null,
+  currentMinute: 0,
+  currentHour: 12,
 };
 
 const handleListChange = (eachTask, listChange) => {
@@ -178,6 +193,14 @@ const initTodo = () => {
     nextWeekBtn,
     noDateBtn,
     removeTimeBtn,
+    addTimeBtn,
+    timeHoursEl,
+    timeMinutesEl,
+    cancelTime,
+    clockFace,
+    keyboardBtn,
+    clockBtn,
+    saveTimeBtn,
   } = elements;
 
   if (
@@ -200,10 +223,18 @@ const initTodo = () => {
     !tomorrowBtn ||
     !nextWeekBtn ||
     !noDateBtn ||
-    !noDateBtn
+    !noDateBtn ||
+    !addTimeBtn ||
+    !timeMinutesEl ||
+    !timeHoursEl ||
+    !cancelTime ||
+    !clockFace ||
+    !keyboardBtn ||
+    !clockBtn ||
+    !saveTimeBtn
   )
     return;
-  // Highlight default on load
+
   highlighActiveList();
 
   const listContainer = document.querySelector(`
@@ -268,12 +299,26 @@ const initTodo = () => {
 
   removeTimeBtn.addEventListener("click", quickDateLabels.syncQuickDateOptions);
 
-  navigator.serviceWorker.addEventListener("message", (event) => {
-    const taskId = event.data.taskId;
-    if (!taskId) return;
-    appStateUi.activeTaskId = taskId;
-    openTaskCalendar();
-  });
+  addTimeBtn.addEventListener("click", buildClockUI);
+  timeHoursEl.addEventListener("click", renderHours);
+  timeMinutesEl.addEventListener("click", renderMinutes);
+  cancelTime.addEventListener("click", cancelTimeSelection);
+  clockFace.addEventListener("pointerdown", updateClockDisplay);
+  clockFace.addEventListener("pointermove", updateClockDisplay);
+  clockFace.addEventListener("pointerup", updateClockDisplay);
+  document.addEventListener("click", decideTimePeriod);
+  keyboardBtn.addEventListener("click", selectTimeByManulType);
+  clockBtn.addEventListener("click", restoreClockView);
+  saveTimeBtn.addEventListener("click", saveTime);
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      const taskId = event.data.taskId;
+      if (!taskId) return;
+      appStateUi.activeTaskId = taskId;
+      openTaskCalendar();
+    });
+  }
 
   // Navigation Click
   navigation.addEventListener("click", (e) => {

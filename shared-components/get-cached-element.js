@@ -112,6 +112,19 @@ export const getCachedElements = () => {
     toggleTimeVisibility: document.querySelectorAll(
       `[${CHECK_STATES.TOGGLE_TIME_VISIBILITY}]`,
     ),
+    timeContainer: document.querySelector(`[${ATTR.TIME_CONTAINER}]`),
+    timeHoursEl: document.querySelector(`[${ATTR.TIME_HOURS}]`),
+    timeMinutesEl: document.querySelector(`[${ATTR.TIME_MINUTES}]`),
+    timePeriodEl: document.querySelector(`[${ATTR.TIME_PERIOD}]`),
+    clockFace: document.querySelector(`[${ATTR.CLOCK_FACE}]`),
+    cancelTime: document.querySelector(`[${ACTIONS.CANCEL_TIME_SELECTION}]`),
+    timePMEl: document.querySelector(`[${ATTR.TIME_PM}]`),
+    timeAMEl: document.querySelector(`[${ATTR.TIME_AM}]`),
+    keyboardBtn: document.querySelector(`[${ACTIONS.SWITCH_TO_MANUAL_TYPE}]`),
+    clockBtn: document.querySelector(`[${ACTIONS.CLOCK_BTN}]`),
+    taskDateEditor: document.querySelector(`[${ATTR.TASK_DATE_EDITOR}]`),
+    saveTimeBtn: document.querySelector(`[${ACTIONS.SAVE_TASK_TIME}]`),
+    clockBackdrop: document.querySelector(`[${ATTR.CLOCK_BACKDROP}]`),
     /* end of the elements that are related to the todo app */
   };
   return elements;

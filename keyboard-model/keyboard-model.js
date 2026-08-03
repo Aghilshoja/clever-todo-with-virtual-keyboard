@@ -20,6 +20,7 @@ export class KeyboardApp {
     this.capsLock = KeyboardApp.CAPS_LOCK.LOWERCASE;
     this.capsLockOnKeyboardLoad = true;
     this.localStorageDraftKey = "text-editor-states";
+    this.onNext = null;
     this.caretManeger = {
       caretPosition: 0,
       text: "",
@@ -152,6 +153,18 @@ export class KeyboardApp {
   resetCaretState() {
     this.caretManeger.text = "";
     this.caretManeger.caretPosition = 0;
+  }
+
+  clearNextHandler() {
+    this.onNext = null;
+  }
+
+  setNextHandler(next) {
+    this.onNext = next;
+  }
+
+  triggerNextHandler() {
+    this.onNext?.();
   }
 
   toggleLanguageLayout(langs) {

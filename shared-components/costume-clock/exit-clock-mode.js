@@ -1,0 +1,63 @@
+import {
+  ACTIVE,
+  ATTR_STATES,
+  INACTIVE,
+} from "../../constants/todo-constants.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
+import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
+import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
+import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
+import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import { getCachedElements } from "../get-cached-element.js";
+import { showClock } from "./select-time-manually.js";
+import {
+  applySelectedTime,
+  putInputElementWhereThatWas,
+} from "./update-time.js";
+
+const elements = getCachedElements();
+
+const restoreDateEditorAfterCancel = () => {
+  if (appStateUi.hasTime) applySelectedTime();
+  else {
+    elements.inputElement.textContent = "";
+    ensurePlaceholder(elements.inputElement);
+  }
+};
+
+const resetClockStates = () => {
+  if (elements.timeHoursEl.hasAttribute("data-hour-visibility")) {
+    elements.timeHoursEl.removeAttribute("data-hour-visibility");
+  } else if (elements.timeMinutesEl.hasAttribute("data-minute-visibility")) {
+    elements.timeMinutesEl.removeAttribute("data-minute-visibility");
+  }
+};
+
+const exitClockUi = () => {
+  if (!elements.timeContainer || !elements.timeMinutesEl) return;
+  elements.timeContainer.dataset[ATTR_STATES.TIME_CONTAINER] =
+    INACTIVE.TIME_CONTAINER;
+
+  const isMinuteSelected =
+    elements.timeMinutesEl.dataset[ATTR_STATES.TIME_MINUTES] ===
+    ACTIVE.TIME_MINUTES;
+
+  if (isMinuteSelected) {
+    elements.timeMinutesEl.dataset[ATTR_STATES.TIME_MINUTES] =
+      INACTIVE.TIME_MINUTES;
+  }
+
+  resetClockStates();
+
+  virtualKeyboard.setLang("en");
+
+  if (elements.timeContainer) elements.timeContainer.style.top = "50%";
+
+  delete elements.clockBackdrop.dataset[ATTR_STATES.CLOCK_BACKDROP];
+
+  showClock();
+  putInputElementWhereThatWas();
+  virtualKeyboard.clearNextHandler();
+};
+
+export { exitClockUi, restoreDateEditorAfterCancel };

@@ -29,6 +29,7 @@ export const KEYBOARD_ACTIONS = {
   SECOND_SYMBOLS_PAGE: "data-action='switch-second-page-symbols'",
   FIRST_SYMBOLS_PAGE: "data-action='switch-first-page-symbols'",
   ADD_NEW_LINE: "data-action='add-new-line'",
+  NEXT: 'data-action="focus-next-input"',
 };
 
 export const KB_CHECK_STATES = {
@@ -51,6 +52,7 @@ export const PLACEHOLDERS = {
   ENTER_TASK: "Enter a task",
   DESCRIPTION: "Description",
   EDIT_TASK_DATE: "etc... Aug 29",
+  EDIT_TIME: "time",
 };
 
 export const KEYBOARD_OPEN = {

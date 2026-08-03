@@ -30,13 +30,13 @@ const quickDateLabels = {
     if (!elements.todayLabel) return;
 
     const today = daysOfWeek[requiredDates.refNow.getDay()];
-    const task = getTaskObject();
-    const date = new Date(task.dueDate);
+
+    const dueDate = appStateUi.draftedDate;
 
     if (appStateUi.hasTime) {
       elements.todayTimeLabel.textContent = `${formatTimeDisplay(
-        date.getHours(),
-        date.getMinutes(),
+        dueDate.getHours(),
+        dueDate.getMinutes(),
       )}`;
       quickDateLabels.toggleTimeLabelVisibility(ACTIVE.REMOVE_TASK_TIME);
     } else {
@@ -51,13 +51,12 @@ const quickDateLabels = {
     const tomorrowIndex = (requiredDates.refNow.getDay() + 1) % 7;
     const tomorrow = daysOfWeek[tomorrowIndex];
 
-    const task = getTaskObject();
-    const date = new Date(task.dueDate);
+    const dueDate = appStateUi.draftedDate;
 
-    if (task.hasTime) {
+    if (appStateUi.hasTime) {
       elements.tomorrowTimeLabel.textContent = `${formatTimeDisplay(
-        date.getHours(),
-        date.getMinutes(),
+        dueDate.getHours(),
+        dueDate.getMinutes(),
       )}`;
       quickDateLabels.toggleTimeLabelVisibility(ACTIVE.REMOVE_TASK_TIME);
     } else {
@@ -79,9 +78,7 @@ const quickDateLabels = {
     }
 
     today.setDate(today.getDate() + daysUntilMonday);
-
-    const task = getTaskObject();
-    const dueDate = new Date(task.dueDate);
+    const dueDate = appStateUi.draftedDate;
 
     if (appStateUi.hasTime) {
       elements.nextWeekTimeLabel.textContent =
@@ -97,8 +94,7 @@ const quickDateLabels = {
   setAddTimeBtnLabel() {
     if (!elements.addTimeBtn) return;
 
-    const task = getTaskObject();
-    const dueDate = new Date(task.dueDate);
+    const dueDate = appStateUi.draftedDate;
 
     if (appStateUi.hasTime) {
       elements.addTimeBtn.innerHTML = `${format24HourTime(
@@ -114,39 +110,6 @@ const quickDateLabels = {
       elements.removeTimeBtn.dataset[ATTR_STATES.REMOVE_TASK_TIME] =
         INACTIVE.REMOVE_TASK_TIME;
     }
-  },
-
-  perserveTime(year, month, day) {
-    const task = getTaskObject();
-
-    if (!task) return false;
-
-    const preservedTime = new Date(task.dueDate);
-
-    const caret = ensureCaret(elements.inputElement);
-
-    const currentYear = new Date().getFullYear();
-
-    const navigatedDate = `${months[month]} ${day} ${year == currentYear ? "" : year}`;
-
-    if (task.hasTime) {
-      const date =
-        appStateUi.hasTime === false
-          ? navigatedDate
-          : `${navigatedDate} ${format24HourTime(
-              preservedTime.getHours(),
-              preservedTime.getMinutes(),
-            )}`;
-
-      virtualKeyboard.caretManeger.text = date;
-      virtualKeyboard.caretManeger.caretPosition = date.length;
-
-      updateTextEditor(elements.inputElement, caret);
-
-      return true;
-    }
-
-    return false;
   },
 
   removeTimeFromTextEditor() {
@@ -172,10 +135,10 @@ const quickDateLabels = {
     if (!task) return;
 
     const taskDueDate = new Date(task.dueDate);
-    appStateUi.hasTime = false;
     appStateUi.draftedDate = taskDueDate;
 
-    if (task.dueDate) {
+    if (appStateUi.hasTime) {
+      appStateUi.hasTime = false;
       quickDateLabels.setTodayLabel();
       quickDateLabels.setTomorrowLabel();
       quickDateLabels.setNextWeekLabel();

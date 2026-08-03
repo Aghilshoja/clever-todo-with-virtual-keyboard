@@ -177,6 +177,29 @@ export class KeyboardStructure {
           },
         },
       },
+      keyboardNumber: {
+        rows: [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+          ["N", 0, "backspace"],
+        ],
+        specialKeys: {
+          backspace: {
+            class: "keyboard__backspace",
+            label: "backspace key",
+            icon: "fa-solid fa-delete-left",
+            dataAction: "backspace",
+          },
+          // Next
+          N: {
+            class: "keybaord__next-input",
+            dataAction: "next-input",
+            label: "Focus next input",
+            dataAction: "focus-next-input",
+          },
+        },
+      },
     };
   }
 }
