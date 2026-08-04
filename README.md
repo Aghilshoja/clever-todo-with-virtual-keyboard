@@ -6,6 +6,48 @@ Clever Task Manager is a Vanilla JavaScript project that began as an experiment 
 ## Live Demo
 👉 [Live Demo](https://aghilshoja.github.io/clever-todo-with-virtual-keyboard/)
 
+## Screenshots
+
+### Task List
+Shows active tasks with optional descriptions and due dates.
+
+![Task List](screenshots/tasks..png)
+
+### Completed Tasks
+Active and completed tasks displayed together.
+
+![Completed Tasks](screenshots/all-tasks.png)
+
+### Virtual Keyboard
+Custom keyboard used to enter tasks.
+
+![Virtual Keyboard](screenshots/keyboard.png)
+
+### Task Actions
+Bulk actions such as duplicate, complete, and delete.
+
+![Task Actions](screenshots/bulk-actions.png)
+
+### Add Menu
+Quick actions to add tasks above, below, or as subtasks.
+
+![Add Menu](screenshots/add-menu.png)
+
+### Calendar
+Interactive calendar for selecting due dates.
+
+![Calendar](screenshots/calendar..png)
+
+### Analog Clock
+Clock interface for selecting a due time.
+
+![Analog Clock](screenshots/analog-clock.png)
+
+### Manual Time Entry
+Numeric keypad for entering time directly.
+
+![Manual Time Entry](screenshots/editing-time.png)
+
 ## Project Goal
 
 The goal of this project is to explore how my ideas can be implemented in a real-world application while strengthening my understanding of Vanilla JavaScript
