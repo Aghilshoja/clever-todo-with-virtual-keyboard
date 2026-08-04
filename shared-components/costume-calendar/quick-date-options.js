@@ -134,7 +134,8 @@ const quickDateLabels = {
 
     if (!task) return;
 
-    const taskDueDate = new Date(task.dueDate);
+    const taskDueDate =
+      task.dueDate === null ? new Date() : new Date(task.dueDate);
     appStateUi.draftedDate = taskDueDate;
 
     if (appStateUi.hasTime) {

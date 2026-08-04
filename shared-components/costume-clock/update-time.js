@@ -29,8 +29,8 @@ import { exitClockUi } from "./exit-clock-mode.js";
 
 const elements = getCachedElements();
 
-const formatTime = (hour, dueDate) => {
-  const time = `${hour.toString().padStart(2, "0")}:${appStateUi.currentMinute.toString().padStart(2, "0")}`;
+const formatTime = (hour, minute, dueDate) => {
+  const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
 
   const year = new Date().getFullYear();
 
@@ -51,11 +51,28 @@ const getTimePeriod = () => {
   return appStateUi.currentHour;
 };
 
-// end of format time and get time period
-
 const putInputElementWhereThatWas = () => {
   elements.taskDateEditor.appendChild(elements.inputElement);
   elements.inputElement.classList.remove("number-input");
+};
+
+const buildTextEditor = (formattedTime) => {
+  virtualKeyboard.caretManeger.text = formattedTime;
+
+  virtualKeyboard.caretManeger.caretPosition = formattedTime.length;
+
+  const caret = ensureCaret(elements.inputElement);
+
+  updateTextEditor(elements.inputElement, caret);
+};
+
+const renderTimeToEditor = (date, minute, hour) => {
+  date.setHours(hour);
+  date.setMinutes(minute);
+
+  const formattedTime = formatTime(hour, minute, date);
+
+  buildTextEditor(formattedTime);
 };
 
 const applySelectedTime = () => {
@@ -66,18 +83,7 @@ const applySelectedTime = () => {
 
   const hour = getTimePeriod();
 
-  date.setHours(hour);
-  date.setMinutes(appStateUi.currentMinute);
-
-  const formattedTime = formatTime(hour, date);
-
-  virtualKeyboard.caretManeger.text = formattedTime;
-
-  virtualKeyboard.caretManeger.caretPosition = formattedTime.length;
-
-  const caret = ensureCaret(elements.inputElement);
-
-  updateTextEditor(elements.inputElement, caret);
+  renderTimeToEditor(date, appStateUi.currentMinute, hour);
 };
 
 const showExistingDatePlusTime = () => {
@@ -129,10 +135,16 @@ const commitSelectedTime = () => {
   quickDateLabels.updateLabels();
 };
 
+const storeOriginalTime = () => {
+  appStateUi.originalHour = appStateUi.currentHour;
+  appStateUi.originalMinute = appStateUi.currentMinute;
+};
+
 const updateManualTime = () => {
   calculateTime();
   exitClockUi();
   commitSelectedTime();
+  storeOriginalTime();
 };
 
 const updateTimeByClock = () => {
@@ -141,6 +153,7 @@ const updateTimeByClock = () => {
   else assignTodayWithSelectedTime();
   exitClockUi();
   commitSelectedTime();
+  storeOriginalTime();
 };
 
 export {
@@ -148,5 +161,5 @@ export {
   updateTimeByClock,
   exitClockUi,
   putInputElementWhereThatWas,
-  applySelectedTime,
+  renderTimeToEditor,
 };

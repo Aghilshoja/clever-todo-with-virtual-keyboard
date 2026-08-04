@@ -11,14 +11,23 @@ import { appStateUi } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { showClock } from "./select-time-manually.js";
 import {
-  applySelectedTime,
   putInputElementWhereThatWas,
+  renderTimeToEditor,
 } from "./update-time.js";
 
 const elements = getCachedElements();
 
+const restoreOriginalTime = () => {
+  const date =
+    appStateUi.draftedDate === null
+      ? new Date()
+      : new Date(appStateUi.draftedDate);
+
+  renderTimeToEditor(date, appStateUi.originalMinute, appStateUi.originalHour);
+};
+
 const restoreDateEditorAfterCancel = () => {
-  if (appStateUi.hasTime) applySelectedTime();
+  if (appStateUi.hasTime) restoreOriginalTime();
   else {
     elements.inputElement.textContent = "";
     ensurePlaceholder(elements.inputElement);

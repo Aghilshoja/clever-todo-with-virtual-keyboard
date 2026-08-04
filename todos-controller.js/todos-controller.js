@@ -131,6 +131,8 @@ export const appStateUi = {
   activeTaskId: null,
   currentMinute: 0,
   currentHour: 12,
+  originalHour: null,
+  originalMinute: null,
 };
 
 const handleListChange = (eachTask, listChange) => {
