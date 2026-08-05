@@ -334,13 +334,14 @@ const quickDateActions = {
     else quickDateActions.renderNoDateLabel(dueDateEls);
   },
 
-  checkIfUsersPickedTime(taskId, dueDate) {
-    const task = lists.default.getTask(taskId);
-
-    const newTime = new Date(task.dueDate);
-
-    if (task.hasTime) {
-      dueDate.setHours(newTime.getHours(), newTime.getMinutes(), 0, 0);
+  checkIfUsersPickedTime(dueDate) {
+    if (appStateUi.hasTime) {
+      dueDate.setHours(
+        appStateUi.draftedDate.getHours(),
+        appStateUi.draftedDate.getMinutes(),
+        0,
+        0,
+      );
     } else {
       dueDate.setHours(23, 59, 0, 0);
     }
@@ -353,40 +354,28 @@ const quickDateActions = {
     exitEditingDate();
   },
 
-  handleTodaySelection() {
-    const { taskItem, taskId } = getTaskItem();
-    const todayDueDate = quickDateActions.getToday();
-    const setDueDateTime = quickDateActions.checkIfUsersPickedTime(
-      taskId,
-      todayDueDate,
-    );
+  applyQuickDateSelection(dueDate) {
+    const { taskId, taskItem } = getTaskItem();
+    const setDueDateTime = quickDateActions.checkIfUsersPickedTime(dueDate);
+    appStateUi.hasTime = true;
     lists.default.setDueDate(taskId, setDueDateTime, appStateUi.hasTime);
     quickDateActions.updateTaskDate(taskItem, setDueDateTime);
     quickDateActions.closeDateEditor();
+  },
+
+  handleTodaySelection() {
+    const todayDueDate = quickDateActions.getToday();
+    quickDateActions.applyQuickDateSelection(todayDueDate);
   },
 
   handleTomorrowSelection() {
-    const { taskId, taskItem } = getTaskItem();
     const tomorrowDueDate = quickDateActions.getTomorrow();
-    const setDueDateTime = quickDateActions.checkIfUsersPickedTime(
-      taskId,
-      tomorrowDueDate,
-    );
-    lists.default.setDueDate(taskId, setDueDateTime, appStateUi.hasTime);
-    quickDateActions.updateTaskDate(taskItem, setDueDateTime);
-    quickDateActions.closeDateEditor();
+    quickDateActions.applyQuickDateSelection(tomorrowDueDate);
   },
 
   handleNextWeekSelection() {
-    const { taskItem, taskId } = getTaskItem();
     const nextWeekDueDate = quickDateActions.getNextWeek();
-    const setDueDateTime = quickDateActions.checkIfUsersPickedTime(
-      taskId,
-      nextWeekDueDate,
-    );
-    lists.default.setDueDate(taskId, setDueDateTime, appStateUi.hasTime);
-    quickDateActions.updateTaskDate(taskItem, setDueDateTime);
-    quickDateActions.closeDateEditor();
+    quickDateActions.applyQuickDateSelection(nextWeekDueDate);
   },
 
   handleNoDate() {
