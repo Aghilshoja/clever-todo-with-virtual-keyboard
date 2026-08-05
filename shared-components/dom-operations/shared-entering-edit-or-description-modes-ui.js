@@ -1,4 +1,4 @@
-import { lists } from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { appStateUi } from "../../todos-controller.js/todos-controller.js";
@@ -24,8 +24,6 @@ import {
 import { renderKeyPreviewPopup } from "../../keyboard-view/keyboard-feedback-overlay.js";
 import { updateEditorState } from "../save-drafted-text-input-to-local-storage.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
-
-const elements = getCachedElements();
 
 export const getRepetitiveElements = (toolbar) => {
   const taskItem = toolbar.closest(`[${ATTR.TASK_ITEM}]`);
@@ -143,7 +141,6 @@ const activiateToolbar = (toolbar) => {
 const moveInputAndHideTaskText = (toolbar, task) => {
   if (!toolbar) return;
   const input = elements.inputElement;
-  if (!input) return;
 
   const repetitiveElements = getRepetitiveElements(toolbar);
   if (!repetitiveElements.taskTextEl) return;
@@ -161,7 +158,7 @@ const moveInputAndHideTaskText = (toolbar, task) => {
 
 const moveInputAndHideTaskDescription = (toolbar, task) => {
   if (!toolbar) return;
-  if (!elements.inputElement) return;
+
   const repetitiveElements = getRepetitiveElements(toolbar);
   if (!repetitiveElements.description) return;
   const descriptionEl = repetitiveElements.description;

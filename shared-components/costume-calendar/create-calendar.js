@@ -1,4 +1,5 @@
 import { ACTIONS, ATTR_STATES } from "../../constants/todo-constants.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 
 const months = [
@@ -18,8 +19,6 @@ const months = [
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const elements = getCachedElements();
-
 const requiredDates = {
   refMonth: new Date().getMonth(),
   refDay: new Date().getDate(),
@@ -33,7 +32,7 @@ const requiredDates = {
 
 const renderCalendar = (day, requiredDates) => {
   const calendar = elements.calendarContainer;
-  if (!calendar) return;
+
   const calendarWeekDay = document.createElement("button");
 
   const selectedDate = new Date(
@@ -91,7 +90,6 @@ const buildEmptyCells = (calendar) => {
 
 const createCalendar = (requiredDates) => {
   const calendar = elements.calendarContainer;
-  if (!calendar) return;
   calendar.textContent = "";
 
   const fullDaysOfMonth = new Date(
@@ -100,8 +98,7 @@ const createCalendar = (requiredDates) => {
     0,
   ).getDate();
 
-  if (elements.calendarHeader)
-    elements.calendarHeader.textContent = `${months[requiredDates.navMonth]} ${requiredDates.navYear}`;
+  elements.calendarHeader.textContent = `${months[requiredDates.navMonth]} ${requiredDates.navYear}`;
 
   buildWeekDay(calendar);
   buildEmptyCells(calendar);

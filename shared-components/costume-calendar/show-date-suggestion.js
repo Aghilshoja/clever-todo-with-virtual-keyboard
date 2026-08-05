@@ -1,6 +1,9 @@
 import { EDIT_MODES } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { requiredDates } from "./create-calendar.js";
 import { findPatterns } from "./find-matching-pattern.js";
@@ -12,8 +15,6 @@ import {
   renderToday,
   renderTomorrow,
 } from "./format-date-suggestion.js";
-
-const elements = getCachedElements();
 
 const showDateSuggestion = () => {
   if (

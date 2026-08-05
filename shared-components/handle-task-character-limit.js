@@ -5,13 +5,11 @@ import {
 } from "../constants/keyboard-constants.js";
 import { ATTR_STATES } from "../constants/todo-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { getRequiredDom } from "./handle-disabling-or-enabling-saving-task-edits.js";
 
-const elements = getCachedElements();
-
 export const handleTaskCharacterLimit = () => {
-  if (!elements) throw new Error("Required DOM was not found");
   const saveBtn = getRequiredDom();
 
   const MAX_LIMIT = 500;

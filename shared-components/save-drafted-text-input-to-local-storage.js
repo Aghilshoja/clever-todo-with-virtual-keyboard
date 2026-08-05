@@ -12,12 +12,13 @@ import {
   PLACEHOLDERS,
 } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../todos-controller.js/todos-controller.js";
 import { EDIT_MODES } from "../constants/todo-constants.js";
 import { updateTextEditor } from "../keyboard-view/keyboard-caret-positioning.js";
 import { handleTaskCharacterLimit } from "./handle-task-character-limit.js";
-
-const elements = getCachedElements();
 
 export const updateEditorState = (key, value) => {
   const savedData =
@@ -62,7 +63,6 @@ const restoreInputPlaceholder = (input) => {
 
 export const loadDraftedInputText = () => {
   const input = elements.inputElement;
-  if (!input) return;
   const savedData = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY.TEXT_EDITOR),
   );

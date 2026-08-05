@@ -8,7 +8,11 @@ import { handleSeveralTasksCompletion } from "./handle-several-tasks-completion.
 import { handleSeveralTasksUncompletion } from "./handle-several-tasks-uncompletion.js";
 import { activeUlId } from "./render-tasks.js";
 import { ACTIONS, ATTR_STATES } from "../constants/todo-constants.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../todos-controller.js/todos-controller.js";
 import {
   getCompletedListContainer,
   showNumberOfCompletedTasks,
@@ -18,8 +22,6 @@ import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { exitTaskSelection } from "./select-tasks.js";
-
-const elements = getCachedElements();
 
 const getSelectedTask = () => {
   const selectedTask = document.querySelector(
@@ -44,7 +46,6 @@ export const handleSeveralTasksCompletionOrUncompletion = () => {
 
 // shared component for both completed tasks and uncompleted tasks
 export const changeUndoPopupLabel = (currentList, length) => {
-  if (!elements.completionStatusLabel) return;
   const completedList = currentList.hasAttribute(ATTR.COMPLETED_LIST);
 
   if (completedList)

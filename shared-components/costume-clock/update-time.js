@@ -17,7 +17,10 @@ import {
 } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { months } from "../costume-calendar/create-calendar.js";
 import {
   getTaskObject,
@@ -26,8 +29,6 @@ import {
 import { showDateSuggestion } from "../costume-calendar/show-date-suggestion.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { exitClockUi } from "./exit-clock-mode.js";
-
-const elements = getCachedElements();
 
 const formatTime = (hour, minute, dueDate) => {
   const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;

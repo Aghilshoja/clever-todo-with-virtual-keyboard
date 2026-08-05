@@ -1,10 +1,11 @@
 import { getCachedElements } from "./get-cached-element.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../todos-controller.js/todos-controller.js";
 import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
 import { keyboardUiState } from "../keyboard-controler/keyboard-controler.js";
 import { ATTR, CHECK_STATES, EDIT_MODES } from "../constants/todo-constants.js";
-
-const elements = getCachedElements();
 
 const checkIfTaskUnchanged = (input) => {
   const taskUnchanged =

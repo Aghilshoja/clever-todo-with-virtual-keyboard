@@ -40,6 +40,7 @@ import {
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
 import { showDateKeyboard } from "../shared-components/costume-calendar/show-date-keyboard.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 
 export const virtualKeyboard = new KeyboardApp();
 
@@ -63,10 +64,7 @@ export const keyboardUiState = {
   activePlaceholder: PLACEHOLDERS.ENTER_TASK,
 };
 
-const elements = getCachedElements();
-
 virtualKeyboard.subscribe(KeyboardApp.EVENTS.CLEAR_KEYBOARD, () => {
-  if (!elements.keyboardContainer) return;
   const keyboard = (elements.keyboardContainer.textContent = "");
   return keyboard;
 });
@@ -77,8 +75,6 @@ virtualKeyboard.loadNewKeyboardlayout();
 virtualKeyboard.currentCapsLock();
 
 const initApp = () => {
-  if (!elements) throw new Error("required DOM wasn't found");
-
   ensurePlaceholder(elements.inputElement);
   elements.mainPageNewTask.addEventListener("click", toggleKeyboard);
 

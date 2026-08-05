@@ -1,5 +1,8 @@
 import { getCachedElements } from "./get-cached-element.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../todos-controller.js/todos-controller.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
@@ -14,8 +17,6 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   INACTIVE,
 } from "../constants/todo-constants.js";
-
-const elements = getCachedElements();
 
 export const handleEmptyTaskStateUi = () => {
   const listContainer = document.querySelector(`
@@ -42,7 +43,6 @@ export const handleEmptyTaskStateUi = () => {
 };
 
 export const deleteTask = (e) => {
-  if (!elements) throw new Error("Required elemetn was not found");
   const isSingleTaskDeletion =
     appStateUi.deletionMode === DELETION_MODES.SINGLE;
   if (
@@ -67,18 +67,17 @@ export const deleteTask = (e) => {
 const showSingleTaskDeletionWarning = (e) => {
   const taskItem = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   appStateUi.taskId = taskItem.dataset.id;
-  if (elements.warningPopup)
-    elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = ACTIVE.POPUP;
+
+  elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = ACTIVE.POPUP;
   const taskEl = taskItem.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`);
   if (!taskEl) return;
-  if (!elements.warningMessage || !elements.deleteHeading) return;
+
   elements.warningMessage.innerHTML = `This will permanently delete "${taskEl.textContent}" and can't be undone`;
   elements.deleteHeading.textContent = "Delete task?";
   appStateUi.deletionMode = DELETION_MODES.SINGLE;
 };
 
 export const warnDeletion = (e) => {
-  if (!elements) throw new Error("Required elemetn was not found");
   if (e.target.closest(`[${ACTIONS.DELETE}]`)) showSingleTaskDeletionWarning(e);
 };
 

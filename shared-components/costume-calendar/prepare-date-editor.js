@@ -9,13 +9,11 @@ import {
 } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { lists } from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { months } from "./create-calendar.js";
 import { getTaskObject } from "./quick-date-options.js";
 import { formatTimeDisplay } from "./parse-time.js";
-
-const elements = getCachedElements();
 
 const format24HourTime = (hours, minutes) => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
@@ -50,8 +48,6 @@ const initializeDateEditor = () => {
 };
 
 const showDateEditor = () => {
-  if (!elements.inputElement || !elements.editDueDateBtn) return;
-
   elements.editDueDateBtn.dataset[ATTR_STATES.HIDE_DUE_DATE_BTN] = "";
 
   elements.editDueDateBtn.before(elements.inputElement);

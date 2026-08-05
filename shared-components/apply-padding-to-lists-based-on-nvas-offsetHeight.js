@@ -1,11 +1,11 @@
 import { getCachedElements } from "./get-cached-element.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import { ACTIVE, ATTR_STATES } from "../constants/todo-constants.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
+
 export const uupdatePaddingOfListDynamicallyBasedOnBottomNavbar = (
   listContainer,
 ) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("Required DOM was not found");
   const completedListContainer = getCompletedListContainer();
   if (!completedListContainer) return;
   const isCompletedListActive =

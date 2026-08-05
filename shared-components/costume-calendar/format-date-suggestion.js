@@ -1,9 +1,10 @@
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { daysOfWeek, months, requiredDates } from "./create-calendar.js";
 import { formatTimeDisplay, parseTime } from "./parse-time.js";
-
-const elements = getCachedElements();
 
 const getMonthIndex = (month) => {
   return months.findIndex((m) => m.toLowerCase() === month.toLowerCase());
@@ -96,11 +97,9 @@ const renderThisWeekend = (dateInfo) => {
   appStateUi.draftedDate = dueDate;
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
         <i class='far fa-calendar-alt'></i> ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${time}
       `;
-  }
 };
 
 const renderNextWeek = (dateInfo) => {
@@ -110,11 +109,9 @@ const renderNextWeek = (dateInfo) => {
   appStateUi.draftedDate = dueDate;
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
         <i class='far fa-calendar-alt'></i> ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${time}
       `;
-  }
 };
 
 const renderDayAndMonthSuggestion = (dateInfo) => {
@@ -125,12 +122,10 @@ const renderDayAndMonthSuggestion = (dateInfo) => {
 
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
     <i class="far fa-calendar-alt"></i>
     ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${time} 
   `;
-  }
 };
 
 const renderTomorrow = (dateInfo) => {
@@ -141,12 +136,10 @@ const renderTomorrow = (dateInfo) => {
 
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
     <i class="far fa-calendar-alt"></i>
     ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${time} 
   `;
-  }
 };
 
 const renderToday = (dateInfo) => {
@@ -157,12 +150,10 @@ const renderToday = (dateInfo) => {
 
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
     <i class="far fa-calendar-alt"></i>
     ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${time} 
   `;
-  }
 };
 
 const renderFullDateSuggestion = (dateInfo) => {
@@ -173,12 +164,10 @@ const renderFullDateSuggestion = (dateInfo) => {
 
   const time = getTimeText(dateInfo, dueDate);
 
-  if (elements.taskDateSuggestion) {
-    elements.taskDateSuggestion.innerHTML = `
+  elements.taskDateSuggestion.innerHTML = `
     <i class="far fa-calendar-alt"></i>
     ${daysOfWeek[dueDate.getDay()]}, ${months[dueDate.getMonth()]} ${dueDate.getDate()} ${dueDate.getFullYear()} ${time} 
   `;
-  }
 };
 
 export {

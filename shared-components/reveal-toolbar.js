@@ -6,9 +6,8 @@ import {
   OPEN,
   CHECK_STATES,
 } from "../constants/todo-constants.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
-
-const elements = getCachedElements();
 
 /*
  * Expands task text width to fill remaining toolbar space.
@@ -21,14 +20,19 @@ export const adjustActiveTaskTextWidth = () => {
   );
   if (!toolbar) return;
   const taskTextEl = toolbar.querySelector(`[${ATTR.TASK_TEXT}]`);
+
   const importantButtonTask = toolbar.querySelector(
     `[${ACTIONS.IMPORTANT_TASK}]`,
   );
+
   const toolbarCheckbox = toolbar.querySelector(`[${ACTIONS.COMPLETE_TASK}]`);
+
   const completedTaskCheckbox = toolbar.querySelector(
     `[${ACTIONS.UNCOMPLETE_TASK}]`,
   );
+
   const toolbarOfAllList = toolbarCheckbox || completedTaskCheckbox;
+
   if (!taskTextEl || !importantButtonTask || !toolbarOfAllList) return;
   const totalOffsetWidth =
     importantButtonTask.offsetWidth + toolbarOfAllList.offsetWidth;
@@ -36,7 +40,6 @@ export const adjustActiveTaskTextWidth = () => {
 };
 
 export const revealToolbar = (e) => {
-  if (!elements.selectionBar) return;
   const isSelectionModeActive =
     elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] ===
     ACTIVE.SELECTION_BAR;

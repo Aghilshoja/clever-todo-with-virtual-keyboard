@@ -11,7 +11,10 @@ import {
   keyboardUiState,
   virtualKeyboard,
 } from "../../keyboard-controler/keyboard-controler.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { renderMinutes } from "./clock-view-mode.js";
 import {
@@ -20,19 +23,13 @@ import {
   updateInputElement,
 } from "./switch-time-editor.js";
 
-const elements = getCachedElements();
-
 const showClock = () => {
-  if (!elements.clockFace || !elements.keyboardBtn || !elements.clockBtn)
-    return;
   elements.clockFace.dataset[ATTR_STATES.CLOCK_FACE] = VISIBLE.CLOCK_FACE;
   elements.clockBtn.dataset[ATTR_STATES.CLOCK_BTN] = HIDDEN.CLOCK_BTN;
   elements.keyboardBtn.dataset[ATTR_STATES.KEYBOARD_BTN] = VISIBLE.KEYBOARD_BTN;
 };
 
 const hideClock = () => {
-  if (!elements.clockFace || !elements.keyboardBtn || !elements.clockBtn)
-    return;
   elements.clockFace.dataset[ATTR_STATES.CLOCK_FACE] = HIDDEN.CLOCK_FACE;
 
   elements.keyboardBtn.dataset[ATTR_STATES.KEYBOARD_BTN] = HIDDEN.KEYBOARD_BTN;
@@ -40,7 +37,6 @@ const hideClock = () => {
 };
 
 const editTime = () => {
-  if (!elements.timeContainer || !elements.inputElement) return;
   keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TIME;
   hideClock();
 

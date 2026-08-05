@@ -94,6 +94,8 @@ import {
 
 registerServiceWorker();
 
+export const elements = getCachedElements();
+
 export const lists = {
   default: new TaskList("default"),
 };
@@ -172,71 +174,6 @@ const addDragAndDropListeners = (list) => {
 };
 
 const initTodo = () => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("Required DOM wasn't found");
-  const {
-    warningPopup,
-    undoCompletedTask,
-    dropDownList,
-    selectionBar,
-    navigation,
-    submitTask,
-    batchDeleteTasks,
-    batchDuplicateTasks,
-    batchCompletedTasks,
-    selectionBarMenu,
-    previousMonthBtn,
-    nextMonthBtn,
-    calendarContainer,
-    dateContainer,
-    saveTaskDate,
-    todayBtn,
-    tomorrowBtn,
-    nextWeekBtn,
-    noDateBtn,
-    removeTimeBtn,
-    addTimeBtn,
-    timeHoursEl,
-    timeMinutesEl,
-    cancelTime,
-    clockFace,
-    keyboardBtn,
-    clockBtn,
-    saveTimeBtn,
-  } = elements;
-
-  if (
-    !warningPopup ||
-    !undoCompletedTask ||
-    !dropDownList ||
-    !selectionBar ||
-    !navigation ||
-    !submitTask ||
-    !batchDeleteTasks ||
-    !batchDuplicateTasks ||
-    !batchCompletedTasks ||
-    !selectionBarMenu ||
-    !previousMonthBtn ||
-    !nextMonthBtn ||
-    !calendarContainer ||
-    !dateContainer ||
-    !saveTaskDate ||
-    !todayBtn ||
-    !tomorrowBtn ||
-    !nextWeekBtn ||
-    !noDateBtn ||
-    !noDateBtn ||
-    !addTimeBtn ||
-    !timeMinutesEl ||
-    !timeHoursEl ||
-    !cancelTime ||
-    !clockFace ||
-    !keyboardBtn ||
-    !clockBtn ||
-    !saveTimeBtn
-  )
-    return;
-
   highlighActiveList();
 
   const listContainer = document.querySelector(`
@@ -250,68 +187,77 @@ const initTodo = () => {
   addListeners(completedList);
   addDragAndDropListeners(listContainer);
   addDragAndDropListeners(completedList);
-  warningPopup.addEventListener("click", deleteTask);
-  undoCompletedTask.addEventListener(
+  elements.warningPopup.addEventListener("click", deleteTask);
+  elements.undoCompletedTask.addEventListener(
     "click",
     handleUndoCompletingAndUncompleting,
   );
-  undoCompletedTask.addEventListener(
+  elements.undoCompletedTask.addEventListener(
     "click",
     handleSeveralCompletedAndUncompletedTasksUndo,
   );
 
   document.addEventListener("click", toggleBatchOptions);
   document.addEventListener("click", toggleSelectionBarMenu);
-  dropDownList.addEventListener("click", triggerTaskSelectionUi);
+  elements.dropDownList.addEventListener("click", triggerTaskSelectionUi);
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
-  selectionBar.addEventListener("click", handleExitSelectionClick);
-  batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
-  batchDuplicateTasks.addEventListener("click", duplicateSeveralTasks);
-  batchCompletedTasks.addEventListener(
+  elements.selectionBar.addEventListener("click", handleExitSelectionClick);
+  elements.batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
+  elements.batchDuplicateTasks.addEventListener("click", duplicateSeveralTasks);
+  elements.batchCompletedTasks.addEventListener(
     "click",
     handleSeveralTasksCompletionOrUncompletion,
   );
-  warningPopup.addEventListener("click", deleteSeveralTasks);
-  warningPopup.addEventListener("click", closeWarningDeletionPopup);
+  elements.warningPopup.addEventListener("click", deleteSeveralTasks);
+  elements.warningPopup.addEventListener("click", closeWarningDeletionPopup);
 
-  selectionBarMenu.addEventListener("click", openKeyboardToAddATask);
+  elements.selectionBarMenu.addEventListener("click", openKeyboardToAddATask);
 
-  nextMonthBtn.addEventListener("click", incrementYearAndMonth);
-  previousMonthBtn.addEventListener("click", decrementYearAndMonth);
+  elements.nextMonthBtn.addEventListener("click", incrementYearAndMonth);
+  elements.previousMonthBtn.addEventListener("click", decrementYearAndMonth);
 
-  calendarContainer.addEventListener("click", selectDate);
+  elements.calendarContainer.addEventListener("click", selectDate);
 
-  dateContainer.addEventListener("click", handleExitEditingTaskDateOrDateMode);
+  elements.dateContainer.addEventListener(
+    "click",
+    handleExitEditingTaskDateOrDateMode,
+  );
 
-  saveTaskDate.addEventListener("click", saveTaskDueDate);
+  elements.saveTaskDate.addEventListener("click", saveTaskDueDate);
 
-  todayBtn.addEventListener("click", quickDateActions.handleTodaySelection);
+  elements.todayBtn.addEventListener(
+    "click",
+    quickDateActions.handleTodaySelection,
+  );
 
-  tomorrowBtn.addEventListener(
+  elements.tomorrowBtn.addEventListener(
     "click",
     quickDateActions.handleTomorrowSelection,
   );
 
-  nextWeekBtn.addEventListener(
+  elements.nextWeekBtn.addEventListener(
     "click",
     quickDateActions.handleNextWeekSelection,
   );
 
-  noDateBtn.addEventListener("click", quickDateActions.handleNoDate);
+  elements.noDateBtn.addEventListener("click", quickDateActions.handleNoDate);
 
-  removeTimeBtn.addEventListener("click", quickDateLabels.syncQuickDateOptions);
+  elements.removeTimeBtn.addEventListener(
+    "click",
+    quickDateLabels.syncQuickDateOptions,
+  );
 
-  addTimeBtn.addEventListener("click", buildClockUI);
-  timeHoursEl.addEventListener("click", renderHours);
-  timeMinutesEl.addEventListener("click", renderMinutes);
-  cancelTime.addEventListener("click", cancelTimeSelection);
-  clockFace.addEventListener("pointerdown", updateClockDisplay);
-  clockFace.addEventListener("pointermove", updateClockDisplay);
-  clockFace.addEventListener("pointerup", updateClockDisplay);
+  elements.addTimeBtn.addEventListener("click", buildClockUI);
+  elements.timeHoursEl.addEventListener("click", renderHours);
+  elements.timeMinutesEl.addEventListener("click", renderMinutes);
+  elements.cancelTime.addEventListener("click", cancelTimeSelection);
+  elements.clockFace.addEventListener("pointerdown", updateClockDisplay);
+  elements.clockFace.addEventListener("pointermove", updateClockDisplay);
+  elements.clockFace.addEventListener("pointerup", updateClockDisplay);
   document.addEventListener("click", decideTimePeriod);
-  keyboardBtn.addEventListener("click", selectTimeByManulType);
-  clockBtn.addEventListener("click", restoreClockView);
-  saveTimeBtn.addEventListener("click", saveTime);
+  elements.keyboardBtn.addEventListener("click", selectTimeByManulType);
+  elements.clockBtn.addEventListener("click", restoreClockView);
+  elements.saveTimeBtn.addEventListener("click", saveTime);
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", (event) => {
@@ -323,7 +269,7 @@ const initTodo = () => {
   }
 
   // Navigation Click
-  navigation.addEventListener("click", (e) => {
+  elements.navigation.addEventListener("click", (e) => {
     const listBtn = e.target.closest("[data-id]");
     if (!listBtn) return;
 
@@ -334,7 +280,7 @@ const initTodo = () => {
     renderTasks(lists.default.getTasks());
   });
 
-  submitTask.addEventListener("click", addTask);
+  elements.submitTask.addEventListener("click", addTask);
 
   document.addEventListener("DOMContentLoaded", () => {
     uupdatePaddingOfListDynamicallyBasedOnBottomNavbar(listContainer);

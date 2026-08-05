@@ -1,5 +1,8 @@
 import { getCachedElements } from "../get-cached-element.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-behavior.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
@@ -30,8 +33,6 @@ import { getRepetitiveElements } from "./shared-entering-edit-or-description-mod
 import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 
-const elements = getCachedElements();
-
 const renderUnrelatedElements = () => {
   const unrelatedEls = document.querySelectorAll(
     `[${CHECK_STATES.UNRELATED_ELS}]`,
@@ -43,7 +44,7 @@ const renderUnrelatedElements = () => {
 };
 
 const putInputElementWhereThatWas = () => {
-  if (elements.circleEl) elements.circleEl.after(elements.inputElement);
+  elements.circleEl.after(elements.inputElement);
 };
 
 const cleanupEditModeUi = (toolbar) => {
@@ -113,7 +114,6 @@ const restoreDraftBackupAfterEditMode = () => {
   const savedData = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY.TEXT_EDITOR),
   );
-  if (!input) return;
 
   if ((savedData.draftedNewTask ?? "").length > 0) {
     const caret = ensureCaret(input);

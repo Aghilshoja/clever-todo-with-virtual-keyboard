@@ -1,10 +1,11 @@
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { cleanupDescriptionUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { cleanupEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
-
-const elements = getCachedElements();
 
 export const saveEditedTaskText = (toolbar, taskItem, event) => {
   const repetitiveEls = getRepetitiveElements(toolbar);

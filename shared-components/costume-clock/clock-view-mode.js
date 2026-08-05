@@ -12,7 +12,10 @@ import {
   keyboardUiState,
   virtualKeyboard,
 } from "../../keyboard-controler/keyboard-controler.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { clockInfo } from "./render-clock.js";
 import {
@@ -24,8 +27,6 @@ import {
   switchInputToMinutes,
 } from "./switch-time-editor.js";
 
-const elements = getCachedElements();
-
 const updateMinuteHandPosition = () => {
   const clockHand = document.querySelector(`[${ATTR.CLOCK_HAND}]`);
   const minuteAngle =
@@ -36,7 +37,6 @@ const updateMinuteHandPosition = () => {
 };
 
 const renderMinutes = () => {
-  if (!elements.timeMinutesEl) return;
   elements.timeMinutesEl.dataset[ATTR_STATES.TIME_MINUTES] =
     ACTIVE.TIME_MINUTES;
 
@@ -77,7 +77,6 @@ const updateHourHandPosition = () => {
 };
 
 const renderHours = () => {
-  if (!elements.timeHoursEl) return;
   elements.timeMinutesEl.dataset[ATTR_STATES.TIME_MINUTES] =
     INACTIVE.TIME_MINUTES;
 

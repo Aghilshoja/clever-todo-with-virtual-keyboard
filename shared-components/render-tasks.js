@@ -12,6 +12,7 @@ import {
 import { formatTimeDisplay } from "./costume-calendar/parse-time.js";
 import { daysOfWeek, months } from "./costume-calendar/create-calendar.js";
 import { format24HourTime } from "./costume-calendar/prepare-date-editor.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 
 export const activeUlId = {
   ul: "default",
@@ -199,9 +200,6 @@ const clearListContainer = (task) => {
 };
 
 export const renderTasks = (task, eachTask) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM wasn't found");
-
   const listContainer = clearListContainer(task);
   if (!listContainer) return;
   if (task.length === 0 || eachTask === undefined) return;
@@ -229,8 +227,6 @@ export const renderTasks = (task, eachTask) => {
 };
 
 export const renderCompletedTask = (eachCompletedTask) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM wasn't found");
   if (!eachCompletedTask) return;
 
   const completedListContainer = getCompletedListContainer();

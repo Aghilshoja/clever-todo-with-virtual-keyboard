@@ -1,4 +1,4 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import { getCachedElements } from "./get-cached-element.js";
 import {
@@ -7,8 +7,6 @@ import {
   removeSelectedTasks,
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
-
-const elements = getCachedElements();
 
 export const handleSeveralTasksCompletion = (currentList) => {
   takeSnapshotOfDom(currentList);

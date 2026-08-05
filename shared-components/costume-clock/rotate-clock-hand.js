@@ -5,11 +5,12 @@ import {
   CHECK_STATES,
   HIDDEN,
 } from "../../constants/todo-constants.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { clockInfo } from "./render-clock.js";
-
-const elements = getCachedElements();
 
 const getAngleFromClick = (clientX, clientY) => {
   const rect = elements.clockFace.getBoundingClientRect();
@@ -64,7 +65,6 @@ const showSpecificMinute = (minute) => {
 };
 
 const rotateHourHand = (clientX, clientY) => {
-  if (!elements.timeHoursEl) return;
   const isHourActive =
     elements.timeHoursEl.dataset[ATTR_STATES.TIME_HOURS] === ACTIVE.TIME_HOURS;
 
@@ -89,8 +89,6 @@ const rotateHourHand = (clientX, clientY) => {
 };
 
 const rotateMinuteHand = (clientX, clientY) => {
-  if (!elements.timeMinutesEl) return;
-
   const isMinuteActive =
     elements.timeMinutesEl.dataset[ATTR_STATES.TIME_MINUTES] ===
     ACTIVE.TIME_MINUTES;

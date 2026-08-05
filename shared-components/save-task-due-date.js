@@ -5,7 +5,11 @@ import {
   DUE_DATE_STATES,
   EDIT_MODES,
 } from "../constants/todo-constants.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../todos-controller.js/todos-controller.js";
 import { daysOfWeek, months } from "./costume-calendar/create-calendar.js";
 import {
   exitDateMode,
@@ -19,8 +23,6 @@ import {
   getTaskItem,
   updateDOM,
 } from "./costume-calendar/update-task-due-date-view.js";
-
-const elements = getCachedElements();
 
 const saveTaskDueDate = () => {
   const { taskItem, taskId } = getTaskItem();

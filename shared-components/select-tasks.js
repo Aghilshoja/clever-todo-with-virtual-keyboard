@@ -13,18 +13,19 @@ import {
   VISIBLE,
 } from "../constants/todo-constants.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
-
-const elements = getCachedElements();
+import {
+  appStateUi,
+  elements,
+} from "../todos-controller.js/todos-controller.js";
 
 export const toggleBatchOptions = (e) => {
-  if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.dropDownList) return;
   if (e.target.closest(`[${ACTIONS.TOGGLE_DROPDOWN_LIST}]`)) {
     const allTasks = document.querySelectorAll(`[${ATTR.TASK_ITEM}]`);
+
     const getSelectedTaskItem = document.querySelector(
       `[${ATTR.SELECT_TASK_ITEM}]`,
     );
+
     if (allTasks.length >= 1)
       getSelectedTaskItem.dataset[ATTR_STATES.SELECT_TASK_ITEM_STATE] =
         VISIBLE.SELECT_TASK_ITEM;
@@ -43,7 +44,7 @@ export const toggleBatchOptions = (e) => {
 
 export const toggleSelectionBarMenu = (e) => {
   const selectionBarMenu = elements.selectionBarMenu;
-  if (!selectionBarMenu) return;
+
   const isSelectionMenuOpen =
     selectionBarMenu.dataset[ATTR_STATES.SELECTION_BAR_MENU_STATE] ===
     OPEN.SELECTION_BAR_MENU;
@@ -73,21 +74,18 @@ const fadeNavAndTaskHeader = () => {
 };
 
 export const triggerTaskSelectionUi = (e) => {
-  if (!elements) throw new Error("required DOM was not found");
   if (e.target.closest(`[${ACTIONS.SELECT_TASK_ITEM}]`)) {
     fadeNavAndTaskHeader();
-    if (!elements.selectionBar || !elements.batchToolbar) return;
+
     elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] =
       ACTIVE.SELECTION_BAR;
     elements.batchToolbar.dataset[ATTR_STATES.BATCH_TOOLBAR] =
       OPEN.BATCH_TOOLBAR;
 
-    if (elements.selectedTasksCount)
-      elements.selectedTasksCount.textContent = "0 selected tasks";
+    elements.selectedTasksCount.textContent = "0 selected tasks";
 
-    if (elements.mainPageNewTaskCon)
-      elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
-        HIDDEN.TASK_CREATOR;
+    elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
+      HIDDEN.TASK_CREATOR;
   }
 };
 
@@ -97,11 +95,8 @@ export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
     appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST;
   const selectedTasksElement = elements.selectionBar;
 
-  if (!selectedTasksElement) return;
-
-  if (elements.selectedTasksCount)
-    elements.selectedTasksCount.textContent =
-      counter === 1 ? "1 selected task" : `${counter} selected tasks`;
+  elements.selectedTasksCount.textContent =
+    counter === 1 ? "1 selected task" : `${counter} selected tasks`;
 
   const operationConfig = {
     [`[${ATTR.BATCH_DELETE_LABEL}]`]: (count) =>
@@ -125,7 +120,6 @@ export const disableOrEnableButtons = () => {
     `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
 
-  if (!elements.activateToolbarButtons) return;
   elements.activateToolbarButtons.forEach((el) => {
     if (allSelectedTasks.length > 0) el.disabled = false;
     else el.disabled = true;
@@ -157,8 +151,6 @@ const fadeHighlightedTasksOfActiveList = (parentOfTarget) => {
 };
 
 const unfadeNavAndTaskHeader = () => {
-  if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.mainPageFlexContainer) return;
   const mainPageFlexCon = Array.from(elements.mainPageFlexContainer.children);
   mainPageFlexCon.forEach(
     (el) => delete el.dataset[ATTR_STATES.UNRELATED_ELS_TO_SELECTION],
@@ -193,8 +185,6 @@ const showOrHideEllipsis = () => {
 };
 
 export const selectTasks = (e) => {
-  if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.selectionBar) return;
   /*
    * If the task-selection counter is not active, then clicking a task should go through the normal toolbar flow, so this selection handler must exit early and avoid highlighting the task.
    */
@@ -203,13 +193,17 @@ export const selectTasks = (e) => {
     ACTIVE.SELECTION_BAR;
   if (!isSelectionModeActive) return;
   const selectedTask = e.target.closest(`[${ATTR.TASK_ITEM}]`);
+
   if (!selectedTask) return;
+
   const SELECTED_tASK = ATTR_STATES.HIGHLIGHT_SELECTED_TASK;
+
   const isCurrentlySelected =
     selectedTask.dataset[SELECTED_tASK] === HIGHLIGHT_SELECTED_TASK.SELECTED;
   selectedTask.dataset[SELECTED_tASK] = isCurrentlySelected
     ? HIGHLIGHT_SELECTED_TASK.UNSELECTED
     : HIGHLIGHT_SELECTED_TASK.SELECTED;
+
   const isSelectedTask =
     selectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK] ===
     HIGHLIGHT_SELECTED_TASK.SELECTED;
@@ -218,6 +212,7 @@ export const selectTasks = (e) => {
     `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
   );
   if (!parentOfTarget) return;
+
   if (
     parentOfTarget.hasAttribute(`${ATTR.DEFAULT_LIST}`) &&
     !e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`)
@@ -254,8 +249,6 @@ export const selectTasks = (e) => {
 };
 
 export const toggleOptionsOfSelectedTasks = (e) => {
-  if (!elements) throw new Error("Required DOM was not found");
-  if (!elements.mainPageBatchMenu) return;
   if (e.target.closest(`[${ACTIONS.TOGGLE_BATCH_MENU}]`))
     elements.mainPageBatchMenu.dataset[ATTR_STATES.BATCH_MENU] =
       OPEN.BATCH_MENU;
@@ -266,7 +259,6 @@ export const toggleOptionsOfSelectedTasks = (e) => {
 };
 
 export const exitTaskSelection = () => {
-  if (!elements) throw new Error("Required DOM was not found");
   unfadeNavAndTaskHeader();
   elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] =
     INACTIVE.SELECTION_BAR;

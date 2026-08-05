@@ -14,13 +14,11 @@ import {
 } from "../constants/keyboard-constants.js";
 import { PLACEHOLDERS, ATTRIBUTES } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 
 export const handleSpaceBar = (e) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("Required DOM was not found");
   if (e.target.closest(`[${KEYBOARD_ACTIONS.SPACE}]`)) {
     const input = elements.inputElement;
-    if (!input) return;
     // use one source of truth if placeholder of the input changed we just change it in one place
     const isTherePlaceholder =
       input.textContent === PLACEHOLDERS.DESCRIPTION ||

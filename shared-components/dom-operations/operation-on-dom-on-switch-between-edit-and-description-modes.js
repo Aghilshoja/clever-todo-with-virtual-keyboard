@@ -1,5 +1,8 @@
 import { getCachedElements } from "../get-cached-element.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { cleanupDescriptionAndEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { disableOrEnableSaveBtn } from "../handle-disabling-or-enabling-saving-task-edits.js";
@@ -23,14 +26,12 @@ import {
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 
-const elements = getCachedElements();
-
 const editDescription = (descriptionEl, toolbar) => {
   if (!descriptionEl) return;
   const taskText = toolbar.querySelector(`[${ATTR.TASK_TEXT}]`);
   if (!taskText) return;
   const input = elements.inputElement;
-  if (!input) return;
+
   delete taskText.dataset[ATTR_STATES.TASK_TEXT_STATE];
   if (virtualKeyboard.caretManeger.text !== "") {
     taskText.textContent = input.textContent;
@@ -61,7 +62,7 @@ const editTask = (taskEl, toolbar) => {
   const description = toolbar.querySelector(`[${ATTR.TASK_DESCRIPTION}]`);
   if (!description) return;
   const input = elements.inputElement;
-  if (!input) return;
+
   delete description.dataset[ATTR_STATES.DESCRIPTION_STATE];
   if (input.textContent === PLACEHOLDERS.DESCRIPTION) {
     description.textContent = PLACEHOLDERS.DESCRIPTION;

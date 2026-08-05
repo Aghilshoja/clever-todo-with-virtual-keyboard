@@ -6,12 +6,13 @@ import {
   DUE_DATE_STATES,
   OPEN,
 } from "../../constants/todo-constants.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { daysOfWeek, months } from "./create-calendar.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { format24HourTime } from "./prepare-date-editor.js";
-
-const elements = getCachedElements();
 
 const getTaskItem = () => {
   const taskId = appStateUi.activeTaskId;
@@ -60,8 +61,6 @@ const checkOverdueDate = (dueDateEls) => {
 };
 
 const updateDOM = (taskItem) => {
-  if (!elements.taskDateSuggestion) return;
-
   const dueDateEls = taskItem.querySelectorAll(
     `[${ACTIONS.TASK_DATE}], [${ATTR.VISIBLE_DUE_DATE}]`,
   );

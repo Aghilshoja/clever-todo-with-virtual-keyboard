@@ -1,6 +1,10 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
@@ -65,8 +69,6 @@ export const moveBackspacePointer = (e) => {
   }
 };
 const startContinuousDelete = () => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM was not found");
   const interval = 50;
 
   keyboardUiState.deleteTimer = setInterval(() => {
@@ -144,17 +146,11 @@ export const clearPlaceholder = (input) => {
 };
 
 export const disableSubmitIfInputEmpty = () => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM was not found");
-
   elements.submitTask.disabled =
     elements.inputElement.textContent.trim() === PLACEHOLDERS.ENTER_TASK;
 };
 
 const deleteLastCharacterOfInput = () => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("Required DOM was not found");
-
   const input = elements.inputElement;
   deleteCharBeforeCaret(input);
   ensurePlaceholder(input);
@@ -187,10 +183,8 @@ export const insertText = (input, char, caret) => {
 };
 
 export const typeIntoInput = (char) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM was not found");
   const input = elements.inputElement;
-  if (!input) return;
+
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
 
   clearPlaceholder(input);

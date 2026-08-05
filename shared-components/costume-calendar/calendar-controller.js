@@ -16,6 +16,7 @@ import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import {
   appStateUi,
+  elements,
   lists,
 } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
@@ -25,10 +26,7 @@ import { getTaskObject, quickDateLabels } from "./quick-date-options.js";
 import { initializeDateEditor, showDateEditor } from "./prepare-date-editor.js";
 import { quickDateVisibility } from "./quick-date-options.js";
 
-const elements = getCachedElements();
-
 const activateCalendar = () => {
-  if (!elements.dateContainer) return;
   elements.dateContainer.dataset[ATTR_STATES.DATE_CONTAINER] =
     ACTIVE.DATE_CONTAINER;
 

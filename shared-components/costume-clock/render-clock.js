@@ -8,10 +8,11 @@ import {
   TIME_PERIODS,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
-
-const elements = getCachedElements();
 
 const clockInfo = {
   CLOCK_RADIUS: 80,
@@ -65,8 +66,6 @@ const buildHourUI = () => {
 };
 
 const loadTimeIntoClock = (clockHand) => {
-  if (!elements.timeAMEl || !elements.timePMEl) return;
-
   const date = appStateUi.hasTime
     ? new Date(appStateUi.draftedDate)
     : new Date();
@@ -116,7 +115,6 @@ const loadTimeIntoClock = (clockHand) => {
 };
 
 const initilaizeHours = () => {
-  if (!elements.clockFace || !elements.timeHoursEl) return;
   elements.clockFace.textContent = "";
 
   buildHourUI();

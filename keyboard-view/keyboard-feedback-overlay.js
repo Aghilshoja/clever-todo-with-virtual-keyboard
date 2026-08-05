@@ -1,8 +1,7 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ATTRIBUTES } from "../constants/keyboard-constants.js";
 import { keyboardUiState } from "../keyboard-controler/keyboard-controler.js";
-
-const elements = getCachedElements();
+import { elements } from "../todos-controller.js/todos-controller.js";
 
 const addPaddingToCornerKeyPreview = (rect) => {
   // Get viewport width
@@ -24,8 +23,6 @@ const addPaddingToCornerKeyPreview = (rect) => {
 
 export const renderKeyPreviewPopup = (keyElement) => {
   if (!keyElement) throw new Error("event hasn't passed correctly");
-  if (!elements || !elements.previewFeedback)
-    throw new Error("required DOM wasn't found");
 
   if (keyboardUiState.previewFeedbackTimer) {
     clearTimeout(keyboardUiState.previewFeedbackTimer);
@@ -46,8 +43,6 @@ export const renderKeyPreviewPopup = (keyElement) => {
 };
 
 export const hideKeyPreview = () => {
-  if (!elements) throw new Error("required DOM wasn't found");
-
   if (keyboardUiState.previewFeedbackTimer) {
     clearTimeout(keyboardUiState.previewFeedbackTimer);
     keyboardUiState.previewFeedbackTimer = null;

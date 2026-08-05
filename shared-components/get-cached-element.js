@@ -11,31 +11,62 @@ import {
   CHECK_STATES,
 } from "../constants/todo-constants.js";
 
+const requireElement = (selector, name) => {
+  const el = document.querySelector(selector);
+
+  if (!el) {
+    throw new Error(`Missing required element: ${name}`);
+  }
+
+  return el;
+};
+
+const requireElements = (selector, name) => {
+  const els = document.querySelectorAll(selector);
+
+  if (els.length === 0) {
+    throw new Error(`Missing required elements: ${name}`);
+  }
+
+  return els;
+};
+
 export const getCachedElements = () => {
   const elements = {
-    splashHeader: document.querySelector(
+    splashHeader: requireElement(
       `[${SPLSASH_HEADER_ATTR.SPLASH_HEADER}]`,
+      "splashHeader",
     ),
-    mainPage: document.querySelector(`[${SPLSASH_HEADER_ATTR.MAIN_PAGE}]`),
-    loaderDot: document.querySelector(`[${SPLSASH_HEADER_ATTR.LOADING}]`), // fixed a typo
+    mainPage: requireElement(`[${SPLSASH_HEADER_ATTR.MAIN_PAGE}]`, "mainPage"),
+    loaderDot: requireElement(`[${SPLSASH_HEADER_ATTR.LOADING}]`, "loderDot"), // fixed a typo
     /* end of the related elements to the logo of the app */
 
     /* elements that are just related to the keyboard */
-    keyboardSection: document.querySelector(`[${ATTRIBUTES.KEYBOARD_SECTION}]`),
-    previewFeedback: document.querySelector(`[${ATTRIBUTES.KEY_PREVIEW}]`),
-    keyboardDismissOverlay: document.querySelector(
+    keyboardSection: requireElement(
+      `[${ATTRIBUTES.KEYBOARD_SECTION}]`,
+      "keyboardSection",
+    ),
+    previewFeedback: requireElement(
+      `[${ATTRIBUTES.KEY_PREVIEW}]`,
+      "previewFeedback",
+    ),
+    keyboardDismissOverlay: requireElement(
       `[${ATTRIBUTES.KEYBOARD_OVERLAY}]`,
+      "  keyboardDismissOverlay",
     ),
-    keyboardContainer: document.querySelector(
+    keyboardContainer: requireElement(
       `[${ATTRIBUTES.KEYBOARD_CONTAINER}]`,
+      "keyboardContainer",
     ),
-    unrelatedKeyboardOptions: document.querySelectorAll(
+    unrelatedKeyboardOptions: requireElements(
       `[${ATTRIBUTES.KEYBOARD_TIME_OPTIONS}], [${ATTRIBUTES.INPUT_CONTAINER}]`,
+      "unrelatedKeyboardOptions",
     ),
-    inputElement: document.querySelector(`[${ATTRIBUTES.INPUT}]`),
-    submitTask: document.querySelector(`[${KEYBOARD_ACTIONS.SUBMIT}]`),
-    inputCharacterLimit: document.querySelector(
+    inputElement: requireElement(`[${ATTRIBUTES.INPUT}]`, "inputElement"),
+    submitTask: requireElement(`[${KEYBOARD_ACTIONS.SUBMIT}]`, "submitTask"),
+    inputCharacterLimit: requireElement(
       `[${ATTRIBUTES.CHARACTER_LIMIT_COUNT}]`,
+      "inputCharacterLimit",
     ),
     circleEl: document.querySelector(`[${ATTRIBUTES.INPUT_ANCHOR}]`),
     unrelatedKeyboardOptions: document.querySelectorAll(
@@ -44,87 +75,173 @@ export const getCachedElements = () => {
     /* end of the elements that are related to the keyboard */
 
     /* elements that are just related to the todo app */
-    activateToolbarButtons: document.querySelectorAll(
+    activateToolbarButtons: requireElements(
       `[${ACTIONS.BATCH_SET_DATE}], [${ACTIONS.BATCH_MOVE_TASKS}], [${ACTIONS.BATCH_ADD_LABEL}], [${ACTIONS.BATCH_SET_PRIORITY}], [${ACTIONS.BATCH_DELETE_TASKS}], [${ACTIONS.BATCH_DUPLICATE_TASKS}], [${ACTIONS.BATCH_COMPLETE_TASKS}]`,
+      "    activateToolbarButtons",
     ),
-    deleteHeading: document.querySelector(`[${ATTR.WARNING_HEADING}]`),
-    batchDeleteTasks: document.querySelector(`[${ACTIONS.BATCH_DELETE_TASKS}]`),
-    batchDuplicateTasks: document.querySelector(
+    deleteHeading: requireElement(`[${ATTR.WARNING_HEADING}]`, "deleteHeading"),
+    batchDeleteTasks: requireElement(
+      `[${ACTIONS.BATCH_DELETE_TASKS}]`,
+      "batchDeleteTasks",
+    ),
+    batchDuplicateTasks: requireElement(
       `[${ACTIONS.BATCH_DUPLICATE_TASKS}]`,
+      "batckDuplicatedTasks",
     ),
-    batchCompletedTasks: document.querySelector(
+    batchCompletedTasks: requireElement(
       `[${ACTIONS.BATCH_COMPLETE_TASKS}]`,
+      "batchCompletedTasks",
     ),
-    mainPageNewTask: document.querySelector(`[${ACTIONS.ADD_TASK}]`),
-    mainPageNewTaskCon: document.querySelector(`[${ATTR.TASK_CREATOR}]`),
-    navigation: document.querySelector(`[${ATTR.NAV}]`),
-    mainPageFlexContainer: document.querySelector(`[${ATTR.HEADER_CONTAINER}]`),
-    warningPopup: document.querySelector(`[${ATTR.WARNING_POPUP}]`),
-    warningMessage: document.querySelector(`[${ATTR.WARNING_MESSAGE}]`),
-    taskCounter: document.querySelector(`[${ATTR.TASKS_COUNTER}]`),
-    undoCompletion: document.querySelector(`[${ATTR.UNDO_CONTAINER}]`),
-    undoCompletedTask: document.querySelector(
+    mainPageNewTask: requireElement(`[${ACTIONS.ADD_TASK}]`, "mainPageNewTask"),
+    mainPageNewTaskCon: requireElement(
+      `[${ATTR.TASK_CREATOR}]`,
+      "mainPageNewTaskCon",
+    ),
+    navigation: requireElement(`[${ATTR.NAV}]`, "navigation"),
+    mainPageFlexContainer: requireElement(
+      `[${ATTR.HEADER_CONTAINER}]`,
+      "mainPageFlexContainer",
+    ),
+    warningPopup: requireElement(`[${ATTR.WARNING_POPUP}]`, "warningPopup"),
+    warningMessage: requireElement(
+      `[${ATTR.WARNING_MESSAGE}]`,
+      "warningMessage",
+    ),
+    taskCounter: requireElement(`[${ATTR.TASKS_COUNTER}]`, "taskCounter"),
+    undoCompletion: requireElement(
+      `[${ATTR.UNDO_CONTAINER}]`,
+      "undoCompletion",
+    ),
+    undoCompletedTask: requireElement(
       `[${ACTIONS.UNDO_COMPLETION_BTN}]`,
+      "undoCompletedTask",
     ),
-    completionStatusLabel: document.querySelector(`[${ATTR.UNDO_STATUS}]`),
-    dropDownList: document.querySelector(`[${ATTR.MAIN_DROPDOWN_LIST}]`),
-    selectionBar: document.querySelector(`[${ATTR.SELECTION_BAR_CON}]`),
-    batchToolbar: document.querySelector(`[${ATTR.BATCH_TOOLBAR}]`),
-    mainPageBatchMenu: document.querySelector(`[${ATTR.BATCH_MENU}]`),
-    selectedTasksCount: document.querySelector(`[${ATTR.SELECTED_COUNT}]`),
-    toggleSelectionMenu: document.querySelector(
+    completionStatusLabel: requireElement(
+      `[${ATTR.UNDO_STATUS}]`,
+      "completionStatusLabel",
+    ),
+    dropDownList: requireElement(
+      `[${ATTR.MAIN_DROPDOWN_LIST}]`,
+      "dropDownList",
+    ),
+    selectionBar: requireElement(`[${ATTR.SELECTION_BAR_CON}]`, "selectionBar"),
+    batchToolbar: requireElement(`[${ATTR.BATCH_TOOLBAR}]`, "batchToolbar"),
+    mainPageBatchMenu: requireElement(
+      `[${ATTR.BATCH_MENU}]`,
+      "mainPageBatchMenu",
+    ),
+    selectedTasksCount: requireElement(
+      `[${ATTR.SELECTED_COUNT}]`,
+      "selectedTasksCount",
+    ),
+    toggleSelectionMenu: requireElement(
       `[${ACTIONS.SELECTION_MENU_TOGGLER}]`,
+      "toggleSelectionMenu",
     ),
-    selectionBarMenu: document.querySelector(`[${ATTR.SELECTION_BAR_MENU}]`),
-    dateContainer: document.querySelector(`[${ATTR.DATE_CONTAINER}]`),
-    calendarContainer: document.querySelector(`[${ATTR.CALENDAR_CONTAINER}]`),
-    calendarHeader: document.querySelector(`[${ATTR.CALENDAR_HEADER}]`),
-    previousMonthBtn: document.querySelector(
+    selectionBarMenu: requireElement(
+      `[${ATTR.SELECTION_BAR_MENU}]`,
+      "selectionBarMenu",
+    ),
+    dateContainer: requireElement(`[${ATTR.DATE_CONTAINER}]`, "dateContainer"),
+    calendarContainer: requireElement(
+      `[${ATTR.CALENDAR_CONTAINER}]`,
+      "calendarContainer",
+    ),
+    calendarHeader: requireElement(
+      `[${ATTR.CALENDAR_HEADER}]`,
+      "calendarHeader",
+    ),
+    previousMonthBtn: requireElement(
       `[${ACTIONS.TOGGLE_PREVIOUS_MONTH}]`,
+      "previousMonthBtn",
     ),
-    nextMonthBtn: document.querySelector(`[${ACTIONS.TOGGLE_NEXT_MONTH}]`),
-    todayLabel: document.querySelector(`[${ATTR.TODAY_LABEL}]`),
-    tomorrowLabel: document.querySelector(`[${ATTR.TOMORROW_LABEL}]`),
-    nextWeekLabel: document.querySelector(`[${ATTR.NEXT_WEEK_LABEL}]`),
-    editDueDateBtn: document.querySelector(`[${ACTIONS.EDIT_TASK_DATE}]`),
-    quickOptionsContainer: document.querySelector(
+    nextMonthBtn: requireElement(
+      `[${ACTIONS.TOGGLE_NEXT_MONTH}]`,
+      "nextMonthBtn",
+    ),
+    todayLabel: requireElement(`[${ATTR.TODAY_LABEL}]`, "todayLabel"),
+    tomorrowLabel: requireElement(`[${ATTR.TOMORROW_LABEL}]`, "tomorrowLabel"),
+    nextWeekLabel: requireElement(`[${ATTR.NEXT_WEEK_LABEL}]`, "nextWeekLabel"),
+    editDueDateBtn: requireElement(
+      `[${ACTIONS.EDIT_TASK_DATE}]`,
+      "editDueDateBtn",
+    ),
+    quickOptionsContainer: requireElement(
       `[${ATTR.QUICK_OPTIONS_CONTAINER}]`,
+      "quickOptioinsContainer",
     ),
-    saveTaskDate: document.querySelector(`[${ACTIONS.SAVE_TASK_DATE}]`),
-    saveButtonContainer: document.querySelector(
+    saveTaskDate: requireElement(`[${ACTIONS.SAVE_TASK_DATE}]`, "saveTaskDave"),
+    saveButtonContainer: requireElement(
       `[${ATTR.SAVE_BUTTON_CONTAINER}]`,
+      "saveButtonContainer",
     ),
-    taskDateSuggestion: document.querySelector(`[${ATTR.DATA_SUGGESTION}]`),
-    noDateBtnContainer: document.querySelector(`[${ATTR.NO_DATE_CONTAINER}]`),
-    todayContainer: document.querySelector(`[${ATTR.TODAY_CONTANIER}]`),
-    tomorrowContainer: document.querySelector(`[${ATTR.TOMORROW_CONTAINER}]`),
-    nextWeekContainer: document.querySelector(`[${ATTR.NEXT_WEEK_CONTAINER}]`),
-    todayBtn: document.querySelector(`[${ACTIONS.SET_TODAY}]`),
-    tomorrowBtn: document.querySelector(`[${ACTIONS.SET_TOMORROW}]`),
-    nextWeekBtn: document.querySelector(`[${ACTIONS.SET_NEXT_WEEK}]`),
-    noDateBtn: document.querySelector(`[${ACTIONS.NO_DATE_BTN}]`),
-    addTimeBtn: document.querySelector(`[${ACTIONS.ADD_TIME}]`),
-    removeTimeBtn: document.querySelector(`[${ACTIONS.REMOVE_TASK_TIME}]`),
-    nextWeekTimeLabel: document.querySelector(`[${ATTR.NEXT_WEEK_TIME_LABEL}]`),
-    todayTimeLabel: document.querySelector(`[${ATTR.TODAY_TIME_LABEL}]`),
-    tomorrowTimeLabel: document.querySelector(`[${ATTR.TOMORROW_TIME_LABEL}]`),
+    taskDateSuggestion: requireElement(
+      `[${ATTR.DATA_SUGGESTION}]`,
+      "taskDateSuggestion",
+    ),
+    noDateBtnContainer: requireElement(
+      `[${ATTR.NO_DATE_CONTAINER}]`,
+      "noDateBtnContainer",
+    ),
+    todayContainer: requireElement(
+      `[${ATTR.TODAY_CONTANIER}]`,
+      "todayContainer",
+    ),
+    tomorrowContainer: requireElement(
+      `[${ATTR.TOMORROW_CONTAINER}]`,
+      "tomorrowContainer",
+    ),
+    nextWeekContainer: requireElement(
+      `[${ATTR.NEXT_WEEK_CONTAINER}]`,
+      "nextWeekContainer",
+    ),
+    todayBtn: requireElement(`[${ACTIONS.SET_TODAY}]`, "todaybtn"),
+    tomorrowBtn: requireElement(`[${ACTIONS.SET_TOMORROW}]`, "tomorrowBtn"),
+    nextWeekBtn: requireElement(`[${ACTIONS.SET_NEXT_WEEK}]`, "nextWeekBtn"),
+    noDateBtn: requireElement(`[${ACTIONS.NO_DATE_BTN}]`, "noDateBtn"),
+    addTimeBtn: requireElement(`[${ACTIONS.ADD_TIME}]`, "addTimeBtn"),
+    removeTimeBtn: requireElement(
+      `[${ACTIONS.REMOVE_TASK_TIME}]`,
+      "removeTimeBtn",
+    ),
+    nextWeekTimeLabel: requireElement(
+      `[${ATTR.NEXT_WEEK_TIME_LABEL}]`,
+      "nextWeekTimeLabel",
+    ),
+    todayTimeLabel: requireElement(
+      `[${ATTR.TODAY_TIME_LABEL}]`,
+      "todayTimeLabel",
+    ),
+    tomorrowTimeLabel: requireElement(
+      `[${ATTR.TOMORROW_TIME_LABEL}]`,
+      "tomorrowTimeLabel",
+    ),
 
-    toggleTimeVisibility: document.querySelectorAll(
+    toggleTimeVisibility: requireElements(
       `[${CHECK_STATES.TOGGLE_TIME_VISIBILITY}]`,
+      "toggleTimeVisibility",
     ),
-    timeContainer: document.querySelector(`[${ATTR.TIME_CONTAINER}]`),
-    timeHoursEl: document.querySelector(`[${ATTR.TIME_HOURS}]`),
-    timeMinutesEl: document.querySelector(`[${ATTR.TIME_MINUTES}]`),
-    timePeriodEl: document.querySelector(`[${ATTR.TIME_PERIOD}]`),
-    clockFace: document.querySelector(`[${ATTR.CLOCK_FACE}]`),
-    cancelTime: document.querySelector(`[${ACTIONS.CANCEL_TIME_SELECTION}]`),
-    timePMEl: document.querySelector(`[${ATTR.TIME_PM}]`),
-    timeAMEl: document.querySelector(`[${ATTR.TIME_AM}]`),
-    keyboardBtn: document.querySelector(`[${ACTIONS.SWITCH_TO_MANUAL_TYPE}]`),
-    clockBtn: document.querySelector(`[${ACTIONS.CLOCK_BTN}]`),
-    taskDateEditor: document.querySelector(`[${ATTR.TASK_DATE_EDITOR}]`),
-    saveTimeBtn: document.querySelector(`[${ACTIONS.SAVE_TASK_TIME}]`),
-    clockBackdrop: document.querySelector(`[${ATTR.CLOCK_BACKDROP}]`),
+    timeContainer: requireElement(`[${ATTR.TIME_CONTAINER}]`, "timeContainer"),
+    timeHoursEl: requireElement(`[${ATTR.TIME_HOURS}]`, "timeHoursEl"),
+    timeMinutesEl: requireElement(`[${ATTR.TIME_MINUTES}]`, "timeMinutesEl"),
+    clockFace: requireElement(`[${ATTR.CLOCK_FACE}]`, "clockFace"),
+    cancelTime: requireElement(
+      `[${ACTIONS.CANCEL_TIME_SELECTION}]`,
+      "cancelTime",
+    ),
+    timePMEl: requireElement(`[${ATTR.TIME_PM}]`, "timePMEl"),
+    timeAMEl: requireElement(`[${ATTR.TIME_AM}]`, "timeAMEl"),
+    keyboardBtn: requireElement(
+      `[${ACTIONS.SWITCH_TO_MANUAL_TYPE}]`,
+      "keyboardBtn",
+    ),
+    clockBtn: requireElement(`[${ACTIONS.CLOCK_BTN}]`, "clockBtn"),
+    taskDateEditor: requireElement(
+      `[${ATTR.TASK_DATE_EDITOR}]`,
+      "taskDateEditor",
+    ),
+    saveTimeBtn: requireElement(`[${ACTIONS.SAVE_TASK_TIME}]`, "saveTimeBtn"),
+    clockBackdrop: requireElement(`[${ATTR.CLOCK_BACKDROP}]`, "clockBackdrop"),
     /* end of the elements that are related to the todo app */
   };
   return elements;

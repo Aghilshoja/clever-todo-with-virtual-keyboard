@@ -15,9 +15,10 @@ import {
   enableSaveDateBtn,
   showDateSuggestion,
 } from "./show-date-suggestion.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
-
-const elements = getCachedElements();
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 
 const showSelectedDate = (dayElement) => {
   const day = dayElement.dataset.day;
@@ -25,8 +26,6 @@ const showSelectedDate = (dayElement) => {
   const year = dayElement.dataset.year;
 
   requiredDates.navDate = day;
-
-  if (!elements.inputElement || !elements.editDueDateBtn) return;
 
   showDateEditor();
 

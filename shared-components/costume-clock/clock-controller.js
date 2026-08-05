@@ -15,6 +15,7 @@ import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import {
   appStateUi,
+  elements,
   lists,
 } from "../../todos-controller.js/todos-controller.js";
 import { daysOfWeek, months } from "../costume-calendar/create-calendar.js";
@@ -37,11 +38,7 @@ import {
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { restoreDateEditorAfterCancel } from "./exit-clock-mode.js";
 
-const elements = getCachedElements();
-
 const buildClockUI = () => {
-  if (!elements.timeContainer || !elements.clockBackdrop) return;
-
   elements.clockBackdrop.dataset[ATTR_STATES.CLOCK_BACKDROP] = "";
 
   elements.timeContainer.dataset[ATTR_STATES.TIME_CONTAINER] =
@@ -52,12 +49,11 @@ const buildClockUI = () => {
 const cancelTimeSelection = () => {
   exitClockUi();
   keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TASK_DATE;
-  if (elements.circleEl && elements.inputElement) {
-    elements.unrelatedKeyboardOptions.forEach(
-      (el) => (el.dataset[ATTR_STATES.UNRELATED_ELS] = VISIBLE.UNRELATED_ELS),
-    );
-    restoreDateEditorAfterCancel();
-  }
+
+  elements.unrelatedKeyboardOptions.forEach(
+    (el) => (el.dataset[ATTR_STATES.UNRELATED_ELS] = VISIBLE.UNRELATED_ELS),
+  );
+  restoreDateEditorAfterCancel();
 };
 
 const updateClockDisplay = (event) => {
@@ -86,14 +82,7 @@ const selectTimeByManulType = () => {
 };
 
 const restoreClockView = () => {
-  if (
-    !elements.timeContainer ||
-    !elements.timeMinutesEl ||
-    !elements.taskDateEditor
-  )
-    return;
-
-  if (elements.timeContainer) elements.timeContainer.style.top = "50%";
+  elements.timeContainer.style.top = "50%";
   showClock();
 
   putInputElementWhereThatWas();

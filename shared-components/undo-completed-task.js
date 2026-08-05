@@ -1,4 +1,8 @@
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { activeUlId } from "./render-tasks.js";
@@ -16,14 +20,10 @@ import {
   INACTIVE,
 } from "../constants/todo-constants.js";
 
-const elements = getCachedElements();
-
 let undoPopupTimer = null;
 
 export const showUndopopup = () => {
-  if (!elements) throw new Error("Required DOM was not found");
   const undoCompletion = elements.undoCompletion;
-  if (!undoCompletion) return;
 
   // 1. Clear any existing timer
   if (undoPopupTimer) clearTimeout(undoPopupTimer);
@@ -54,9 +54,8 @@ export const removeTaskItemForUndo = () => {
 };
 
 export const hideUndoPopup = () => {
-  if (!elements) throw new Error("Required DOM was not found");
   const undoCompletionPopup = elements.undoCompletion;
-  if (!undoCompletionPopup) return;
+
   undoCompletionPopup.dataset[ATTR_STATES.UNDO_CON] = INACTIVE.UNDO_CON;
 };
 
@@ -65,7 +64,6 @@ const unhighlightSelectedTaskAfterUndoOperation = (taskItem) => {
 };
 
 const undoCompletedTask = () => {
-  if (!elements) throw new Error("Required DOM was not found");
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
   const taskObjectIndex = appStateUi.undoOperation.taskObjectIndex;
   const removedTaskItem = appStateUi.undoOperation.removedEl;

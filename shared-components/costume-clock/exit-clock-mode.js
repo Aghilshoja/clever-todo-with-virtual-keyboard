@@ -7,15 +7,16 @@ import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js"
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { showClock } from "./select-time-manually.js";
 import {
   putInputElementWhereThatWas,
   renderTimeToEditor,
 } from "./update-time.js";
-
-const elements = getCachedElements();
 
 const restoreOriginalTime = () => {
   const date =
@@ -43,7 +44,6 @@ const resetClockStates = () => {
 };
 
 const exitClockUi = () => {
-  if (!elements.timeContainer || !elements.timeMinutesEl) return;
   elements.timeContainer.dataset[ATTR_STATES.TIME_CONTAINER] =
     INACTIVE.TIME_CONTAINER;
 
@@ -60,7 +60,7 @@ const exitClockUi = () => {
 
   virtualKeyboard.setLang("en");
 
-  if (elements.timeContainer) elements.timeContainer.style.top = "50%";
+  elements.timeContainer.style.top = "50%";
 
   delete elements.clockBackdrop.dataset[ATTR_STATES.CLOCK_BACKDROP];
 

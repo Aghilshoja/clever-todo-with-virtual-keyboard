@@ -10,11 +10,12 @@ import {
   virtualKeyboard,
 } from "../../keyboard-controler/keyboard-controler.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { showDateSuggestion } from "./show-date-suggestion.js";
-
-const elements = getCachedElements();
 
 const showDateKeyboard = () => {
   if (
@@ -33,14 +34,6 @@ const showDateKeyboard = () => {
   const quickOptionsContainer = elements.quickOptionsContainer;
   const taskDateSeggestionEl = elements.taskDateSuggestion;
   const input = elements.inputElement;
-
-  if (
-    !unrelatedElements ||
-    !input ||
-    !quickOptionsContainer ||
-    !taskDateSeggestionEl
-  )
-    return;
 
   appStateUi.activeMode = EDIT_MODES.EDIT_TASK_DATE;
 

@@ -1,4 +1,8 @@
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { renderCompletedTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
@@ -19,8 +23,6 @@ import {
   INACTIVE,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-
-const elements = getCachedElements();
 
 export const captureAndRemoveTaskItem = (taskId) => {
   const taskItem = document.querySelector(

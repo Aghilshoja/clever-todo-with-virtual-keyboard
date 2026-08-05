@@ -13,6 +13,7 @@ import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import {
   appStateUi,
+  elements,
   lists,
 } from "../../todos-controller.js/todos-controller.js";
 import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
@@ -23,12 +24,8 @@ import { formatTimeDisplay } from "./parse-time.js";
 import { format24HourTime } from "./prepare-date-editor.js";
 import { getTaskItem } from "./update-task-due-date-view.js";
 
-const elements = getCachedElements();
-
 const quickDateLabels = {
   setTodayLabel() {
-    if (!elements.todayLabel) return;
-
     const today = daysOfWeek[requiredDates.refNow.getDay()];
 
     const dueDate = appStateUi.draftedDate;
@@ -46,8 +43,6 @@ const quickDateLabels = {
   },
 
   setTomorrowLabel() {
-    if (!elements.tomorrowLabel) return;
-
     const tomorrowIndex = (requiredDates.refNow.getDay() + 1) % 7;
     const tomorrow = daysOfWeek[tomorrowIndex];
 
@@ -92,8 +87,6 @@ const quickDateLabels = {
   },
 
   setAddTimeBtnLabel() {
-    if (!elements.addTimeBtn) return;
-
     const dueDate = appStateUi.draftedDate;
 
     if (appStateUi.hasTime) {
@@ -149,8 +142,6 @@ const quickDateLabels = {
   },
 
   removeTime() {
-    if (!elements.addTimeBtn || !elements.removeTimeBtn) return;
-
     elements.addTimeBtn.innerHTML = "Add time";
 
     elements.removeTimeBtn.dataset[ATTR_STATES.REMOVE_TASK_TIME] =
@@ -222,8 +213,6 @@ const quickDateVisibility = {
   },
 
   toggleNoDateBtnVisibility(task) {
-    if (!elements.noDateBtnContainer) return;
-
     if (task.dueDate === null) {
       elements.noDateBtnContainer.dataset[ATTR_STATES.NO_DATE_CONTAINER] =
         INACTIVE.NO_DATE_CONTAINER;
@@ -234,7 +223,6 @@ const quickDateVisibility = {
   },
 
   toggleTodayOption(date) {
-    if (!elements.todayContainer) return;
     const validateToday = quickDateVisibility.isToday(date);
     if (validateToday) {
       elements.todayContainer.dataset[ATTR_STATES.TODAY_CONTAINER] =
@@ -246,7 +234,6 @@ const quickDateVisibility = {
   },
 
   toggleTomorrowOption(date) {
-    if (!elements.tomorrowContainer) return;
     const validateTomorrow = quickDateVisibility.isTomorrow(date);
 
     if (validateTomorrow) {
@@ -259,7 +246,6 @@ const quickDateVisibility = {
   },
 
   toggleNextWeekOption(date) {
-    if (!elements.nextWeekContainer) return;
     const validateNextWeek = quickDateVisibility.isNextWeek(date);
 
     if (validateNextWeek) {
@@ -339,8 +325,6 @@ const quickDateActions = {
   },
 
   updateTaskDate(taskItem, taskDueDate) {
-    if (!elements.taskDateSuggestion) return;
-
     const dueDateEls = taskItem.querySelectorAll(
       `[${ACTIONS.TASK_DATE}], [${ATTR.VISIBLE_DUE_DATE}]`,
     );

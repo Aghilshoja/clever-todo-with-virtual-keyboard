@@ -6,6 +6,7 @@ import {
   KEYBOARD_INACTIVE,
   KEYBOARD_ACTIVE,
 } from "../constants/keyboard-constants.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
   const button = document.createElement("button");
 
@@ -47,8 +48,6 @@ export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
 };
 
 export const createRows = (rowIndex) => {
-  const elements = getCachedElements();
-  if (!elements) throw new Error("required DOM wasn't found");
   const rowElement = document.createElement("div");
   rowElement.className = `keyboard__row-${rowIndex} kb-flex`;
   rowElement.dataset.col = rowIndex;
