@@ -319,6 +319,22 @@ export class TaskList {
     taskToSetItsDueDate.dueDate = taskDueDate.getTime();
   }
 
+  setMultipleDueDates(taskIds, dueDate, hasTime) {
+    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
+    const targetedTasks = allTasks.filter((task) => taskIds.includes(task.id));
+
+    if (targetedTasks.length === 0) {
+      throw new Error("No matching task objects were found.");
+    }
+
+    if (!(dueDate instanceof Date)) throw new Error("no date object !");
+
+    targetedTasks.forEach((task) => {
+      task.dueDate = dueDate.getTime();
+      task.hasTime = hasTime;
+    });
+  }
+
   async showNotification(task) {
     const image = "app-logo.png";
     const title = "Clever Task Manager";

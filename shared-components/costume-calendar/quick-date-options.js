@@ -18,6 +18,8 @@ import {
 } from "../../todos-controller.js/todos-controller.js";
 import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { exitTaskSelection } from "../select-tasks.js";
+import { getSelectedTasksToSetDateOn } from "../set-due-date-on-multiple-tasks.js";
 import { daysOfWeek, months, requiredDates } from "./create-calendar.js";
 import { exitDateMode, exitEditingDate } from "./exit-date-picker.js";
 import { formatTimeDisplay } from "./parse-time.js";
@@ -123,12 +125,10 @@ const quickDateLabels = {
   },
 
   syncQuickDateOptions() {
-    const task = getTaskObject();
-
-    if (!task) return;
-
     const taskDueDate =
-      task.dueDate === null ? new Date() : new Date(task.dueDate);
+      appStateUi.draftedDate === null
+        ? new Date()
+        : new Date(appStateUi.draftedDate);
     appStateUi.draftedDate = taskDueDate;
 
     if (appStateUi.hasTime) {
@@ -136,7 +136,7 @@ const quickDateLabels = {
       quickDateLabels.setTodayLabel();
       quickDateLabels.setTomorrowLabel();
       quickDateLabels.setNextWeekLabel();
-      quickDateLabels.removeTimeFromTextEditor(task.taskDueDate);
+      quickDateLabels.removeTimeFromTextEditor();
       quickDateLabels.removeTime();
     }
   },
@@ -179,23 +179,31 @@ const quickDateVisibility = {
     );
   },
 
-  isToday(task) {
-    const dueDate = new Date(task.dueDate);
+  isToday() {
+    const taskDueDate = new Date(appStateUi.draftedDate);
+
     const now = new Date();
 
-    return quickDateVisibility.isSameCalendarDay(dueDate, now);
+    return quickDateVisibility.isSameCalendarDay(taskDueDate, now);
   },
 
-  isTomorrow(date) {
-    const dueDate = new Date(date.dueDate);
+  isTomorrow() {
+    const taskDueDate =
+      appStateUi.draftedDate === null
+        ? new Date()
+        : new Date(appStateUi.draftedDate);
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    return quickDateVisibility.isSameCalendarDay(dueDate, tomorrow);
+    return quickDateVisibility.isSameCalendarDay(taskDueDate, tomorrow);
   },
 
-  isNextWeek(date) {
-    const dueDate = new Date(date.dueDate);
+  isNextWeek() {
+    const taskDueDate =
+      appStateUi.draftedDate === null
+        ? new Date()
+        : new Date(appStateUi.draftedDate);
     const nextMonday = new Date();
     const todayIndex = nextMonday.getDay();
 
@@ -209,11 +217,11 @@ const quickDateVisibility = {
 
     nextMonday.setDate(nextMonday.getDate() + daysUntilMonday);
 
-    return quickDateVisibility.isSameCalendarDay(dueDate, nextMonday);
+    return quickDateVisibility.isSameCalendarDay(taskDueDate, nextMonday);
   },
 
-  toggleNoDateBtnVisibility(task) {
-    if (task.dueDate === null) {
+  toggleNoDateBtnVisibility() {
+    if (appStateUi.draftedDate === null) {
       elements.noDateBtnContainer.dataset[ATTR_STATES.NO_DATE_CONTAINER] =
         INACTIVE.NO_DATE_CONTAINER;
     } else {
@@ -222,8 +230,8 @@ const quickDateVisibility = {
     }
   },
 
-  toggleTodayOption(date) {
-    const validateToday = quickDateVisibility.isToday(date);
+  toggleTodayOption() {
+    const validateToday = quickDateVisibility.isToday();
     if (validateToday) {
       elements.todayContainer.dataset[ATTR_STATES.TODAY_CONTAINER] =
         INACTIVE.TODAY_CONTAINER;
@@ -233,8 +241,8 @@ const quickDateVisibility = {
     }
   },
 
-  toggleTomorrowOption(date) {
-    const validateTomorrow = quickDateVisibility.isTomorrow(date);
+  toggleTomorrowOption() {
+    const validateTomorrow = quickDateVisibility.isTomorrow();
 
     if (validateTomorrow) {
       elements.tomorrowContainer.dataset[ATTR_STATES.TOMORROW_CONTAINER] =
@@ -245,8 +253,8 @@ const quickDateVisibility = {
     }
   },
 
-  toggleNextWeekOption(date) {
-    const validateNextWeek = quickDateVisibility.isNextWeek(date);
+  toggleNextWeekOption() {
+    const validateNextWeek = quickDateVisibility.isNextWeek();
 
     if (validateNextWeek) {
       elements.nextWeekContainer.dataset[ATTR_STATES.NEXT_WEEK_CONTAINER] =
@@ -258,13 +266,10 @@ const quickDateVisibility = {
   },
 
   updateQuickDateOptions() {
-    const taskObject = getTaskObject();
-    if (!taskObject) return;
-
-    quickDateVisibility.toggleNoDateBtnVisibility(taskObject);
-    quickDateVisibility.toggleTodayOption(taskObject);
-    quickDateVisibility.toggleTomorrowOption(taskObject);
-    quickDateVisibility.toggleNextWeekOption(taskObject);
+    quickDateVisibility.toggleNoDateBtnVisibility();
+    quickDateVisibility.toggleTodayOption();
+    quickDateVisibility.toggleTomorrowOption();
+    quickDateVisibility.toggleNextWeekOption();
   },
 };
 
@@ -363,28 +368,67 @@ const quickDateActions = {
     quickDateActions.closeDateEditor();
   },
 
+  applyQuickDateToSelectedTasks(dueDate) {
+    const setDueDateTime = quickDateActions.checkIfUsersPickedTime(dueDate);
+    appStateUi.hasTime = true;
+    const { taskIds, selectedTaskItems } = getSelectedTasksToSetDateOn();
+    lists.default.setMultipleDueDates(
+      taskIds,
+      setDueDateTime,
+      appStateUi.hasTime,
+    );
+
+    selectedTaskItems.forEach((taskEl) =>
+      quickDateActions.updateTaskDate(taskEl, setDueDateTime),
+    );
+    quickDateActions.closeDateEditor();
+    exitTaskSelection();
+  },
+
+  applyQuickDateByMode(dueDate) {
+    if (appStateUi.activeMode === EDIT_MODES.EDIT_MULTIPLE_TASK) {
+      quickDateActions.applyQuickDateToSelectedTasks(dueDate);
+    } else {
+      quickDateActions.applyQuickDateSelection(dueDate);
+    }
+  },
+
   handleTodaySelection() {
     const todayDueDate = quickDateActions.getToday();
-    quickDateActions.applyQuickDateSelection(todayDueDate);
+    quickDateActions.applyQuickDateByMode(todayDueDate);
   },
 
   handleTomorrowSelection() {
     const tomorrowDueDate = quickDateActions.getTomorrow();
-    quickDateActions.applyQuickDateSelection(tomorrowDueDate);
+    quickDateActions.applyQuickDateByMode(tomorrowDueDate);
   },
 
   handleNextWeekSelection() {
     const nextWeekDueDate = quickDateActions.getNextWeek();
-    quickDateActions.applyQuickDateSelection(nextWeekDueDate);
+    quickDateActions.applyQuickDateByMode(nextWeekDueDate);
   },
 
   handleNoDate() {
-    const { taskItem, taskId } = getTaskItem();
-    const taskObject = lists.default.getTask(taskId);
-    taskObject.dueDate = null;
-    taskObject.hasTime = false;
+    if (appStateUi.activeMode === EDIT_MODES.EDIT_MULTIPLE_TASK) {
+      const { taskIds, selectedTaskItems } = getSelectedTasksToSetDateOn();
 
-    quickDateActions.updateTaskDate(taskItem);
+      for (let i = 0; i < taskIds.length; i++) {
+        const task = lists.default.getTask(taskIds[i]);
+        task.hasTime = false;
+        task.dueDate = null;
+      }
+      selectedTaskItems.forEach((taskEl) =>
+        quickDateActions.updateTaskDate(taskEl),
+      );
+      exitTaskSelection();
+    } else {
+      const { taskItem, taskId } = getTaskItem();
+      const taskObject = lists.default.getTask(taskId);
+      taskObject.dueDate = null;
+      taskObject.hasTime = false;
+
+      quickDateActions.updateTaskDate(taskItem);
+    }
     quickDateActions.closeDateEditor();
   },
 };

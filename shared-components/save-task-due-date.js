@@ -23,8 +23,9 @@ import {
   getTaskItem,
   updateDOM,
 } from "./costume-calendar/update-task-due-date-view.js";
+import { saveMultipleTasksDueDate } from "./set-due-date-on-multiple-tasks.js";
 
-const saveTaskDueDate = () => {
+const saveSingleTaskDate = () => {
   const { taskItem, taskId } = getTaskItem();
 
   lists.default.setDueDate(taskId, appStateUi.draftedDate, appStateUi.hasTime);
@@ -35,6 +36,20 @@ const saveTaskDueDate = () => {
   exitDateMode();
   virtualKeyboard.updateAutoCaps();
   appStateUi.activeTaskId = null;
+};
+
+const saveTaskDueDate = () => {
+  const singleDateMode = appStateUi.activeMode === EDIT_MODES.DATE_MODE;
+
+  const multipleDateMode =
+    appStateUi.activeMode === EDIT_MODES.EDIT_MULTIPLE_TASK;
+
+  if (singleDateMode) {
+    saveSingleTaskDate();
+  }
+  if (multipleDateMode) {
+    saveMultipleTasksDueDate();
+  }
 };
 
 export { saveTaskDueDate };

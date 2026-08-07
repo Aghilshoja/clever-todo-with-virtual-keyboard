@@ -9,7 +9,11 @@ import {
 } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
+import {
+  appStateUi,
+  elements,
+  lists,
+} from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { months } from "./create-calendar.js";
 import { getTaskObject } from "./quick-date-options.js";
@@ -19,10 +23,10 @@ const format24HourTime = (hours, minutes) => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 };
 
-const loadExistingDueDate = (task) => {
-  const date = new Date(task.dueDate);
+const loadExistingDueDate = () => {
+  const date = new Date(appStateUi.draftedDate);
 
-  const time = task.hasTime
+  const time = appStateUi.hasTime
     ? format24HourTime(date.getHours(), date.getMinutes())
     : "";
 
@@ -40,10 +44,7 @@ const loadExistingDueDate = (task) => {
 };
 
 const initializeDateEditor = () => {
-  const task = getTaskObject();
-  if (!task) return;
-
-  if (task && task.dueDate !== null) loadExistingDueDate(task);
+  if (appStateUi.draftedDate !== null) loadExistingDueDate();
   else elements.inputElement.textContent = PLACEHOLDERS.EDIT_TASK_DATE;
 };
 

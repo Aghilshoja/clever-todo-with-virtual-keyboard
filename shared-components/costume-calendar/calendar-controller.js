@@ -25,6 +25,7 @@ import { exitDateMode, exitEditingDate } from "./exit-date-picker.js";
 import { getTaskObject, quickDateLabels } from "./quick-date-options.js";
 import { initializeDateEditor, showDateEditor } from "./prepare-date-editor.js";
 import { quickDateVisibility } from "./quick-date-options.js";
+import { exitTaskSelection } from "../select-tasks.js";
 
 const activateCalendar = () => {
   elements.dateContainer.dataset[ATTR_STATES.DATE_CONTAINER] =
@@ -59,6 +60,10 @@ const handleExitEditingTaskDateOrDateMode = (event) => {
   if (!event.target.closest(`[${ACTIONS.EXIT_DATE_PICKER}]`)) return;
   if (appStateUi.activeMode === EDIT_MODES.DATE_MODE) exitDateMode();
   if (appStateUi.activeMode === EDIT_MODES.EDIT_TASK_DATE) exitEditingDate();
+  if (appStateUi.activeMode === EDIT_MODES.EDIT_MULTIPLE_TASK) {
+    exitDateMode();
+    exitTaskSelection();
+  }
 };
 
 export {

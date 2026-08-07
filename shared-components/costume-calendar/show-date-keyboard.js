@@ -20,7 +20,8 @@ import { showDateSuggestion } from "./show-date-suggestion.js";
 const showDateKeyboard = () => {
   if (
     appStateUi.activeMode !== EDIT_MODES.DATE_MODE &&
-    appStateUi.activeMode !== EDIT_MODES.EDIT_TASK_DATE
+    appStateUi.activeMode !== EDIT_MODES.EDIT_TASK_DATE &&
+    appStateUi.activeMode !== EDIT_MODES.EDIT_MULTIPLE_TASK
   )
     return;
 

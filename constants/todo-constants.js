@@ -329,6 +329,7 @@ export const EDIT_MODES = {
   SWITCH_BETWEEN_MODES: "switch-between-modes",
   DATE_MODE: "active",
   EDIT_TASK_DATE: "edit-task-date",
+  EDIT_MULTIPLE_TASK: "edit-multiple-task",
   NO_MODES: "none",
 };
 

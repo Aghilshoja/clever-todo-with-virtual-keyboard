@@ -91,6 +91,7 @@ import {
   renderHours,
   renderMinutes,
 } from "../shared-components/costume-clock/clock-view-mode.js";
+import { showCalendar } from "../shared-components/set-due-date-on-multiple-tasks.js";
 
 registerServiceWorker();
 
@@ -258,6 +259,8 @@ const initTodo = () => {
   elements.keyboardBtn.addEventListener("click", selectTimeByManulType);
   elements.clockBtn.addEventListener("click", restoreClockView);
   elements.saveTimeBtn.addEventListener("click", saveTime);
+
+  elements.batchDueDateBtn.addEventListener("click", showCalendar);
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", (event) => {

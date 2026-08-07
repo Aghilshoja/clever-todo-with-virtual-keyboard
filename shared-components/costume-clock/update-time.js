@@ -149,8 +149,7 @@ const updateManualTime = () => {
 };
 
 const updateTimeByClock = () => {
-  const task = getTaskObject();
-  if (task.dueDate) showExistingDatePlusTime();
+  if (appStateUi.draftedDate) showExistingDatePlusTime();
   else assignTodayWithSelectedTime();
   exitClockUi();
   commitSelectedTime();

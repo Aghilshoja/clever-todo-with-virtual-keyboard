@@ -242,6 +242,10 @@ export const getCachedElements = () => {
     ),
     saveTimeBtn: requireElement(`[${ACTIONS.SAVE_TASK_TIME}]`, "saveTimeBtn"),
     clockBackdrop: requireElement(`[${ATTR.CLOCK_BACKDROP}]`, "clockBackdrop"),
+    batchDueDateBtn: requireElement(
+      `[${ACTIONS.BATCH_SET_DATE}]`,
+      "batchDueDateBtn",
+    ),
     /* end of the elements that are related to the todo app */
   };
   return elements;
