@@ -1,6 +1,7 @@
 import {
   ATTR,
   CHECK_STATES,
+  EDIT_MODES,
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
@@ -22,6 +23,7 @@ import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { exitTaskSelection } from "./select-tasks.js";
+import { months } from "./costume-calendar/create-calendar.js";
 
 const getSelectedTask = () => {
   const selectedTask = document.querySelector(
@@ -44,9 +46,34 @@ export const handleSeveralTasksCompletionOrUncompletion = () => {
   }
 };
 
+const formatTime = () => {
+  const currentYear = new Date().getFullYear();
+
+  const year = appStateUi.undoOperation.dueDate.getFullYear();
+  const month = appStateUi.undoOperation.dueDate.getMonth();
+  const date = appStateUi.undoOperation.dueDate.getDate();
+
+  const hour = appStateUi.undoOperation.dueDate.getHours();
+  const minute = appStateUi.undoOperation.dueDate.getMinutes();
+
+  const time = appStateUi.undoOperation.hasTime
+    ? `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
+    : "";
+
+  return `scheduled for ${months[month]} ${date} ${year === currentYear ? "" : year} ${time}`;
+};
+
 // shared component for both completed tasks and uncompleted tasks
-export const changeUndoPopupLabel = (currentList, length) => {
+export const ShowUndoStatusLabel = (currentList, length) => {
   const completedList = currentList.hasAttribute(ATTR.COMPLETED_LIST);
+
+  const isMultipleDueDates =
+    appStateUi.undoOperation.undoType === UNDO_STATES.UNDO_MULTIPLE_DUE_DATES;
+
+  if (isMultipleDueDates) {
+    elements.completionStatusLabel.textContent = formatTime();
+    return;
+  }
 
   if (completedList)
     elements.completionStatusLabel.textContent = `${length} uncompleted`;

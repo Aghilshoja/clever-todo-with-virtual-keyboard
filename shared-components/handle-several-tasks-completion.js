@@ -2,9 +2,9 @@ import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import { getCachedElements } from "./get-cached-element.js";
 import {
-  changeUndoPopupLabel,
   refreshUi,
   removeSelectedTasks,
+  ShowUndoStatusLabel,
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
 
@@ -26,5 +26,5 @@ export const handleSeveralTasksCompletion = (currentList) => {
 
   selectedTasksClone.forEach((task) => completedList.prepend(task));
   refreshUi();
-  changeUndoPopupLabel(currentList, selectedTasksLength);
+  ShowUndoStatusLabel(currentList, selectedTasksLength);
 };

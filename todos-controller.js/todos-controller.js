@@ -58,7 +58,7 @@ import {
 } from "../shared-components/delete-several-tasks.js";
 import { duplicateSeveralTasks } from "../shared-components/duplicate-several-tasks.js";
 import { handleSeveralTasksCompletionOrUncompletion } from "../shared-components/handle-several-tasks-completion-or-uncompletion.js";
-import { handleSeveralCompletedAndUncompletedTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
+import { handleMultipleTasksUndo } from "../shared-components/handle-several-completed-and-uncompleted-tasks-undo.js";
 import { openKeyboardToAddATask } from "../shared-components/add-task-relative-to-selected-task.js";
 import {
   decrementYearAndMonth,
@@ -117,6 +117,8 @@ export const appStateUi = {
     taskObjectIndex: null,
     originalTaskObject: null,
     undoType: UNDO_STATES.NO_UNDO,
+    hasTime: null,
+    dueDate: null,
   },
   taskSelectionMode: SELECTION_BAR.ACTIVE_LIST,
   selectedTasksCounter: 0,
@@ -193,10 +195,7 @@ const initTodo = () => {
     "click",
     handleUndoCompletingAndUncompleting,
   );
-  elements.undoCompletedTask.addEventListener(
-    "click",
-    handleSeveralCompletedAndUncompletedTasksUndo,
-  );
+  elements.undoCompletedTask.addEventListener("click", handleMultipleTasksUndo);
 
   document.addEventListener("click", toggleBatchOptions);
   document.addEventListener("click", toggleSelectionBarMenu);

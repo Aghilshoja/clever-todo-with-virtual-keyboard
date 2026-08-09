@@ -2,10 +2,10 @@ import { ATTR } from "../constants/todo-constants.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import {
-  changeUndoPopupLabel,
   clearActiveTaskContainer,
   refreshUi,
   removeSelectedTasks,
+  ShowUndoStatusLabel,
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
 import { activeUlId } from "./render-tasks.js";
@@ -27,6 +27,6 @@ export const handleSeveralTasksUncompletion = (currentList) => {
   lists.default.uncompleteSeveralTasks(taskids);
   selectedTasksClone.forEach((task) => activeList.prepend(task));
 
-  changeUndoPopupLabel(currentList, selectedTasksLength);
+  ShowUndoStatusLabel(currentList, selectedTasksLength);
   refreshUi();
 };

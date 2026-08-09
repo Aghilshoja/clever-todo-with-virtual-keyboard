@@ -338,6 +338,7 @@ export const UNDO_STATES = {
   UNDO_UNCOMPLETED: "single-uncompleted",
   UNDO_SEVERAL_COMPLETED: "several-completed",
   UNDO_SEVERAL_UNCOMPLETED: "several-uncompleted",
+  UNDO_MULTIPLE_DUE_DATES: "multiple-due-dates",
   NO_UNDO: "none",
 };
 
