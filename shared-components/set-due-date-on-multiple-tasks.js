@@ -87,7 +87,7 @@ const saveMultipleTasksDueDate = () => {
 
   quickDateActions.closeDateEditor();
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_MULTIPLE_DUE_DATES;
-  ShowUndoStatusLabel(selectedTaskItems[0].parentElement);
+  ShowUndoStatusLabel();
   showUndopopup();
   exitTaskSelection();
 };

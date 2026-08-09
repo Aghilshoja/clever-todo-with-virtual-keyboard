@@ -65,15 +65,14 @@ const formatTime = () => {
 
 // shared component for both completed tasks and uncompleted tasks
 export const ShowUndoStatusLabel = (currentList, length) => {
-  const completedList = currentList.hasAttribute(ATTR.COMPLETED_LIST);
-
   const isMultipleDueDates =
     appStateUi.undoOperation.undoType === UNDO_STATES.UNDO_MULTIPLE_DUE_DATES;
-
   if (isMultipleDueDates) {
     elements.completionStatusLabel.textContent = formatTime();
     return;
   }
+
+  const completedList = currentList.hasAttribute(ATTR.COMPLETED_LIST);
 
   if (completedList)
     elements.completionStatusLabel.textContent = `${length} uncompleted`;

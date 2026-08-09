@@ -7,6 +7,7 @@ import {
   DUE_DATE_STATES,
   EDIT_MODES,
   INACTIVE,
+  UNDO_STATES,
 } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
@@ -18,8 +19,11 @@ import {
 } from "../../todos-controller.js/todos-controller.js";
 import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { ShowUndoStatusLabel } from "../handle-several-tasks-completion-or-uncompletion.js";
 import { exitTaskSelection } from "../select-tasks.js";
 import { getSelectedTasksToSetDateOn } from "../set-due-date-on-multiple-tasks.js";
+import { showUndopopup } from "../undo-completed-task.js";
+import { takeSnapShotofDomForDueDates } from "../undo-multiple-due-dates.js";
 import { daysOfWeek, months, requiredDates } from "./create-calendar.js";
 import { exitDateMode, exitEditingDate } from "./exit-date-picker.js";
 import { formatTimeDisplay } from "./parse-time.js";
@@ -372,6 +376,9 @@ const quickDateActions = {
     const setDueDateTime = quickDateActions.checkIfUsersPickedTime(dueDate);
     appStateUi.hasTime = true;
     const { taskIds, selectedTaskItems } = getSelectedTasksToSetDateOn();
+
+    takeSnapShotofDomForDueDates();
+
     lists.default.setMultipleDueDates(
       taskIds,
       setDueDateTime,
@@ -382,6 +389,11 @@ const quickDateActions = {
       quickDateActions.updateTaskDate(taskEl, setDueDateTime),
     );
     quickDateActions.closeDateEditor();
+    appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_MULTIPLE_DUE_DATES;
+    appStateUi.undoOperation.dueDate = setDueDateTime;
+    appStateUi.undoOperation.hasTime = appStateUi.hasTime;
+    ShowUndoStatusLabel();
+    showUndopopup();
     exitTaskSelection();
   },
 
