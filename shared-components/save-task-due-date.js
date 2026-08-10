@@ -44,7 +44,9 @@ const saveTaskDueDate = () => {
   const multipleDateMode =
     appStateUi.activeMode === EDIT_MODES.EDIT_MULTIPLE_TASK;
 
-  if (singleDateMode) {
+  const editingTaskDate = appStateUi.activeMode === EDIT_MODES.EDIT_TASK_DATE;
+
+  if (singleDateMode || editingTaskDate) {
     saveSingleTaskDate();
   }
   if (multipleDateMode) {

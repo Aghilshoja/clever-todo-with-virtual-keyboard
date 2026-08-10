@@ -70,7 +70,19 @@ const getMonthAndDay = (dateInfo) => {
 };
 
 const getNextWeek = (dateInfo) => {
-  return applyTime(today, dateInfo);
+  const nextWeekDueDate = new Date();
+  const todayIndex = nextWeekDueDate.getDay();
+
+  const MONDAY_INDEX = 1;
+
+  let daysUntilMonday = MONDAY_INDEX - todayIndex;
+
+  if (daysUntilMonday < 0) {
+    daysUntilMonday += 7;
+  }
+
+  nextWeekDueDate.setDate(nextWeekDueDate.getDate() + daysUntilMonday);
+  return applyTime(nextWeekDueDate, dateInfo);
 };
 
 const getThisWeekEnd = (dateInfo) => {
