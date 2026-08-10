@@ -48,6 +48,7 @@ const openTaskCalendar = () => {
   activateCalendar();
   showDateEditor();
   initializeDateEditor();
+  quickDateVisibility.updateQuickDateOptions();
 };
 
 const showCostumeCalendar = (e) => {
