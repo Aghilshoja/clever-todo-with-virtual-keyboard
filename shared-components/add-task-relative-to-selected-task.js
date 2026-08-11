@@ -7,7 +7,8 @@ import {
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
+import { appStateUi } from "./todo-states/states.js";
 
 const performDOMOperationOfAddingNewTask = (selectedTask, newTask) => {
   const cloneSelectedTask = selectedTask.cloneNode(true);

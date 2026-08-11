@@ -1,17 +1,10 @@
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import {
   PLACEHOLDERS,
   ATTRIBUTES,
@@ -21,6 +14,8 @@ import {
 import { showDateSuggestion } from "../shared-components/costume-calendar/show-date-suggestion.js";
 import { updateTextEditor } from "./keyboard-caret-positioning.js";
 import { limitTimeInput } from "../shared-components/costume-clock/validate-time-input.js";
+import { appStateUi } from "../shared-components/todo-states/states.js";
+import { keyboardUiState } from "./keyboard-states/states.js";
 
 export const pressBackspace = (e) => {
   if (e.target.closest(`[${KEYBOARD_ACTIONS.BACKSPACE}]`)) {

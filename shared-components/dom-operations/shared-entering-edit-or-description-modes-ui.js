@@ -1,11 +1,7 @@
 import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { appStateUi } from "../../todos-controller.js/todos-controller.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTRIBUTES,
   KEYBOARD_STATES,
@@ -24,6 +20,8 @@ import {
 import { renderKeyPreviewPopup } from "../../keyboard-view/keyboard-feedback-overlay.js";
 import { updateEditorState } from "../save-drafted-text-input-to-local-storage.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 export const getRepetitiveElements = (toolbar) => {
   const taskItem = toolbar.closest(`[${ATTR.TASK_ITEM}]`);

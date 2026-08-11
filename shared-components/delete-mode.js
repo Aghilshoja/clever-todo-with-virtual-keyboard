@@ -1,8 +1,5 @@
 import { getCachedElements } from "./get-cached-element.js";
-import {
-  appStateUi,
-  elements,
-} from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { lists } from "../todos-controller.js/todos-controller.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
@@ -17,6 +14,7 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   INACTIVE,
 } from "../constants/todo-constants.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const handleEmptyTaskStateUi = () => {
   const listContainer = document.querySelector(`

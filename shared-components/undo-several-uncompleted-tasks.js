@@ -1,10 +1,11 @@
 import { ATTR } from "../constants/todo-constants.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,
 } from "./handle-several-completed-and-uncompleted-tasks-undo.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralUncompletedTasks = () => {
   const completedTaskList = getCompletedListContainer();

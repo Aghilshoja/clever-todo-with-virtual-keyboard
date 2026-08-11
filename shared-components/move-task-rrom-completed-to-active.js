@@ -1,4 +1,4 @@
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import {
   captureAndRemoveTaskItem,
   showNumberOfCompletedTasks,
@@ -12,6 +12,7 @@ import {
   updateCounterAfterCompletingOrUncompletingATask,
 } from "./select-tasks.js";
 import { ACTIONS, UNDO_STATES } from "../constants/todo-constants.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const moveTaskFromCompletedToActive = (event) => {
   const clickedCheckbox = event.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`);

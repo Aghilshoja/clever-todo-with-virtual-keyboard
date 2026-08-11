@@ -1,12 +1,9 @@
 import { ACTIONS, ATTR } from "../constants/todo-constants.js";
-import {
-  addListeners,
-  appStateUi,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { activeUlId } from "./render-tasks.js";
+import { appStateUi } from "./todo-states/states.js";
 import { hideUndoPopup, removeTaskItemForUndo } from "./undo-completed-task.js";
 
 export const undoUncompletedTask = () => {

@@ -1,8 +1,6 @@
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 import { daysOfWeek, months, requiredDates } from "./create-calendar.js";
 import { formatTimeDisplay, parseTime } from "./parse-time.js";
 

@@ -12,21 +12,17 @@ import {
   HIDDEN,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import {
   disableSubmitIfInputEmpty,
   ensurePlaceholder,
 } from "../../keyboard-view/keyboard-input-behavior.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const resetModesAndEnsurePlaceholder = () => {
   appStateUi.activeMode = EDIT_MODES.NO_MODES;

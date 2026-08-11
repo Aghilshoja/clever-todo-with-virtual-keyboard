@@ -1,8 +1,5 @@
 import { getCachedElements } from "../get-cached-element.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-behavior.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
@@ -16,10 +13,7 @@ import {
   LOCAL_STORAGE_KEY,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTR,
   ATTR_STATES,
@@ -32,6 +26,8 @@ import {
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const renderUnrelatedElements = () => {
   const unrelatedEls = document.querySelectorAll(

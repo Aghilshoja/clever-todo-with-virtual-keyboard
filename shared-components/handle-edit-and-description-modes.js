@@ -1,4 +1,3 @@
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
 
 import {
@@ -26,6 +25,7 @@ import {
   ATTR,
   EDIT_MODES,
 } from "../constants/todo-constants.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const implementEditAndDescriptionMode = (event) => {
   const requiredData = detectClickedElementAndGetTaskObject(event);

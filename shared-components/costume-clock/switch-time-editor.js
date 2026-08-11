@@ -4,11 +4,9 @@ import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js"
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 
 const hideKeyboardUnrelatedOptions = () => {
   elements.unrelatedKeyboardOptions.forEach(

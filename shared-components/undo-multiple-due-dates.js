@@ -3,11 +3,12 @@ import {
   CHECK_STATES,
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import { refreshUiAfterUndo } from "./handle-several-completed-and-uncompleted-tasks-undo.js";
 import { activeUlId } from "./render-tasks.js";
 import { exitTaskSelection } from "./select-tasks.js";
+import { appStateUi } from "./todo-states/states.js";
 
 const getSelectedTask = () => {
   const selectedTask = document.querySelector(

@@ -7,21 +7,17 @@ import {
   INACTIVE,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 import { renderMinutes } from "./clock-view-mode.js";
 import {
   activateNumberKeyboard,
   hideKeyboardUnrelatedOptions,
   updateInputElement,
 } from "./switch-time-editor.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const showClock = () => {
   elements.clockFace.dataset[ATTR_STATES.CLOCK_FACE] = VISIBLE.CLOCK_FACE;

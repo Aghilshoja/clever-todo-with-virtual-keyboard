@@ -11,16 +11,10 @@ import {
   TIME_PERIODS,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { months } from "../costume-calendar/create-calendar.js";
 import {
   getTaskObject,
@@ -28,7 +22,9 @@ import {
 } from "../costume-calendar/quick-date-options.js";
 import { showDateSuggestion } from "../costume-calendar/show-date-suggestion.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 import { exitClockUi } from "./exit-clock-mode.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const formatTime = (hour, minute, dueDate) => {
   const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;

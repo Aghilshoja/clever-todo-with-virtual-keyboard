@@ -12,16 +12,13 @@ import {
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { ShowUndoStatusLabel } from "../handle-several-tasks-completion-or-uncompletion.js";
 import { exitTaskSelection } from "../select-tasks.js";
 import { getSelectedTasksToSetDateOn } from "../set-due-date-on-multiple-tasks.js";
+import { appStateUi } from "../todo-states/states.js";
 import { showUndopopup } from "../undo-completed-task.js";
 import { takeSnapShotofDomForDueDates } from "../undo-multiple-due-dates.js";
 import { daysOfWeek, months, requiredDates } from "./create-calendar.js";

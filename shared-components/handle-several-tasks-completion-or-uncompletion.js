@@ -9,11 +9,7 @@ import { handleSeveralTasksCompletion } from "./handle-several-tasks-completion.
 import { handleSeveralTasksUncompletion } from "./handle-several-tasks-uncompletion.js";
 import { activeUlId } from "./render-tasks.js";
 import { ACTIONS, ATTR_STATES } from "../constants/todo-constants.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import {
   getCompletedListContainer,
   showNumberOfCompletedTasks,
@@ -24,6 +20,7 @@ import { showUndopopup } from "./undo-completed-task.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { exitTaskSelection } from "./select-tasks.js";
 import { months } from "./costume-calendar/create-calendar.js";
+import { appStateUi } from "./todo-states/states.js";
 
 const getSelectedTask = () => {
   const selectedTask = document.querySelector(

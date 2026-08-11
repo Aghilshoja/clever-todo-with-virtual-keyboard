@@ -32,10 +32,8 @@ export class TaskList {
     return this.completedTasks;
   }
 
-  // update delete , edit, and duplicate features to handle completed list as well
   deleteTask(taskId) {
-    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const foundTask = allTypesOfTasks.find((t) => t.id === taskId);
+    const foundTask = this.getTask(taskId);
     if (!foundTask) throw new Error("task object was not found");
 
     this.removeNotifications(taskId);
@@ -67,8 +65,7 @@ export class TaskList {
   }
 
   duplicateTask(taskId) {
-    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const foundTask = allTypesOfTasks.find((t) => t.id === taskId);
+    const foundTask = this.getTask(taskId);
     if (!foundTask) throw new Error("task object was not found");
     const isCompleted = foundTask.isCompleted === true;
 
@@ -94,8 +91,7 @@ export class TaskList {
   duplicateSeveralTasks(taskIds) {
     const copiesOfDuplicatedTasks = [];
 
-    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const firstTask = allTasks.find((t) => taskIds.includes(t.id));
+    const firstTask = this.getTask(taskIds[0]);
     const isCompletedList = firstTask?.isCompleted === true;
 
     const sourceList = isCompletedList
@@ -256,15 +252,13 @@ export class TaskList {
   }
 
   editTaskOrDescription(taskId) {
-    const allTypesOfTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const taskTodEdit = allTypesOfTasks.find((t) => t.id === taskId);
-    if (!taskTodEdit) throw new Error("task object was not found");
-    return taskTodEdit;
+    const taskToEdit = this.getTask(taskId);
+    if (!taskToEdit) throw new Error("task object was not found");
+    return taskToEdit;
   }
 
   createInsertionContext(selectedTaskId, text) {
-    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const selectedTask = allTasks.find((task) => task.id === selectedTaskId);
+    const selectedTask = this.getTask(selectedTaskId);
 
     if (!selectedTask) return;
 
@@ -308,8 +302,7 @@ export class TaskList {
   }
 
   setDueDate(taskId, taskDueDate, hasTime) {
-    const allTasks = [...this.getTasks(), ...this.getCompletedTasks()];
-    const taskToSetItsDueDate = allTasks.find((task) => task.id === taskId);
+    const taskToSetItsDueDate = this.getTask(taskId);
     if (!taskToSetItsDueDate) throw new Error("task object was not found");
 
     if (!(taskDueDate instanceof Date)) throw new Error("no date object !");

@@ -5,11 +5,9 @@ import {
   CHECK_STATES,
   HIDDEN,
 } from "../../constants/todo-constants.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 import { clockInfo } from "./render-clock.js";
 
 const getAngleFromClick = (clientX, clientY) => {

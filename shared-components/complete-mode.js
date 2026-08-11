@@ -1,13 +1,8 @@
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { renderCompletedTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
-import { addListeners } from "../todos-controller.js/todos-controller.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import {
@@ -23,6 +18,8 @@ import {
   INACTIVE,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
+import { appStateUi } from "./todo-states/states.js";
+import { addTaskListeners } from "./listeners/todo-listeners.js";
 
 export const captureAndRemoveTaskItem = (taskId) => {
   const taskItem = document.querySelector(
@@ -89,7 +86,7 @@ export const completeTask = (e) => {
   const completedListContainer = getCompletedListContainer();
   if (!completedListContainer) return;
   captureAndRemoveTaskItem(taskId);
-  addListeners(
+  addTaskListeners(
     completedListContainer.completedList,
   ); /* add listeners to the completed list */
   showNumberOfCompletedTasks();

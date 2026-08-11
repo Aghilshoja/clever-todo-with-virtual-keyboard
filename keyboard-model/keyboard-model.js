@@ -110,7 +110,6 @@ export class KeyboardApp {
   }
 
   updateAutoCaps() {
-    // If locked in uppercase, don't change
     if (this.capsLock === KeyboardApp.CAPS_LOCK.UPPERCASE) return;
 
     const beforeCaret = this.caretManeger.text.slice(

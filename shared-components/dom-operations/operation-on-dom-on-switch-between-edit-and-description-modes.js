@@ -1,15 +1,9 @@
 import { getCachedElements } from "../get-cached-element.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { cleanupDescriptionAndEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { disableOrEnableSaveBtn } from "../handle-disabling-or-enabling-saving-task-edits.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import {
   ATTR,
   ATTR_STATES,
@@ -25,6 +19,8 @@ import {
 } from "../../constants/keyboard-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const editDescription = (descriptionEl, toolbar) => {
   if (!descriptionEl) return;

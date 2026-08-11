@@ -8,11 +8,9 @@ import {
   TIME_PERIODS,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 
 const clockInfo = {
   CLOCK_RADIUS: 80,

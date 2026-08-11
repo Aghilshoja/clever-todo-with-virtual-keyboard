@@ -2,12 +2,10 @@ import { ensureCaret } from "./keyboard-input-caret.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import {
-  appStateUi,
-  elements,
-} from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { EDIT_MODES } from "../constants/todo-constants.js";
 import { updateEditorState } from "../shared-components/save-drafted-text-input-to-local-storage.js";
+import { appStateUi } from "../shared-components/todo-states/states.js";
 
 export const updateTextEditor = (input, caret) => {
   const caretState = virtualKeyboard.caretManeger;

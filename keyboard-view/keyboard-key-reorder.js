@@ -1,12 +1,11 @@
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import {
   ATTRIBUTES,
   KB_CHECK_STATES,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
+import { keyboardUiState } from "./keyboard-states/states.js";
+
 export const handledraggeingKey = (e) => {
   const draggedKey = e.target.closest(`[${ATTRIBUTES.REGULAR_KEY}]`);
   if (!draggedKey) return;

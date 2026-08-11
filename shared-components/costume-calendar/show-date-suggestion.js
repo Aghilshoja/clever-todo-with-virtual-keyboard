@@ -1,10 +1,8 @@
 import { EDIT_MODES } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
+import { appStateUi } from "../todo-states/states.js";
 import { requiredDates } from "./create-calendar.js";
 import { findPatterns } from "./find-matching-pattern.js";
 import {

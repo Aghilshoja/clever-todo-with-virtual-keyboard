@@ -1,10 +1,6 @@
 import { getCachedElements } from "./get-cached-element.js";
 import { ensurePlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
 import { countTasks } from "./count-tasks.js";
 import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
@@ -15,6 +11,7 @@ import {
   addTaskAboveSelectedTask,
   addTaskBelowSelectedTask,
 } from "./add-task-relative-to-selected-task.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const addTask = () => {
   const value = virtualKeyboard.caretManeger.text.trim();

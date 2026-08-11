@@ -1,8 +1,4 @@
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "./get-cached-element.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { activeUlId } from "./render-tasks.js";
@@ -19,6 +15,7 @@ import {
   ACTIVE,
   INACTIVE,
 } from "../constants/todo-constants.js";
+import { appStateUi } from "./todo-states/states.js";
 
 let undoPopupTimer = null;
 

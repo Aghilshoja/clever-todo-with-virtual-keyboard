@@ -3,21 +3,16 @@ import {
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
 import { ATTR_STATES } from "../../constants/todo-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { getCachedElements } from "../get-cached-element.js";
 import { months } from "./create-calendar.js";
 import { getTaskObject } from "./quick-date-options.js";
 import { formatTimeDisplay } from "./parse-time.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const format24HourTime = (hours, minutes) => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;

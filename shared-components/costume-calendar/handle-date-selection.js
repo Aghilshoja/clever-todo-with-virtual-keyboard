@@ -15,10 +15,8 @@ import {
   enableSaveDateBtn,
   showDateSuggestion,
 } from "./show-date-suggestion.js";
-import {
-  appStateUi,
-  elements,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller.js/todos-controller.js";
+import { appStateUi } from "../todo-states/states.js";
 
 const showSelectedDate = (dayElement) => {
   const day = dayElement.dataset.day;

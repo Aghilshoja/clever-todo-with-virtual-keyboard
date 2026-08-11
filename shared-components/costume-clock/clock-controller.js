@@ -7,17 +7,10 @@ import {
   TIME_PERIODS,
   VISIBLE,
 } from "../../constants/todo-constants.js";
-import {
-  keyboardUiState,
-  virtualKeyboard,
-} from "../../keyboard-controler/keyboard-controler.js";
+import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { daysOfWeek, months } from "../costume-calendar/create-calendar.js";
 import { showDateSuggestion } from "../costume-calendar/show-date-suggestion.js";
 import { getTaskItem } from "../costume-calendar/update-task-due-date-view.js";
@@ -37,6 +30,8 @@ import {
 } from "./update-time.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { restoreDateEditorAfterCancel } from "./exit-clock-mode.js";
+import { appStateUi } from "../todo-states/states.js";
+import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 const buildClockUI = () => {
   elements.clockBackdrop.dataset[ATTR_STATES.CLOCK_BACKDROP] = "";

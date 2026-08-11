@@ -12,13 +12,11 @@ import {
   PLACEHOLDERS,
 } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import {
-  appStateUi,
-  elements,
-} from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { EDIT_MODES } from "../constants/todo-constants.js";
 import { updateTextEditor } from "../keyboard-view/keyboard-caret-positioning.js";
 import { handleTaskCharacterLimit } from "./handle-task-character-limit.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const updateEditorState = (key, value) => {
   const savedData =

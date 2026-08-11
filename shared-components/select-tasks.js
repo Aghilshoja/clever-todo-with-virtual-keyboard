@@ -13,10 +13,8 @@ import {
   VISIBLE,
 } from "../constants/todo-constants.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
-import {
-  appStateUi,
-  elements,
-} from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const toggleBatchOptions = (e) => {
   if (e.target.closest(`[${ACTIONS.TOGGLE_DROPDOWN_LIST}]`)) {

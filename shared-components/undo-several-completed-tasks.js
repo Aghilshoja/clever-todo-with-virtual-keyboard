@@ -5,13 +5,14 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-import { appStateUi, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,
 } from "./handle-several-completed-and-uncompleted-tasks-undo.js";
 import { activeUlId } from "./render-tasks.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralCompletedTasks = () => {
   const activelist = document.querySelector(`

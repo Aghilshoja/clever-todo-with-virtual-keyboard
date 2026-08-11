@@ -6,11 +6,7 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-import {
-  appStateUi,
-  elements,
-  lists,
-} from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller.js/todos-controller.js";
 import { updateCalendar } from "./costume-calendar/create-calendar.js";
 import {
   initializeDateEditor,
@@ -24,6 +20,7 @@ import {
 import { updateDOM } from "./costume-calendar/update-task-due-date-view.js";
 import { ShowUndoStatusLabel } from "./handle-several-tasks-completion-or-uncompletion.js";
 import { exitTaskSelection } from "./select-tasks.js";
+import { appStateUi } from "./todo-states/states.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import { takeSnapShotofDomForDueDates } from "./undo-multiple-due-dates.js";
 

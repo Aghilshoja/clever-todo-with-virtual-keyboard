@@ -4,10 +4,10 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-import { appStateUi } from "../todos-controller.js/todos-controller.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { appStateUi } from "./todo-states/states.js";
 import { hideUndoPopup } from "./undo-completed-task.js";
 import { undoMultipleTaskDueDates } from "./undo-multiple-due-dates.js";
 import { undoSeveralCompletedTasks } from "./undo-several-completed-tasks.js";
