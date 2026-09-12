@@ -63,7 +63,6 @@ export const ATTR = {
   TODAY_CONTANIER: "data-today-container",
   TOMORROW_CONTAINER: "data-tomorrow-container",
   NEXT_WEEK_CONTAINER: "data-next-week-container",
-
   NEXT_WEEK_TIME_LABEL: "data-next-week-time-label",
   TOMORROW_TIME_LABEL: "data-tomorrow-time-label",
   TODAY_TIME_LABEL: "data-today-time-label",
@@ -77,6 +76,9 @@ export const ATTR = {
   TIME_PM: "data-time-pm",
   TASK_DATE_EDITOR: "data-task-date-editor",
   CLOCK_BACKDROP: "data-clock-backdrop",
+  HISTORY_DROPDOWN_LIST: "data-history-dropdown-list",
+  HISTORY_SECTION: "data-task-history-section",
+  HISTORY_CONTAINER: "data-task-history-container",
 };
 
 // elements that perform actions
@@ -139,6 +141,12 @@ export const ACTIONS = {
   SWITCH_TO_MANUAL_TYPE: 'data-action="switch-to-manual-time"',
   CLOCK_BTN: 'data-action="switch-to-clock"',
   SAVE_TASK_TIME: 'data-action="save-task-time"',
+  ACTIVITY_LOG: 'data-action="activity-log"',
+  DELETED_TASK_HISTORY: 'data-action="deleted-task-history"',
+  EDITED_TASK_HISTORY: 'data-action="edited-task-history"',
+  COMPLETED_TASK_HISTORY: 'data-action="completed-task-history"',
+  ADDED_TASK_HISTORY: 'data-action="added-task-history"',
+  TO_MAIN_PAGE: 'data-action="back-to-main-page"',
 };
 
 // check states using selectors
@@ -231,6 +239,8 @@ export const ATTR_STATES = {
   MINUTE_VISIBILITY: "minuteVisibility",
   HOUR_VISIBILITY: "hourVisibility",
   CLOCK_BACKDROP: "backdrop",
+  HISTROY_DROP_LIST: "activityLogState",
+  HISTORY_SECTION: "historySectionState",
 };
 
 export const VISIBLE = {
@@ -274,6 +284,8 @@ export const OPEN = {
   BATCH_TOOLBAR: "open",
   BATCH_MENU: "open",
   SELECTION_BAR_MENU: "open",
+  HISTROY_DROP_LIST: "open",
+  HISTORY_SECTION: "open",
 };
 
 export const CLOSED = {
@@ -283,6 +295,8 @@ export const CLOSED = {
   BATCH_TOOLBAR: "closed",
   BATCH_MENU: "closed",
   SELECTION_BAR_MENU: "closed",
+  HISTROY_DROP_LIST: "closed",
+  HISTORY_SECTION: "closed",
 };
 
 export const ACTIVE = {

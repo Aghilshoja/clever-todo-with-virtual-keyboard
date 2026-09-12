@@ -25,13 +25,17 @@ import {
 import { duplicateTask } from "../duplicate-mode.js";
 import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
 import {
+  exitTaskHistory,
+  renderTaskHistory,
+  toggleActivityLogDropMenu,
+} from "../handle-activity-log.js";
+import {
   exitEditMode,
   implementEditAndDescriptionMode,
   saveEditedTask,
 } from "../handle-edit-and-description-modes.js";
 import { handleMultipleTasksUndo } from "../handle-several-completed-and-uncompleted-tasks-undo.js";
 import { handleSeveralTasksCompletionOrUncompletion } from "../handle-several-tasks-completion-or-uncompletion.js";
-import { handleSeveralTasksCompletion } from "../handle-several-tasks-completion.js";
 import { moveTaskFromCompletedToActive } from "../move-task-rrom-completed-to-active.js";
 import { revealManu, revealToolbar } from "../reveal-toolbar.js";
 import {
@@ -54,7 +58,10 @@ export const registerTodoListeners = () => {
   elements.undoCompletedTask.addEventListener("click", handleMultipleTasksUndo);
 
   document.addEventListener("click", toggleBatchOptions);
+  document.addEventListener("click", toggleActivityLogDropMenu);
+  elements.historyDropList.addEventListener("click", renderTaskHistory);
   document.addEventListener("click", toggleSelectionBarMenu);
+  document.addEventListener("click", exitTaskHistory);
   elements.dropDownList.addEventListener("click", triggerTaskSelectionUi);
   document.addEventListener("click", toggleOptionsOfSelectedTasks);
   elements.selectionBar.addEventListener("click", handleExitSelectionClick);

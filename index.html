@@ -85,6 +85,7 @@
                 <button
                   class="main-page__select-tasks button-reset pd fs cursor"
                   aria-label="select tasks to do an action on them"
+                  title="select tasks to do an action on them"
                   data-action="enter-selection-mode"
                 >
                   select tasks
@@ -94,6 +95,8 @@
                 <button
                   class="main-page__activity-log button-reset pd fs cursor"
                   aria-label="check your history like which tasks you have deleted, edited or completed"
+                  title="check your history like which tasks you have deleted, edited or completed"
+                  data-action="activity-log"
                 >
                   activity log
                 </button>
@@ -104,6 +107,52 @@
                   aria-label="see all of your comments"
                 >
                   Comments
+                </button>
+              </li>
+            </ul>
+            <ul
+              class="drop-down-manu"
+              data-history-dropdown-list
+              data-activity-log-state="closed"
+            >
+              <li class="task-histories__deleted history">
+                <button
+                  class="task-histories__deleted-tasks history-task button-reset pd fs"
+                  data-action="deleted-task-history"
+                  title="review the history of your entire deleted tasks"
+                  aria-label="review the history of your entire deleted tasks"
+                >
+                  deleted tasks
+                </button>
+              </li>
+              <li class="task-histories__edited history">
+                <button
+                  class="task-histories__edited-tasks history-task button-reset pd fs"
+                  data-action="edited-task-history"
+                  title="review the history of your entire edited tasks"
+                  aria-label="review the history of your entire edited tasks"
+                >
+                  edited tasks
+                </button>
+              </li>
+              <li class="task-histories__completed history">
+                <button
+                  class="task-histories__completed-tasks history-task button-reset pd fs"
+                  data-action="completed-task-history"
+                  title="review the history of your entire completed tasks"
+                  aria-label="review the history of your entire completed tasks"
+                >
+                  completed tasks
+                </button>
+              </li>
+              <li class="task-histories__added history">
+                <button
+                  class="task-histories__added-tasks history-task button-reset pd fs"
+                  data-action="added-task-history"
+                  title="review the history of your entire added tasks"
+                  aria-label="review the history of your entire added tasks"
+                >
+                  added tasks
                 </button>
               </li>
             </ul>
@@ -842,12 +891,33 @@
           <button
             class="task-date__save-new-date button-reset fs cursor padding"
             aria-label="save new task' date"
-            title="save new task' date"
+            title="save new task date"
             data-action="save-task-date"
           >
             Save
           </button>
         </div>
+      </section>
+      <section
+        class="history"
+        data-task-history-section
+        data-history-section-state="closed"
+      >
+        <div class="history-container">
+          <h2>task history</h2>
+          <div class="back-arrow-wrapper">
+            <button
+              class="history__back-arrow button-reset fs"
+              aria-labe="back to main page form history page"
+              title="back to main page from history page"
+              data-action="back-to-main-page"
+            >
+              <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <ul class="all-task-history" data-task-history-container></ul>
       </section>
     </main>
 

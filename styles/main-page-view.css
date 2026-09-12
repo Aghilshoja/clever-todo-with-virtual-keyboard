@@ -263,3 +263,29 @@
 .main-page__toggle-selection-bar-menu {
   padding-right: 0.4rem;
 }
+
+.history button {
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.history button:hover {
+  background-color: rgba(128, 128, 128, 0.096);
+}
+
+[data-activity-log-state] {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  background-color: white;
+  box-shadow: 1px 1px 10px black;
+}
+
+[data-activity-log-state="closed"] {
+  display: none;
+}
+
+[data-activity-log-state="open"] {
+  display: block;
+}

@@ -10,6 +10,10 @@ export const appStateUi = {
   taskId: null,
   activeMode: EDIT_MODES.NO_MODES,
   taskObjectToEdit: null,
+  taskObjectInfo: {
+    description: null,
+    text: null,
+  },
   lastClickedElement: {
     lastEl: null,
     updatedInput: null,

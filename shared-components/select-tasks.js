@@ -12,7 +12,6 @@ import {
   SELECTION_BAR,
   VISIBLE,
 } from "../constants/todo-constants.js";
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { elements } from "../todos-controller.js/todos-controller.js";
 import { appStateUi } from "./todo-states/states.js";
 

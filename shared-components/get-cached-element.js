@@ -3,13 +3,7 @@ import {
   KEYBOARD_ACTIONS,
   ATTRIBUTES,
 } from "../constants/keyboard-constants.js";
-import {
-  ATTR,
-  ATTR_STATES,
-  HIDDEN,
-  ACTIONS,
-  CHECK_STATES,
-} from "../constants/todo-constants.js";
+import { ATTR, ACTIONS, CHECK_STATES } from "../constants/todo-constants.js";
 
 const requireElement = (selector, name) => {
   const el = document.querySelector(selector);
@@ -246,7 +240,19 @@ export const getCachedElements = () => {
       `[${ACTIONS.BATCH_SET_DATE}]`,
       "batchDueDateBtn",
     ),
-    /* end of the elements that are related to the todo app */
+    historyDropList: requireElement(
+      `[${ATTR.HISTORY_DROPDOWN_LIST}]`,
+      "taskHistoryContainer",
+    ),
+    historySection: requireElement(
+      `[${ATTR.HISTORY_SECTION}]`,
+      "historySection",
+    ),
+    historyContainer: requireElement(
+      `[${ATTR.HISTORY_CONTAINER}]`,
+      "historyContainer",
+    ),
+    /* end of the elements that are related to the task manager */
   };
   return elements;
 };

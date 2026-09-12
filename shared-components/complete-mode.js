@@ -1,5 +1,4 @@
 import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "./get-cached-element.js";
 import { renderCompletedTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
@@ -90,8 +89,8 @@ export const completeTask = (e) => {
     completedListContainer.completedList,
   ); /* add listeners to the completed list */
   showNumberOfCompletedTasks();
-  renderCompletedTask(completedTaskobject.copyCompletedTask);
-  appStateUi.undoOperation.taskObject = completedTaskobject.copyCompletedTask;
+  renderCompletedTask(completedTaskobject.completedTask);
+  appStateUi.undoOperation.taskObject = completedTaskobject.completedTask;
   appStateUi.undoOperation.taskObjectIndex =
     completedTaskobject.completedTaskIndex;
   appStateUi.undoOperation.originalTaskObject =

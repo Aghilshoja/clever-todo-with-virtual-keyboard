@@ -1,11 +1,24 @@
-import { elements } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements, lists } from "../../todos-controller.js/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { cleanupDescriptionUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { cleanupEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 
-export const saveEditedTaskText = (toolbar, taskItem, event) => {
+export const updateEditedTask = () => {
+  const editedTaskObject = {
+    id: lists.default.generateId(),
+    text: appStateUi.taskObjectToEdit.text,
+    description: appStateUi.taskObjectToEdit.description,
+    dueDate: appStateUi.taskObjectToEdit.dueDate,
+    isCompleted: appStateUi.taskObjectToEdit.isCompleted,
+    editedAt: Date.now(),
+    originalTaskText: appStateUi.taskObjectInfo.text,
+    originalTaskDescription: appStateUi.taskObjectInfo.description,
+  };
+  lists.default.taskHistory.editedTasks.push(editedTaskObject);
+};
+
+export const saveEditedTaskText = (toolbar, event) => {
   const repetitiveEls = getRepetitiveElements(toolbar);
 
   const toolbarTaskText = repetitiveEls.taskTextEl;
@@ -22,10 +35,12 @@ export const saveEditedTaskText = (toolbar, taskItem, event) => {
     appStateUi.taskObjectToEdit.text = elements.inputElement.textContent;
     taskText.dataset.truncateText = elements.inputElement.textContent;
   }
+
+  updateEditedTask();
   cleanupEditUi(toolbar, event);
 };
 
-export const saveEditedTaskDescription = (toolbar, taskItem, event) => {
+export const saveEditedTaskDescription = (toolbar, event) => {
   const repetitiveEls = getRepetitiveElements(toolbar);
   const mainTaskDescription = repetitiveEls.taskItemDescription;
   const toolbarTaskDescription = repetitiveEls.description;
@@ -44,5 +59,6 @@ export const saveEditedTaskDescription = (toolbar, taskItem, event) => {
     mainTaskDescription.dataset.truncateText =
       elements.inputElement.textContent;
   }
+  updateEditedTask();
   cleanupDescriptionUi(toolbar, event);
 };

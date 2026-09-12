@@ -19,19 +19,14 @@ import {
   enterEditMode,
 } from "./dom-operations/shared-entering-edit-or-description-modes-ui.js";
 import { adjustActiveTaskTextWidth } from "./reveal-toolbar.js";
-import {
-  ACTIONS,
-  ACTIVE,
-  ATTR,
-  EDIT_MODES,
-} from "../constants/todo-constants.js";
+import { ACTIONS, ATTR, EDIT_MODES } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
 
 export const implementEditAndDescriptionMode = (event) => {
   const requiredData = detectClickedElementAndGetTaskObject(event);
   if (!requiredData) return;
-  appStateUi.originalTaskDescription = requiredData.taskObject.description;
-  appStateUi.originalTaskText = requiredData.taskObject.text;
+  appStateUi.taskObjectInfo.description = requiredData.taskObject.description;
+  appStateUi.taskObjectInfo.text = requiredData.taskObject.text;
   if (appStateUi.activeMode === EDIT_MODES.DESCRIPTION) {
     enterDescriptionMode(
       requiredData.taskItem.toolbar,

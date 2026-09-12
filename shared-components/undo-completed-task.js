@@ -1,5 +1,4 @@
 import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "./get-cached-element.js";
 import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
@@ -8,9 +7,7 @@ import { disableOrEnableButtons } from "./select-tasks.js";
 import {
   ACTIONS,
   ATTR,
-  HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
-  CHECK_STATES,
   ATTR_STATES,
   ACTIVE,
   INACTIVE,

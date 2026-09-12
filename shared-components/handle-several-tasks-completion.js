@@ -1,6 +1,5 @@
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller.js/todos-controller.js";
 import { getCompletedListContainer } from "./complete-mode.js";
-import { getCachedElements } from "./get-cached-element.js";
 import {
   refreshUi,
   removeSelectedTasks,

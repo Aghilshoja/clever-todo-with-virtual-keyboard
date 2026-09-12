@@ -1,18 +1,14 @@
-import { getCachedElements } from "./get-cached-element.js";
 import { getCompletedListContainer } from "./complete-mode.js";
 import {
   ACTIONS,
   ATTR,
-  ATTR_STATES,
   CHECK_STATES,
   CLOSED,
   DUE_DATE_STATES,
   HIDDEN,
 } from "../constants/todo-constants.js";
-import { formatTimeDisplay } from "./costume-calendar/parse-time.js";
 import { daysOfWeek, months } from "./costume-calendar/create-calendar.js";
 import { format24HourTime } from "./costume-calendar/prepare-date-editor.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
 
 export const activeUlId = {
   ul: "default",
@@ -111,7 +107,6 @@ const createMoreOptions = (task) => {
   `;
   return moreOptions;
 };
-
 const createToolbar = (task) => {
   const toolbar = `
     <div class="close-toolbar" ${ACTIONS.CLOSE_TOOLBAR}></div>
@@ -199,30 +194,38 @@ const clearListContainer = (task) => {
   return listContainer;
 };
 
-export const renderTasks = (task, eachTask) => {
-  const listContainer = clearListContainer(task);
-  if (!listContainer) return;
-  if (task.length === 0 || eachTask === undefined) return;
-
+export const renderTask = (task) => {
   const list = `
-    <li class="task" draggable="true" data-id="${eachTask.id}" ${ATTR.TASK_ITEM}>
-    <ul class="task__container">
-    <li class="task__item flex-space-between">
-    <div class="group-input-and-text flex">
-    <input type="checkbox" data-id="${eachTask.id}" class="task__main-task-checkbox check-layout" ${ACTIONS.COMPLETE_TASK}>
+  <li class="task" draggable="true" data-id="${task.id}" ${ATTR.TASK_ITEM}>
+  <ul class="task__container">
+  <li class="task__item flex-space-between">
+  <div class="group-input-and-text flex">
+  <input type="checkbox" data-id="${task.id}" class="${task.isCompleted ? `task__completed-main-task-checkbox check-layout` : `task__main-task-checkbox check-layout`}" ${task.isCompleted ? `${ACTIONS.UNCOMPLETE_TASK}` : `${ACTIONS.COMPLETE_TASK}`}  ${task.isCompleted ? "checked" : ""}>
     <div class="task__wrap-task-and-description">
-    <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${eachTask.text}">${eachTask.text}</p>
-    <p class="task__description color word-wrap" ${ATTR.MAIN_TASK_DESCRIPTION} data-truncate-text="${eachTask.description ? eachTask.description : ""}">${eachTask.description ? eachTask.description : ""}</p>
-    <p class="task__visible-due-date" data-id="${eachTask.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(eachTask)}>${formatTaskDueDate(eachTask)}</p>
+    <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${task.text}">${task.text}</p>
+    <p class="task__description color word-wrap" ${ATTR.MAIN_TASK_DESCRIPTION} data-truncate-text="${task.description ? task.description : ""}">${task.description ? task.description : ""}</p>
+    <p class="task__visible-due-date" data-id="${task.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(task)}>${formatTaskDueDate(task)}</p>
     </div>
     </div>
-    <button class="task__important button-reset cursor" aria-label="mark your active task as important" data-id="${eachTask.id}" ${ACTIONS.IMPORTANT_TASK}><i class="fa-regular fa-star"></i></button>
+    <div class='task__actions'>
+    <button class="task__important button-reset cursor" aria-label="mark your active task as important" data-id="${task.id}" ${ACTIONS.IMPORTANT_TASK}><i class="fa-regular fa-star"></i></button>
+    </div>
     </li>
-    <li class="task__toolbar bg">${createToolbar(eachTask)}
+    </li>
+    <li class="task__toolbar bg">${createToolbar(task)}
     </li>
     </ul>
     </li>
     `;
+  return list;
+};
+
+export const renderTasks = (task, eachTask) => {
+  const listContainer = clearListContainer(task);
+  if (!listContainer) return;
+  if (task.length === 0 || eachTask === undefined) return;
+  const list = renderTask(eachTask);
+
   listContainer.insertAdjacentHTML("afterbegin", list);
 };
 
@@ -231,24 +234,8 @@ export const renderCompletedTask = (eachCompletedTask) => {
 
   const completedListContainer = getCompletedListContainer();
   if (!completedListContainer) return;
-  const list = `
-    <li class="task" draggable="true" data-id="${eachCompletedTask.id}" ${ATTR.TASK_ITEM}>
-    <ul class="task__container">
-    <li class="task__item flex-space-between">
-    <div class="group-input-and-text flex">
-    <input type="checkbox" data-id="${eachCompletedTask.id}" class="task__completed-main-task-checkbox check-layout" ${ACTIONS.UNCOMPLETE_TASK} checked>
-    <div class="task__wrap-task-and-description">
-    <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${eachCompletedTask.text}">${eachCompletedTask.text}</p>
-    <p class="task__description color word-wrap" ${ATTR.MAIN_TASK_DESCRIPTION} data-truncate-text="${eachCompletedTask.description ? eachCompletedTask.description : ""}">${eachCompletedTask.description ? eachCompletedTask.description : ""}</p>
-      <p class="task__visible-due-date" data-id="${eachCompletedTask.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(eachCompletedTask)}> ${formatTaskDueDate(eachCompletedTask)}</p>
-    </div>
-    </div>
-    <button class="task__important button-reset cursor"><i class="fa-regular fa-star" aria-label="mark your completed task as important" data-id="${eachCompletedTask.id}" ${ACTIONS.IMPORTANT_TASK}></i></button>
-    </li>
-    <li class="task__toolbar bg">${createToolbar(eachCompletedTask)}
-    </li>
-    </ul>
-    </li>
-    `;
+
+  const list = renderTask(eachCompletedTask);
+
   completedListContainer.completedList.insertAdjacentHTML("afterbegin", list);
 };
