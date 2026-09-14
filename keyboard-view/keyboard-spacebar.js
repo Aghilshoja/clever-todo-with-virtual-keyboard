@@ -1,4 +1,3 @@
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret } from "./keyboard-input-caret.js";
 import {
   disableSubmitIfInputEmpty,
@@ -12,11 +11,14 @@ import {
   KEYBOARD_ACTIONS,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
-import { PLACEHOLDERS, ATTRIBUTES } from "../constants/keyboard-constants.js";
+import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import { elements } from "../todos-controller.js/todos-controller.js";
+import { appStateUi } from "../shared-components/todo-states/states.js";
+import { MICROPHONE_MODE } from "../constants/todo-constants.js";
 
 export const handleSpaceBar = (e) => {
+  if (appStateUi.microphoneMode === MICROPHONE_MODE.MIC_PROMPT) return;
   if (e.target.closest(`[${KEYBOARD_ACTIONS.SPACE}]`)) {
     const input = elements.inputElement;
     // use one source of truth if placeholder of the input changed we just change it in one place

@@ -252,6 +252,10 @@ export const getCachedElements = () => {
       `[${ATTR.HISTORY_CONTAINER}]`,
       "historyContainer",
     ),
+    speechToTextBtn: requireElement(
+      `[${ACTIONS.SPEECH_TO_TEXT}]`,
+      "voiceRecorder button",
+    ),
     /* end of the elements that are related to the task manager */
   };
   return elements;

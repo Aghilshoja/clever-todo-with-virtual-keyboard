@@ -1,6 +1,11 @@
 import { elements } from "../../todos-controller.js/todos-controller.js";
 import { openKeyboardToAddATask } from "../add-task-relative-to-selected-task.js";
 import { addTask } from "../add-task.js";
+import {
+  abortVoiceRecording,
+  startVoiceTaskInput,
+  stopVoiceRecording,
+} from "../add-task-by-voice.js";
 import { closeToolbar } from "../closeToolbarOnPageClick.js";
 import { completeTask } from "../complete-mode.js";
 import { showCostumeCalendar } from "../costume-calendar/calendar-controller.js";
@@ -77,6 +82,9 @@ export const registerTodoListeners = () => {
   elements.selectionBarMenu.addEventListener("click", openKeyboardToAddATask);
   elements.batchDueDateBtn.addEventListener("click", showCalendar);
   elements.submitTask.addEventListener("click", addTask);
+  elements.speechToTextBtn.addEventListener("click", startVoiceTaskInput);
+  document.addEventListener("click", abortVoiceRecording);
+  document.addEventListener("click", stopVoiceRecording);
 };
 
 export const addTaskListeners = (list) => {

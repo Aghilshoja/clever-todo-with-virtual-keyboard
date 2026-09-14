@@ -147,6 +147,9 @@ export const ACTIONS = {
   COMPLETED_TASK_HISTORY: 'data-action="completed-task-history"',
   ADDED_TASK_HISTORY: 'data-action="added-task-history"',
   TO_MAIN_PAGE: 'data-action="back-to-main-page"',
+  SPEECH_TO_TEXT: 'data-action="add-task-by-voice"',
+  CANCEL_VOICE: 'data-action="cancel-voice-input"',
+  CONFIRM_VOICE: 'data-action="confirm-voice-input"',
 };
 
 // check states using selectors
@@ -387,4 +390,8 @@ export const TIME_PERIODS = {
   PM: "pm",
   AM: "am",
   NOT_SELECTED: "none",
+};
+
+export const MICROPHONE_MODE = {
+  MIC_PROMPT: "listening...",
 };

@@ -47,4 +47,5 @@ export const appStateUi = {
   currentHour: 12,
   originalHour: null,
   originalMinute: null,
+  microphoneMode: null,
 };

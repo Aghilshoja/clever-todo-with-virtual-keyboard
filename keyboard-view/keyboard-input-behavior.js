@@ -1,13 +1,11 @@
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller.js/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import {
   PLACEHOLDERS,
-  ATTRIBUTES,
   KEYBOARD_ACTIONS,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
@@ -16,6 +14,7 @@ import { updateTextEditor } from "./keyboard-caret-positioning.js";
 import { limitTimeInput } from "../shared-components/costume-clock/validate-time-input.js";
 import { appStateUi } from "../shared-components/todo-states/states.js";
 import { keyboardUiState } from "./keyboard-states/states.js";
+import { MICROPHONE_MODE } from "../constants/todo-constants.js";
 
 export const pressBackspace = (e) => {
   if (e.target.closest(`[${KEYBOARD_ACTIONS.BACKSPACE}]`)) {
@@ -146,6 +145,7 @@ export const disableSubmitIfInputEmpty = () => {
 };
 
 const deleteLastCharacterOfInput = () => {
+  if (appStateUi.microphoneMode === MICROPHONE_MODE.MIC_PROMPT) return;
   const input = elements.inputElement;
   deleteCharBeforeCaret(input);
   ensurePlaceholder(input);
@@ -178,6 +178,7 @@ export const insertText = (input, char, caret) => {
 };
 
 export const typeIntoInput = (char) => {
+  if (appStateUi.microphoneMode === MICROPHONE_MODE.MIC_PROMPT) return;
   const input = elements.inputElement;
 
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
