@@ -9,31 +9,28 @@ import {
 } from "../constants/todo-constants.js";
 import { elements, lists } from "../todos-controller.js/todos-controller.js";
 
-const dismissToolbarBeforeLog = () => {
+const closeOpenOverlays = () => {
   const menu = document.querySelector(
     `[${CHECK_STATES.TOOLBAR_MENU}='${OPEN.TASK_MENU}']`,
   );
+  if (menu) menu.dataset[ATTR_STATES.TASK_MENU] = CLOSED.TASK_MENU;
 
   const toolbar = document.querySelector(
     `[${CHECK_STATES.TASK_TOOLBAR}='${OPEN.TASK_TOOLBAR}']`,
   );
-
-  const toolbarClosure = document.querySelector(
+  const overlay = document.querySelector(
     `[${CHECK_STATES.TOOLBAR_OVERLAY_STATE}='${ACTIVE.TOOLBAR_OVERLAY}']`,
   );
 
-  if (menu) menu.dataset[ATTR_STATES.TASK_MENU] = CLOSED.TASK_MENU;
-  if (toolbar && toolbarClosure) {
-    toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = CLOSED.TASK_TOOLBAR;
-    toolbarClosure.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
-      INACTIVE.TOOLBAR_OVERLAY;
-  }
+  if (toolbar) toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = CLOSED.TASK_TOOLBAR;
+  if (overlay)
+    overlay.dataset[ATTR_STATES.TOOLBAR_OVERLAY] = INACTIVE.TOOLBAR_OVERLAY;
 };
 
 const toggleActivityLogDropMenu = (e) => {
   const activityLogDropMenu = elements.historyDropList;
   if (e.target.closest(`[${ACTIONS.ACTIVITY_LOG}]`)) {
-    dismissToolbarBeforeLog();
+    closeOpenOverlays();
     activityLogDropMenu.dataset[ATTR_STATES.HISTROY_DROP_LIST] =
       OPEN.HISTROY_DROP_LIST;
   } else if (
