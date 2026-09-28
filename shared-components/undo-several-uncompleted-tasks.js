@@ -1,6 +1,6 @@
 import { ATTR } from "../constants/todo-constants.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
-import { getCompletedListContainer } from "./complete-mode.js";
+import { lists } from "../todos-controller/todos-controller.js";
+import { getList } from "./complete-mode.js";
 import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,
@@ -8,28 +8,28 @@ import {
 import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralUncompletedTasks = () => {
-  const completedTaskList = getCompletedListContainer();
-  const { completedList } = completedTaskList;
+  const tasksContainer = getList();
+
+  if (!tasksContainer) return;
 
   removeSelectedTasksHighlightedTasks();
 
-  const tasksToRemoveFromActiveListAfterUndo =
-    appStateUi.snapshots.IdsOfSelectedTasks.map((id) =>
-      document.querySelector(`[${ATTR.TASK_ITEM}][data-id='${id}']`),
-    );
+  const taskIds = appStateUi.snapshots.IdsOfSelectedTasks;
+
+  const tasksToRemoveFromActiveListAfterUndo = taskIds.map((id) =>
+    document.querySelector(`[${ATTR.TASK_ITEM}][data-id='${id}']`),
+  );
 
   tasksToRemoveFromActiveListAfterUndo.forEach((task) => task.remove());
 
-  completedList.innerHTML = "";
+  tasksContainer.innerHTML = "";
   appStateUi.snapshots.domSnapshot.forEach((task) =>
-    completedList.appendChild(task),
+    tasksContainer.appendChild(task),
   );
-
-  const taskIds = appStateUi.snapshots.IdsOfSelectedTasks;
 
   const originalClonedArray = appStateUi.snapshots.dataSnapshot;
 
-  lists.default.undoSeveralUncompletedTasks(originalClonedArray, taskIds);
+  lists.default.undoSeveralUncompletedTasks(originalClonedArray);
 
   refreshUiAfterUndo();
 };

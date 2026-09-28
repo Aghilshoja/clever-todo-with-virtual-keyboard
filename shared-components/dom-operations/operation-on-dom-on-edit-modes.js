@@ -1,4 +1,4 @@
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { cleanupDescriptionUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { cleanupEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";

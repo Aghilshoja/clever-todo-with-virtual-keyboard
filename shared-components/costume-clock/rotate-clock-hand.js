@@ -5,8 +5,7 @@ import {
   CHECK_STATES,
   HIDDEN,
 } from "../../constants/todo-constants.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { clockInfo } from "./render-clock.js";
 

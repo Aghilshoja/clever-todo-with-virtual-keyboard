@@ -453,6 +453,19 @@ details[open] summary::after {
   margin-top: auto;
 }
 
+[data-is-completed="true"] {
+  position: relative;
+  background-color: #f0fdf4;
+  border-left: 3px solid #10b981;
+  color: #6b7280;
+  text-decoration: line-through;
+  text-decoration-color: rgba(107, 114, 128, 0.5);
+}
+
+[data-completed-task-visiblity="true"] {
+  display: none;
+}
+
 /* ===================================
    timeComponents
 =================================== */

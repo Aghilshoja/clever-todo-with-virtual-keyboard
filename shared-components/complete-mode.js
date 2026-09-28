@@ -1,24 +1,34 @@
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { renderCompletedTask } from "./render-tasks.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
+import { renderTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
-import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { createTaskEmptyState, handleEmptyTaskStateUi } from "./delete-mode.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import {
   disableOrEnableButtons,
   updateCounterAfterCompletingOrUncompletingATask,
   updateLabelsOfOperationalButtonsForSelectedTasks,
 } from "./select-tasks.js";
-import {
-  ACTIONS,
-  ACTIVE,
-  ATTR,
-  ATTR_STATES,
-  INACTIVE,
-  UNDO_STATES,
-} from "../constants/todo-constants.js";
+import { ACTIONS, ATTR, UNDO_STATES } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
-import { addTaskListeners } from "./listeners/todo-listeners.js";
+
+export const showEmptyStateWhenNoVisibleTasks = () => {
+  const tasksContainer = getList();
+
+  if (!tasksContainer) return;
+
+  const taskItems = document.querySelectorAll(
+    `[${ATTR.TASK_ITEM}][data-is-completed="false"]`,
+  );
+
+  const areCompletedTasksHidden =
+    elements.showCompletedTasksBtn.dataset.isVisible === "false";
+  if (taskItems.length === 0 && areCompletedTasksHidden) {
+    const template = document.createElement("ul");
+    template.innerHTML = createTaskEmptyState();
+    tasksContainer.prepend(template.firstElementChild);
+  }
+};
 
 export const captureAndRemoveTaskItem = (taskId) => {
   const taskItem = document.querySelector(
@@ -31,38 +41,12 @@ export const captureAndRemoveTaskItem = (taskId) => {
   taskItem.remove();
 };
 
-export const getCompletedListContainer = () => {
-  const activeList = document.querySelector(
-    `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
+export const getList = () => {
+  return (
+    document.querySelector(
+      `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
+    ) || null
   );
-
-  const listWrapper = activeList.nextElementSibling;
-  const completedListTitle = listWrapper.querySelector(
-    `[${ATTR.COMPLETION_STATUS}]`,
-  );
-  const completedList = listWrapper.querySelector(`[${ATTR.COMPLETED_LIST}]`);
-  return {
-    listWrapper,
-    completedListTitle,
-    completedList,
-  };
-};
-
-export const showNumberOfCompletedTasks = () => {
-  const numberOfCompletedTasks = lists.default.getCompletedTasks().length;
-  const completedElements = getCompletedListContainer();
-  if (!completedElements) return;
-  completedElements.completedListTitle.textContent =
-    numberOfCompletedTasks === 1
-      ? `${numberOfCompletedTasks} completed task`
-      : `${numberOfCompletedTasks} completed tasks`;
-  completedElements.listWrapper.dataset[ATTR_STATES.COMPLETED_LIST_SECTION] =
-    ACTIVE.COMPLETED_SECTION;
-
-  if (numberOfCompletedTasks === 0) {
-    completedElements.listWrapper.dataset[ATTR_STATES.COMPLETED_LIST_SECTION] =
-      INACTIVE.COMPLETED_SECTION;
-  }
 };
 
 export const updateCompletionStatusLabel = (e) => {
@@ -75,36 +59,49 @@ export const updateCompletionStatusLabel = (e) => {
   else if (completedListCheckbox) completionStatus.textContent = "Uncompleted";
 };
 
+export const createTaskItem = (task) => {
+  const template = document.createElement("div");
+  template.innerHTML = renderTask(task);
+  const taskItem = template.firstElementChild;
+  taskItem.dataset.isCompleted = true;
+
+  const shouldCompletedTasksBeVisible =
+    elements.showCompletedTasksBtn.dataset.isVisible === "true";
+
+  if (shouldCompletedTasksBeVisible)
+    taskItem.dataset.completedTaskVisiblity = false;
+  else taskItem.dataset.completedTaskVisiblity = true;
+
+  return taskItem;
+};
+
 export const completeTask = (e) => {
   const clickedCheckbox = e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`);
   if (!clickedCheckbox) return;
-  if (!elements) throw new Error("Required DOM was not found");
   const taskId = clickedCheckbox.dataset.id;
   if (!taskId) return;
-  const completedTaskobject = lists.default.markTaskAsCompleted(taskId);
-  const completedListContainer = getCompletedListContainer();
-  if (!completedListContainer) return;
+  const taskObject = lists.default.markTaskAsCompleted(taskId);
+  const tasksContainer = getList();
+
+  if (!tasksContainer) return;
+
   captureAndRemoveTaskItem(taskId);
-  addTaskListeners(
-    completedListContainer.completedList,
-  ); /* add listeners to the completed list */
-  showNumberOfCompletedTasks();
-  renderCompletedTask(completedTaskobject.completedTask);
-  appStateUi.undoOperation.taskObject = completedTaskobject.completedTask;
-  appStateUi.undoOperation.taskObjectIndex =
-    completedTaskobject.completedTaskIndex;
-  appStateUi.undoOperation.originalTaskObject =
-    completedTaskobject.taskToComplete;
+  appStateUi.undoOperation.originalTaskObject = taskObject;
+
+  const taskItem = createTaskItem(taskObject);
+  tasksContainer.appendChild(taskItem);
+
   countTasks(); //update badge of active list
   handleEmptyTaskStateUi();
-  // show undo popup
+
   updateCompletionStatusLabel(e);
-  showUndopopup();
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_COMPLETED;
+  showUndopopup();
   updateLabelsOfOperationalButtonsForSelectedTasks();
 
   /* update number of tasks selected after completing them in task selection mode */
   updateCounterAfterCompletingOrUncompletingATask();
   /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
   disableOrEnableButtons();
+  showEmptyStateWhenNoVisibleTasks();
 };

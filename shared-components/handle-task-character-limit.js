@@ -3,10 +3,8 @@ import {
   KEYBOARD_INACTIVE,
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
-import { ATTR_STATES } from "../constants/todo-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "./get-cached-element.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { getRequiredDom } from "./handle-disabling-or-enabling-saving-task-edits.js";
 
 export const handleTaskCharacterLimit = () => {

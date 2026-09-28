@@ -256,6 +256,14 @@ export const getCachedElements = () => {
       `[${ACTIONS.SPEECH_TO_TEXT}]`,
       "voiceRecorder button",
     ),
+    showCompletedTasksBtn: requireElement(
+      `[${ACTIONS.TOGGLE_COMPLETED_TASKS_VISIBILITY}]`,
+      "hideOrShowCompletedTasksBtn",
+    ),
+    taskEmptyStateEl: requireElement(
+      `[${ATTR.EMPTY_STATE_TASK}]`,
+      "taskEmptyStateEl",
+    ),
     /* end of the elements that are related to the task manager */
   };
   return elements;

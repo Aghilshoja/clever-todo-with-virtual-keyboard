@@ -1,29 +1,31 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller/todos-controller.js";
+import { getList } from "./complete-mode.js";
 import {
-  clearActiveTaskContainer,
   refreshUi,
-  removeSelectedTasks,
-  ShowUndoStatusLabel,
+  removeOriginallySelectedTasks,
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
+import { renderTask } from "./render-tasks.js";
 
-export const handleSeveralTasksUncompletion = (currentList) => {
-  const activeList = clearActiveTaskContainer();
-  if (!activeList) return;
+export const handleSeveralTasksUncompletion = () => {
+  const tasksContainer = getList();
 
-  if (lists.default.getTasks().length === 0) activeList.innerHTML = "";
+  if (!tasksContainer) return;
 
-  takeSnapshotOfDom(currentList);
+  takeSnapshotOfDom(tasksContainer);
 
-  const selectedTasksInfo = removeSelectedTasks(currentList);
-  const { taskids, selectedTasksClone, selectedTasksLength } =
-    selectedTasksInfo;
+  const selectedTasksInfo = removeOriginallySelectedTasks();
+  const { taskIds, selectedTasksLength } = selectedTasksInfo;
 
-  if (!taskids || !selectedTasksClone || !selectedTasksLength) return;
+  if (!taskIds || !selectedTasksLength) return;
 
-  lists.default.uncompleteSeveralTasks(taskids);
-  selectedTasksClone.forEach((task) => activeList.prepend(task));
+  const uncompletedTasks = lists.default.uncompleteSeveralTasks(taskIds);
 
-  ShowUndoStatusLabel(currentList, selectedTasksLength);
+  for (const task of uncompletedTasks) {
+    const template = document.createElement("div");
+    template.innerHTML = renderTask(task);
+    tasksContainer.prepend(template.firstElementChild);
+  }
+
   refreshUi();
 };

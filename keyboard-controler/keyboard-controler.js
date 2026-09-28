@@ -6,9 +6,7 @@ import {
 } from "../keyboard-view/build-keyboard-ui.js";
 import { ensurePlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
 import { loadDraftedInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";
-import { ATTRIBUTES } from "../constants/keyboard-constants.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
-import { keyboardUiState } from "../keyboard-view/keyboard-states/states.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import {
   registerDragAndDropListeners,
   registerKeyboardListeners,

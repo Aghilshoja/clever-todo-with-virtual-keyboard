@@ -1,4 +1,4 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import {
   ACTIONS,
   ATTR,
@@ -6,6 +6,7 @@ import {
   CHECK_STATES,
   OPEN,
 } from "../constants/todo-constants.js";
+import { showUndopopup } from "./undo-completed-task.js";
 
 let currentDragImage = null;
 
@@ -53,6 +54,16 @@ const mockTaskImage = (task) => {
 export const dragStart = (e) => {
   const task = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!task) return;
+
+  const isTheTaskCompleted = task.hasAttribute("data-is-completed");
+  if (isTheTaskCompleted) {
+    elements.completionStatusLabel.textContent =
+      "Completed tasks cannot be reordered";
+    elements.undoCompletedTask.hidden = true;
+    showUndopopup();
+    e.preventDefault();
+    return;
+  }
 
   const activeToolbar = exitDragAndDropIfToolbarActive();
   if (activeToolbar) {
@@ -126,30 +137,22 @@ export const dropTarget = (e) => {
   const tasksContainer = e.currentTarget;
   if (!dropT || !draggedTask) return;
 
+  if (dropT.hasAttribute("data-is-completed")) return;
+
   clearDragState();
 
-  const sourceContainer = draggedTask.closest(
-    `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
-  );
-  if (!sourceContainer || sourceContainer !== tasksContainer) return;
-
-  const activeList = e.currentTarget.hasAttribute(ATTR.DEFAULT_LIST);
-  const currentList = activeList
-    ? lists.default.getTasks()
-    : lists.default.getCompletedTasks();
+  const list = lists.default.getTasks();
 
   const rect = dropT.getBoundingClientRect();
   const isAfter = e.clientY > rect.top + rect.height / 1.8;
 
-  const draggedTaskIndex = currentList.findIndex((t) => t.id === taskId);
-  const droppedTaskIndex = currentList.findIndex(
-    (t) => t.id === dropT.dataset.id,
-  );
+  const draggedTaskIndex = list.findIndex((t) => t.id === taskId);
+  const droppedTaskIndex = list.findIndex((t) => t.id === dropT.dataset.id);
 
   if (draggedTaskIndex === -1 || droppedTaskIndex === -1) return;
 
-  const [removedTask] = currentList.splice(draggedTaskIndex, 1);
-  currentList.splice(droppedTaskIndex, 0, removedTask);
+  const [removedTask] = list.splice(draggedTaskIndex, 1);
+  list.splice(droppedTaskIndex, 0, removedTask);
   tasksContainer.insertBefore(
     draggedTask,
     isAfter ? dropT.nextElementSibling : dropT,

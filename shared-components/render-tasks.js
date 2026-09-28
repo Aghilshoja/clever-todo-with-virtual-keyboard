@@ -1,4 +1,3 @@
-import { getCompletedListContainer } from "./complete-mode.js";
 import {
   ACTIONS,
   ATTR,
@@ -196,7 +195,8 @@ const clearListContainer = (task) => {
 
 export const renderTask = (task) => {
   const list = `
-  <li class="task" draggable="true" data-id="${task.id}" ${ATTR.TASK_ITEM}>
+  <li class="task" draggable="true" data-id="${task.id}" ${ATTR.TASK_ITEM}  data-is-completed=
+  "false">
   <ul class="task__container">
   <li class="task__item flex-space-between">
   <div class="group-input-and-text flex">
@@ -227,15 +227,4 @@ export const renderTasks = (task, eachTask) => {
   const list = renderTask(eachTask);
 
   listContainer.insertAdjacentHTML("afterbegin", list);
-};
-
-export const renderCompletedTask = (eachCompletedTask) => {
-  if (!eachCompletedTask) return;
-
-  const completedListContainer = getCompletedListContainer();
-  if (!completedListContainer) return;
-
-  const list = renderTask(eachCompletedTask);
-
-  completedListContainer.completedList.insertAdjacentHTML("afterbegin", list);
 };

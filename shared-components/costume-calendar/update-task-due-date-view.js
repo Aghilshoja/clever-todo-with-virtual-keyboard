@@ -6,9 +6,7 @@ import {
   DUE_DATE_STATES,
   OPEN,
 } from "../../constants/todo-constants.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
 import { daysOfWeek, months } from "./create-calendar.js";
-import { getCachedElements } from "../get-cached-element.js";
 import { format24HourTime } from "./prepare-date-editor.js";
 import { appStateUi } from "../todo-states/states.js";
 

@@ -2,8 +2,7 @@ import { ACTIVE, ATTR_STATES } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 
 const validateHours = () => {
   if (Number(virtualKeyboard.caretManeger.text[0]) <= 1) {

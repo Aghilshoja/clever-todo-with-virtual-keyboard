@@ -1,22 +1,33 @@
-import { getCachedElements } from "./get-cached-element.js";
 import { ensurePlaceholder } from "../keyboard-view/keyboard-input-behavior.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import { disableSubmitIfInputEmpty } from "../keyboard-view/keyboard-input-behavior.js";
 import { countTasks } from "./count-tasks.js";
 import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
 import { truncateTaskDescription, truncateTaskText } from "./truncate-task.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { ADD_TASK_MODE } from "../constants/todo-constants.js";
+import { ADD_TASK_MODE, ATTR } from "../constants/todo-constants.js";
 import {
   addTaskAboveSelectedTask,
   addTaskBelowSelectedTask,
 } from "./add-task-relative-to-selected-task.js";
 import { appStateUi } from "./todo-states/states.js";
+import { getList } from "./complete-mode.js";
+
+const removeEmptyStateImage = () => {
+  const tasksContainer = getList();
+  if (!tasksContainer) return;
+  const emptyStateEl = tasksContainer.querySelector(
+    `[${ATTR.EMPTY_STATE_TASK}]`,
+  );
+  if (emptyStateEl) emptyStateEl.remove();
+};
 
 export const addTask = () => {
   const value = virtualKeyboard.caretManeger.text.trim();
 
   if (value === "") return;
+
+  removeEmptyStateImage();
 
   const shouldAddTaskAbove =
     appStateUi.addTaskModes === ADD_TASK_MODE.ADD_ABOVE;

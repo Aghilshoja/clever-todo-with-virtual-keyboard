@@ -2,8 +2,7 @@ import {
   CHECK_STATES,
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
 import { exitTaskSelection } from "./select-tasks.js";
 
@@ -38,5 +37,4 @@ export const duplicateSeveralTasks = () => {
 
   exitTaskSelection();
   countTasks();
-  showNumberOfCompletedTasks();
 };

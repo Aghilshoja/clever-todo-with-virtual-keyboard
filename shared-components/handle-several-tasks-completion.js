@@ -1,29 +1,34 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
-import { getCompletedListContainer } from "./complete-mode.js";
+import { lists } from "../todos-controller/todos-controller.js";
+import {
+  createTaskItem,
+  getList,
+  showEmptyStateWhenNoVisibleTasks,
+} from "./complete-mode.js";
 import {
   refreshUi,
-  removeSelectedTasks,
-  ShowUndoStatusLabel,
+  removeOriginallySelectedTasks,
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
 
-export const handleSeveralTasksCompletion = (currentList) => {
-  takeSnapshotOfDom(currentList);
+export const handleSeveralTasksCompletion = () => {
+  const tasksContainer = getList();
 
-  const selectedTasksInfo = removeSelectedTasks(currentList);
-  const { taskids, selectedTasksClone, selectedTasksLength } =
-    selectedTasksInfo;
+  if (!tasksContainer) return;
 
-  if (!taskids || !selectedTasksClone || !selectedTasksLength) return;
+  takeSnapshotOfDom(tasksContainer);
 
-  lists.default.markSeveralTasksAsCompleted(taskids);
+  const selectedTasksInfo = removeOriginallySelectedTasks();
+  const { taskIds, selectedTasksLength } = selectedTasksInfo;
 
-  const completedTasksList = getCompletedListContainer();
-  const { completedList } = completedTasksList;
+  if (!taskIds || !selectedTasksLength) return;
 
-  if (!completedList) return;
+  const completedTasks = lists.default.markSeveralTasksAsCompleted(taskIds);
 
-  selectedTasksClone.forEach((task) => completedList.prepend(task));
+  for (const task of completedTasks) {
+    const taskItem = createTaskItem(task);
+    tasksContainer.appendChild(taskItem);
+  }
+
   refreshUi();
-  ShowUndoStatusLabel(currentList, selectedTasksLength);
+  showEmptyStateWhenNoVisibleTasks();
 };

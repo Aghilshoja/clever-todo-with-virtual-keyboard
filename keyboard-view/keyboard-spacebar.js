@@ -13,7 +13,7 @@ import {
 } from "../constants/keyboard-constants.js";
 import { PLACEHOLDERS } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { appStateUi } from "../shared-components/todo-states/states.js";
 import { MICROPHONE_MODE } from "../constants/todo-constants.js";
 

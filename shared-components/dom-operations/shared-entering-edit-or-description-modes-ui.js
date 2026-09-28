@@ -1,9 +1,7 @@
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements, lists } from "../../todos-controller/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import {
-  ATTRIBUTES,
   KEYBOARD_STATES,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
@@ -11,13 +9,11 @@ import {
   ACTIONS,
   ATTR,
   ATTR_STATES,
-  CHECK_STATES,
   EDIT_MODES,
   HIDDEN,
   VISIBLE,
   OPEN,
 } from "../../constants/todo-constants.js";
-import { renderKeyPreviewPopup } from "../../keyboard-view/keyboard-feedback-overlay.js";
 import { updateEditorState } from "../save-drafted-text-input-to-local-storage.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { appStateUi } from "../todo-states/states.js";

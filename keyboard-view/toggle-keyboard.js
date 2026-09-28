@@ -4,16 +4,12 @@ import {
   KEYBOARD_STATES,
 } from "../constants/keyboard-constants.js";
 import {
-  ATTR,
   ATTR_STATES,
-  CHECK_STATES,
   EDIT_MODES,
   HIDDEN,
-  OPEN,
 } from "../constants/todo-constants.js";
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { appStateUi } from "../shared-components/todo-states/states.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 
 export const toggleKeyboard = () => {
   elements.keyboardSection.dataset[KEYBOARD_STATES.KEYBOARD] =

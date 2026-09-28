@@ -1,27 +1,15 @@
 import {
   KEYBOARD_STATES,
-  LOCAL_STORAGE_KEY,
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
-import {
-  ACTIVE,
-  ATTR_STATES,
-  EDIT_MODES,
-  INACTIVE,
-  TIME_PERIODS,
-  VISIBLE,
-} from "../../constants/todo-constants.js";
+import { ATTR_STATES, TIME_PERIODS } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { months } from "../costume-calendar/create-calendar.js";
-import {
-  getTaskObject,
-  quickDateLabels,
-} from "../costume-calendar/quick-date-options.js";
+import { quickDateLabels } from "../costume-calendar/quick-date-options.js";
 import { showDateSuggestion } from "../costume-calendar/show-date-suggestion.js";
-import { getCachedElements } from "../get-cached-element.js";
 import { appStateUi } from "../todo-states/states.js";
 import { exitClockUi } from "./exit-clock-mode.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";

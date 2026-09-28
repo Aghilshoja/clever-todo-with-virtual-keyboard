@@ -1,4 +1,4 @@
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import {
   buildClockUI,
   cancelTimeSelection,

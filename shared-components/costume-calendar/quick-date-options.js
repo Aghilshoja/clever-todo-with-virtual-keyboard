@@ -12,9 +12,7 @@ import {
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
-import { duplicateSeveralTasks } from "../duplicate-several-tasks.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements, lists } from "../../todos-controller/todos-controller.js";
 import { ShowUndoStatusLabel } from "../handle-several-tasks-completion-or-uncompletion.js";
 import { exitTaskSelection } from "../select-tasks.js";
 import { getSelectedTasksToSetDateOn } from "../set-due-date-on-multiple-tasks.js";

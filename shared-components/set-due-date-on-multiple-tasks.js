@@ -6,7 +6,7 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import { updateCalendar } from "./costume-calendar/create-calendar.js";
 import {
   initializeDateEditor,

@@ -4,8 +4,6 @@ import {
   PLACEHOLDERS,
 } from "../../constants/keyboard-constants.js";
 import {
-  ACTIONS,
-  ACTIVE,
   ATTR_STATES,
   EDIT_MODES,
   INACTIVE,
@@ -19,8 +17,7 @@ import {
   ensurePlaceholder,
 } from "../../keyboard-view/keyboard-input-behavior.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 

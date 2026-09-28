@@ -2,7 +2,6 @@
 export const ATTR = {
   TASK_ITEM: "data-task-item",
   DEFAULT_LIST: "data-default-list",
-  COMPLETED_LIST: "data-completed-list",
   TASK_DESCRIPTION: "data-task-description",
   TASK_TEXT: "data-task-text",
   MAIN_TASK_TEXT: "data-main-task-text",
@@ -79,6 +78,7 @@ export const ATTR = {
   HISTORY_DROPDOWN_LIST: "data-history-dropdown-list",
   HISTORY_SECTION: "data-task-history-section",
   HISTORY_CONTAINER: "data-task-history-container",
+  EMPTY_STATE_TASK: "data-empty-state",
 };
 
 // elements that perform actions
@@ -150,6 +150,8 @@ export const ACTIONS = {
   SPEECH_TO_TEXT: 'data-action="add-task-by-voice"',
   CANCEL_VOICE: 'data-action="cancel-voice-input"',
   CONFIRM_VOICE: 'data-action="confirm-voice-input"',
+  TOGGLE_COMPLETED_TASKS_VISIBILITY:
+    'data-action="show-or-hide-completed-tasks"',
 };
 
 // check states using selectors

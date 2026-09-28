@@ -160,7 +160,8 @@
 .main-page__section:hover,
 .main-page__select-your-tasks:hover,
 .main-page__activity:hover,
-.main-page__comments:hover {
+.main-page__comments:hover,
+.main-page__show-completed-tasks:hover {
   background-color: rgba(128, 128, 128, 0.081);
 }
 

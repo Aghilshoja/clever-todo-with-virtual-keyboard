@@ -12,7 +12,8 @@ import {
   SELECTION_BAR,
   VISIBLE,
 } from "../constants/todo-constants.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
+import { getList } from "./complete-mode.js";
 import { appStateUi } from "./todo-states/states.js";
 
 export const toggleBatchOptions = (e) => {
@@ -88,9 +89,8 @@ export const triggerTaskSelectionUi = (e) => {
 
 export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
   const counter = appStateUi.selectedTasksCounter;
-  const isCompletedList =
+  const isCompletedTask =
     appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST;
-  const selectedTasksElement = elements.selectionBar;
 
   elements.selectedTasksCount.textContent =
     counter === 1 ? "1 selected task" : `${counter} selected tasks`;
@@ -101,7 +101,7 @@ export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
     [`[${ATTR.BATCH_DUPLICATE_LABEL}]`]: (count) =>
       `Duplicate ${count} task${count !== 1 ? "s" : ""}`,
     [`[${ATTR.BATCH_COMPLETE_LABEL}]`]: (count) => {
-      const label = isCompletedList ? "Uncomplete" : "Complete";
+      const label = isCompletedTask ? "Uncomplete" : "Complete";
       return `${label} ${count} task${count !== 1 ? "s" : ""}`;
     },
   };
@@ -123,28 +123,30 @@ export const disableOrEnableButtons = () => {
   });
 };
 
-const fadeHighlightedTasksOfCompletedList = (parentOfTarget) => {
-  const getCompletedlistParent = parentOfTarget.nextElementSibling;
-  if (!getCompletedlistParent) return;
-  const completedlist = getCompletedlistParent.querySelector("ul");
-  if (!completedlist) return;
-  const removeHighlightedTaskOfCompletedList = completedlist.querySelectorAll(
-    `[${CHECK_STATES.SELECTED_TASK}]`,
+const fadeHighlightedTasksOfCompletedTasks = () => {
+  const tasksContainer = getList();
+
+  if (!tasksContainer) return;
+  const removeHighlightedTaskOfCompletedList = tasksContainer.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}][data-is-completed="true"]`,
   );
   removeHighlightedTaskOfCompletedList.forEach(
     (el) => delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
   );
 };
 
-const fadeHighlightedTasksOfActiveList = (parentOfTarget) => {
-  const activeList = parentOfTarget.closest("section").previousElementSibling;
+const fadeHighlightedTasksOfActiveTasks = () => {
+  const activeList = getList();
   if (!activeList) return;
   const highlightedTasksOfActiveList = activeList.querySelectorAll(
     `[${CHECK_STATES.SELECTED_TASK}]`,
   );
-  highlightedTasksOfActiveList.forEach(
-    (task) => delete task.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
-  );
+
+  highlightedTasksOfActiveList.forEach((el) => {
+    if (!el.hasAttribute("data-is-completed")) {
+      delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
+    }
+  });
 };
 
 const unfadeNavAndTaskHeader = () => {
@@ -205,36 +207,27 @@ export const selectTasks = (e) => {
     selectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK] ===
     HIGHLIGHT_SELECTED_TASK.SELECTED;
 
-  const parentOfTarget = selectedTask.closest(
-    `[${ATTR.DEFAULT_LIST}], [${ATTR.COMPLETED_LIST}]`,
-  );
-  if (!parentOfTarget) return;
+  const isCompletedTask = selectedTask.dataset.isCompleted === "true";
 
-  if (
-    parentOfTarget.hasAttribute(`${ATTR.DEFAULT_LIST}`) &&
-    !e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`)
-  ) {
-    if (appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST) {
-      appStateUi.selectedTasksCounter = 0;
-      fadeHighlightedTasksOfCompletedList(parentOfTarget);
-    }
-
-    appStateUi.taskSelectionMode = SELECTION_BAR.ACTIVE_LIST;
-    if (isSelectedTask) appStateUi.selectedTasksCounter++;
-    else appStateUi.selectedTasksCounter--;
-  } else if (
-    parentOfTarget.hasAttribute(`${ATTR.COMPLETED_LIST}`) &&
-    !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`)
-  ) {
+  if (isCompletedTask && !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`)) {
     /* 
      when users switche betwwen lists reset counter and show number of selected tasks of the current focused list
     */
     if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
-      fadeHighlightedTasksOfActiveList(parentOfTarget);
+      fadeHighlightedTasksOfActiveTasks();
       appStateUi.selectedTasksCounter = 0;
     }
 
     appStateUi.taskSelectionMode = SELECTION_BAR.COMPLETED_LIST;
+    if (isSelectedTask) appStateUi.selectedTasksCounter++;
+    else appStateUi.selectedTasksCounter--;
+  } else if (!e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`)) {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST) {
+      appStateUi.selectedTasksCounter = 0;
+      fadeHighlightedTasksOfCompletedTasks();
+    }
+
+    appStateUi.taskSelectionMode = SELECTION_BAR.ACTIVE_LIST;
     if (isSelectedTask) appStateUi.selectedTasksCounter++;
     else appStateUi.selectedTasksCounter--;
   }

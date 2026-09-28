@@ -7,7 +7,7 @@ import {
   INACTIVE,
   OPEN,
 } from "../constants/todo-constants.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 
 const closeOpenOverlays = () => {
   const menu = document.querySelector(

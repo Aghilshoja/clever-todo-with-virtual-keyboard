@@ -1,5 +1,4 @@
-import { getCachedElements } from "../get-cached-element.js";
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { cleanupDescriptionAndEditUi } from "./shared-cleaningup-edit-and-description-mode-ui.js";
 import { disableOrEnableSaveBtn } from "../handle-disabling-or-enabling-saving-task-edits.js";

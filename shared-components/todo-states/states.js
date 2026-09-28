@@ -22,8 +22,6 @@ export const appStateUi = {
     previousEl: null,
     nextEl: null,
     removedEl: null,
-    taskObject: null,
-    taskObjectIndex: null,
     originalTaskObject: null,
     undoType: UNDO_STATES.NO_UNDO,
     hasTime: null,

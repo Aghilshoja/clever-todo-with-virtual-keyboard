@@ -3,18 +3,11 @@ import {
   ACTIVE,
   ATTR,
   ATTR_STATES,
-  INACTIVE,
   TIME_PERIODS,
   VISIBLE,
 } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
-import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
-import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
-import { elements, lists } from "../../todos-controller.js/todos-controller.js";
-import { daysOfWeek, months } from "../costume-calendar/create-calendar.js";
-import { showDateSuggestion } from "../costume-calendar/show-date-suggestion.js";
-import { getTaskItem } from "../costume-calendar/update-task-due-date-view.js";
-import { getCachedElements } from "../get-cached-element.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { initilaizeHours } from "./render-clock.js";
 import { editTime, showClock } from "./select-time-manually.js";
 import { rotateHourHand, rotateMinuteHand } from "./rotate-clock-hand.js";
@@ -28,7 +21,6 @@ import {
   updateManualTime,
   updateTimeByClock,
 } from "./update-time.js";
-import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { restoreDateEditorAfterCancel } from "./exit-clock-mode.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";

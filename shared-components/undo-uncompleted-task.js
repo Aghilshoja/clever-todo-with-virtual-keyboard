@@ -1,26 +1,23 @@
-import { ACTIONS, ATTR } from "../constants/todo-constants.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
+import { ACTIONS } from "../constants/todo-constants.js";
+import { lists } from "../todos-controller/todos-controller.js";
+import { getList } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
-import { activeUlId } from "./render-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
-import { hideUndoPopup, removeTaskItemForUndo } from "./undo-completed-task.js";
+import {
+  hideUndoPopup,
+  removeTaskEmptyState,
+  removeTaskItemForUndo,
+} from "./undo-completed-task.js";
 
 export const undoUncompletedTask = () => {
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
-  const taskObjectIndex = appStateUi.undoOperation.taskObjectIndex;
   const removedTaskItem = appStateUi.undoOperation.removedEl;
   const previousEl = appStateUi.undoOperation.previousEl;
   const nextEl = appStateUi.undoOperation.nextEl;
-  const completedTaskId = appStateUi.undoOperation.taskObject.id;
 
   removeTaskItemForUndo();
 
-  lists.default.undoUncompletedTask(
-    originalTaskObject,
-    taskObjectIndex,
-    completedTaskId,
-  );
+  lists.default.undoUncompletedTask(originalTaskObject);
 
   const checkboxes = removedTaskItem.querySelectorAll(
     `[${ACTIONS.UNCOMPLETE_TASK}]`,
@@ -31,16 +28,12 @@ export const undoUncompletedTask = () => {
   if (previousEl) previousEl.after(removedTaskItem);
   else if (nextEl) nextEl.before(removedTaskItem);
   else {
-    const activeList = document.querySelector(
-      `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
-    );
-    const nextElementSibling = activeList.nextElementSibling;
-    const completedList = nextElementSibling.querySelector("ul");
-    if (!nextElementSibling || !completedList) return;
+    const tasksContainer = getList();
+    if (!tasksContainer) return;
     completedList.appendChild(removedTaskItem);
   }
 
-  showNumberOfCompletedTasks();
   hideUndoPopup();
   countTasks(); // update badge of active tasks
+  removeTaskEmptyState();
 };

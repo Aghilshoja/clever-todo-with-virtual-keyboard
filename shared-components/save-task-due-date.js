@@ -1,19 +1,10 @@
-import {
-  ATTR,
-  ATTR_STATES,
-  CHECK_STATES,
-  DUE_DATE_STATES,
-  EDIT_MODES,
-} from "../constants/todo-constants.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { daysOfWeek, months } from "./costume-calendar/create-calendar.js";
+import { EDIT_MODES } from "../constants/todo-constants.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import {
   exitDateMode,
   exitEditingDate,
 } from "./costume-calendar/exit-date-picker.js";
 import { quickDateLabels } from "./costume-calendar/quick-date-options.js";
-import { format24HourTime } from "./costume-calendar/prepare-date-editor.js";
-import { getCachedElements } from "./get-cached-element.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
 import {
   getTaskItem,

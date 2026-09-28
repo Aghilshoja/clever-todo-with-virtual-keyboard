@@ -4,7 +4,6 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
 import { appStateUi } from "./todo-states/states.js";
@@ -47,7 +46,6 @@ export const removeSelectedTasksHighlightedTasks = () => {
 };
 
 export const refreshUiAfterUndo = () => {
-  showNumberOfCompletedTasks();
   countTasks();
   hideUndoPopup();
   handleEmptyTaskStateUi();

@@ -1,12 +1,5 @@
-import {
-  ATTR,
-  ATTR_STATES,
-  CHECK_STATES,
-  HIGHLIGHT_SELECTED_TASK,
-  UNDO_STATES,
-} from "../constants/todo-constants.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
-import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { ATTR } from "../constants/todo-constants.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,

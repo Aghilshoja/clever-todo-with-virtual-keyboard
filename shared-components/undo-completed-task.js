@@ -1,6 +1,4 @@
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
-import { activeUlId } from "./render-tasks.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
 import { undoUncompletedTask } from "./undo-uncompleted-task.js";
 import { disableOrEnableButtons } from "./select-tasks.js";
@@ -13,10 +11,27 @@ import {
   INACTIVE,
 } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
+import { getList } from "./complete-mode.js";
+
+export const removeTaskEmptyState = () => {
+  const tasksContainer = getList();
+
+  if (!tasksContainer) return;
+
+  const emptyStateEl = tasksContainer.querySelector(
+    `[${ATTR.EMPTY_STATE_TASK}]`,
+  );
+
+  if (emptyStateEl) emptyStateEl.remove();
+};
 
 let undoPopupTimer = null;
 
 export const showUndopopup = () => {
+  const noUndoAvailable =
+    appStateUi.undoOperation.undoType === UNDO_STATES.NO_UNDO;
+
+  elements.undoCompletedTask.hidden = noUndoAvailable;
   const undoCompletion = elements.undoCompletion;
 
   // 1. Clear any existing timer
@@ -34,13 +49,14 @@ export const showUndopopup = () => {
 
   undoPopupTimer = setTimeout(() => {
     undoCompletion.dataset[ATTR_STATES.UNDO_CON] = INACTIVE.UNDO_CON;
+    appStateUi.undoOperation.undoType = UNDO_STATES.NO_UNDO;
     // Reset the timer variable once it's done
     undoPopupTimer = null;
   }, 2000);
 };
 
 export const removeTaskItemForUndo = () => {
-  const taskId = appStateUi.undoOperation.taskObject.id;
+  const taskId = appStateUi.undoOperation.originalTaskObject.id;
   const taskItem = document.querySelector(
     `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
   );
@@ -59,20 +75,16 @@ const unhighlightSelectedTaskAfterUndoOperation = (taskItem) => {
 
 const undoCompletedTask = () => {
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
-  const taskObjectIndex = appStateUi.undoOperation.taskObjectIndex;
   const removedTaskItem = appStateUi.undoOperation.removedEl;
   const previousEl = appStateUi.undoOperation.previousEl;
   const nextEl = appStateUi.undoOperation.nextEl;
-  const completedTaskId = appStateUi.undoOperation.taskObject.id;
+
   unhighlightSelectedTaskAfterUndoOperation(removedTaskItem);
   disableOrEnableButtons();
   removeTaskItemForUndo();
 
-  lists.default.undoCompletedTask(
-    originalTaskObject,
-    taskObjectIndex,
-    completedTaskId,
-  );
+  lists.default.undoCompletedTask(originalTaskObject);
+
   const checkboxes = removedTaskItem.querySelectorAll(
     `[${ACTIONS.COMPLETE_TASK}]`,
   );
@@ -83,16 +95,15 @@ const undoCompletedTask = () => {
   if (previousEl) previousEl.after(removedTaskItem);
   else if (nextEl) nextEl.before(removedTaskItem);
   else {
-    const activeList = document.querySelector(
-      `[${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`,
-    );
-    if (!activeList) return;
-    activeList.textContent = "";
-    activeList.appendChild(removedTaskItem);
+    const tasksContainer = getList();
+    if (!tasksContainer) return;
+    tasksContainer.textContent = "";
+    tasksContainer.appendChild(removedTaskItem);
   }
-  showNumberOfCompletedTasks();
+
   countTasks();
   hideUndoPopup();
+  removeTaskEmptyState();
 };
 
 export const handleUndoCompletingAndUncompleting = () => {

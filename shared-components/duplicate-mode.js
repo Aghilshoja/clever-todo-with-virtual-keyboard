@@ -1,6 +1,5 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import {
   ACTIONS,
   ACTIVE,
@@ -53,6 +52,5 @@ export const duplicateTask = (event) => {
       );
   }
 
-  showNumberOfCompletedTasks();
   countTasks();
 };

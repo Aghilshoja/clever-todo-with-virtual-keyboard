@@ -1,5 +1,5 @@
 import { ensureCaret, deleteCharBeforeCaret } from "./keyboard-input-caret.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { handleTaskCharacterLimit } from "../shared-components/handle-task-character-limit.js";
 import { disableOrEnableSaveBtn } from "../shared-components/handle-disabling-or-enabling-saving-task-edits.js";
 import { saveInputText } from "../shared-components/save-drafted-text-input-to-local-storage.js";

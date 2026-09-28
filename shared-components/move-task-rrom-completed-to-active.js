@@ -1,10 +1,10 @@
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import {
   captureAndRemoveTaskItem,
-  showNumberOfCompletedTasks,
+  getList,
   updateCompletionStatusLabel,
 } from "./complete-mode.js";
-import { renderTasks } from "./render-tasks.js";
+import { renderTask } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import {
@@ -21,17 +21,20 @@ export const moveTaskFromCompletedToActive = (event) => {
   if (!taskid) return;
   const activeTaskObject = lists.default.moveTaskFromCompletedToActive(taskid);
   captureAndRemoveTaskItem(taskid);
-  showNumberOfCompletedTasks();
-  appStateUi.undoOperation.taskObject = activeTaskObject.activeTask;
-  appStateUi.undoOperation.taskObjectIndex =
-    activeTaskObject.indexOfTaskToUncomplete;
-  appStateUi.undoOperation.originalTaskObject =
-    activeTaskObject.taskToUncomplete;
-  renderTasks(lists.default.getTasks(), activeTaskObject.activeTask);
+  appStateUi.undoOperation.originalTaskObject = activeTaskObject;
+
+  const tasksContainer = getList();
+
+  if (tasksContainer) {
+    const template = document.createElement("div");
+    template.innerHTML = renderTask(activeTaskObject);
+    tasksContainer.prepend(template.firstElementChild);
+  }
+
   countTasks();
   updateCompletionStatusLabel(event);
-  showUndopopup();
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_UNCOMPLETED;
+  showUndopopup();
   updateCounterAfterCompletingOrUncompletingATask();
   /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
   disableOrEnableButtons();

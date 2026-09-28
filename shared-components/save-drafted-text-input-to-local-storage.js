@@ -1,4 +1,3 @@
-import { getCachedElements } from "./get-cached-element.js";
 import { ensureCaret } from "../keyboard-view/keyboard-input-caret.js";
 import {
   clearPlaceholder,
@@ -12,7 +11,7 @@ import {
   PLACEHOLDERS,
 } from "../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { EDIT_MODES } from "../constants/todo-constants.js";
 import { updateTextEditor } from "../keyboard-view/keyboard-caret-positioning.js";
 import { handleTaskCharacterLimit } from "./handle-task-character-limit.js";

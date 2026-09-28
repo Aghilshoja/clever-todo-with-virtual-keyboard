@@ -101,6 +101,17 @@
                   activity log
                 </button>
               </li>
+              <li class="main-page__completed-tasks-visibility">
+                <button
+                  class="main-page__show-completed-tasks button-reset pd fs cursor"
+                  aria-label="show tasks that you've completed"
+                  title="show tasks that you've completed"
+                  data-action="show-or-hide-completed-tasks"
+                  data-is-visible="false"
+                >
+                  Show completed tasks
+                </button>
+              </li>
               <li class="main-page__comments">
                 <button
                   class="main-page__comments button-reset pd fs cursor"
@@ -231,7 +242,7 @@
             data-id="default"
             data-default-list
           >
-            <li>
+            <li data-empty-state>
               <img
                 src="photo_2026-02-20_12-00-02.jpg"
                 alt="Your inbox is empty"
@@ -247,24 +258,6 @@
               </p>
             </li>
           </ul>
-          <section
-            class="completed-default-tasks list-wrapper"
-            data-id="completed-default"
-            data-completed-section
-            data-completed-section-state="inactive"
-          >
-            <h3 class="completed-default-list__title">completed tasks</h3>
-            <details class="completed-default-tasks__toggler">
-              <summary
-                class="completed-default-tasks__title"
-                data-completed-status
-              ></summary>
-              <ul
-                class="completed-default-tasks__list"
-                data-completed-list
-              ></ul>
-            </details>
-          </section>
         </section>
         <nav
           class="main-page__navigation"
@@ -938,9 +931,6 @@
       type="module"
       src="keyboard-controler/keyboard-controler.js"
     ></script>
-    <script
-      type="module"
-      src="todos-controller.js/todos-controller.js"
-    ></script>
+    <script type="module" src="todos-controller/todos-controller.js"></script>
   </body>
 </html>

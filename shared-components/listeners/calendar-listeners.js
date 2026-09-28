@@ -1,5 +1,5 @@
 import { showCalendar } from "../set-due-date-on-multiple-tasks.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { saveTaskDueDate } from "../save-task-due-date.js";
 import {
   quickDateActions,

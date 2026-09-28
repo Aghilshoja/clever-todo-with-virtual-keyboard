@@ -1,27 +1,20 @@
-import { getCachedElements } from "./get-cached-element.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
-import { lists } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
+import { lists } from "../todos-controller/todos-controller.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
 import {
   ACTIONS,
   ACTIVE,
   ATTR,
   ATTR_STATES,
-  CHECK_STATES,
   DELETION_MODES,
-  HIGHLIGHT_SELECTED_TASK,
   INACTIVE,
 } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
 
-export const handleEmptyTaskStateUi = () => {
-  const listContainer = document.querySelector(`
-  [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
-  if (lists.default.tasks.length === 0) {
-    listContainer.innerHTML = `
-          <li>
+export const createTaskEmptyState = () => {
+  return `
+          <li data-empty-state>
               <img
               src="photo_2026-02-20_12-00-02.jpg"
               alt="Your inbox is empty"
@@ -37,6 +30,13 @@ export const handleEmptyTaskStateUi = () => {
             </p>
             </li>
     `;
+};
+
+export const handleEmptyTaskStateUi = () => {
+  const listContainer = document.querySelector(`
+  [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
+  if (lists.default.tasks.length === 0) {
+    listContainer.innerHTML = createTaskEmptyState();
   }
 };
 
@@ -59,7 +59,6 @@ export const deleteTask = (e) => {
 
   handleEmptyTaskStateUi();
   countTasks();
-  showNumberOfCompletedTasks();
 };
 
 const showSingleTaskDeletionWarning = (e) => {

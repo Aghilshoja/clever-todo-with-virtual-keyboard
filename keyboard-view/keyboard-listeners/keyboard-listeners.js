@@ -22,7 +22,7 @@ import {
 } from "../keyboard-key-reorder.js";
 import { handleSpaceBar } from "../keyboard-spacebar.js";
 import { toggleKeyboard } from "../toggle-keyboard.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { keyboardUiState } from "../keyboard-states/states.js";
 import {
   hideKeyPreview,

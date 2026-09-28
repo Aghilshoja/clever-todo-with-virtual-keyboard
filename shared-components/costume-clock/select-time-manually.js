@@ -1,16 +1,13 @@
 import { PLACEHOLDERS } from "../../constants/keyboard-constants.js";
 import {
   ACTIVE,
-  ATTR,
   ATTR_STATES,
   HIDDEN,
   INACTIVE,
   VISIBLE,
 } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "../get-cached-element.js";
-import { appStateUi } from "../todo-states/states.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { renderMinutes } from "./clock-view-mode.js";
 import {
   activateNumberKeyboard,

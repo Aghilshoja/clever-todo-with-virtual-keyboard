@@ -1,4 +1,3 @@
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import {
   KEYBOARD_ACTIONS,
   ATTRIBUTES,
@@ -6,7 +5,7 @@ import {
   KEYBOARD_INACTIVE,
   KEYBOARD_ACTIVE,
 } from "../constants/keyboard-constants.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 export const createKeys = (chars, langs, colIndex, rowIndex, activeLang) => {
   const button = document.createElement("button");
 

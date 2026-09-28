@@ -1,8 +1,6 @@
-import { getCachedElements } from "../get-cached-element.js";
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { disableSubmitIfInputEmpty } from "../../keyboard-view/keyboard-input-behavior.js";
-import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import {
   saveInputText,
@@ -15,7 +13,6 @@ import {
 } from "../../constants/keyboard-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
 import {
-  ATTR,
   ATTR_STATES,
   CHECK_STATES,
   CLOSED,

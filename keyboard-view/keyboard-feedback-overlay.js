@@ -1,6 +1,5 @@
-import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { ATTRIBUTES } from "../constants/keyboard-constants.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { keyboardUiState } from "./keyboard-states/states.js";
 
 const addPaddingToCornerKeyPreview = (rect) => {

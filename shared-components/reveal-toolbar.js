@@ -6,8 +6,7 @@ import {
   OPEN,
   CHECK_STATES,
 } from "../constants/todo-constants.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
-import { getCachedElements } from "./get-cached-element.js";
+import { elements } from "../todos-controller/todos-controller.js";
 
 /*
  * Expands task text width to fill remaining toolbar space.

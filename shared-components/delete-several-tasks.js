@@ -7,11 +7,9 @@ import {
   HIGHLIGHT_SELECTED_TASK,
   INACTIVE,
 } from "../constants/todo-constants.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
-import { showNumberOfCompletedTasks } from "./complete-mode.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
 import { handleEmptyTaskStateUi } from "./delete-mode.js";
-import { getCachedElements } from "./get-cached-element.js";
 import { exitTaskSelection } from "./select-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 
@@ -55,6 +53,5 @@ export const deleteSeveralTasks = (e) => {
     exitTaskSelection();
     handleEmptyTaskStateUi();
     countTasks();
-    showNumberOfCompletedTasks();
   }
 };

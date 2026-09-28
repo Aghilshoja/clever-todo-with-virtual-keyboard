@@ -3,7 +3,6 @@ import { renderTasks, activeUlId } from "../shared-components/render-tasks.js";
 import { getCachedElements } from "../shared-components/get-cached-element.js";
 import { highlighActiveList } from "../shared-components/highlight-active-list.js";
 import { ATTR } from "../constants/todo-constants.js";
-import { openTaskCalendar } from "../shared-components/costume-calendar/calendar-controller.js";
 import { markTaskAsDue } from "../shared-components/costume-calendar/mark-task-due.js";
 import { registerServiceWorker } from "../service-worker/register-service-worker.js";
 import { registerClockListeners } from "../shared-components/listeners/clock-listeners.js";
@@ -40,15 +39,9 @@ const initTodo = () => {
   const listContainer = document.querySelector(`
   [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
   if (!listContainer) return;
-  const nextElementSibling = listContainer.nextElementSibling;
-  if (!nextElementSibling) return;
-  const completedList = nextElementSibling.querySelector("ul");
-  if (!completedList) return;
   addTaskListeners(listContainer);
-  addTaskListeners(completedList);
 
   addDragAndDropListeners(listContainer);
-  addDragAndDropListeners(completedList);
 
   registerNotificationListener();
 

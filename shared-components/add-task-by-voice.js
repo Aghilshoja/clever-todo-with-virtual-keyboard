@@ -10,7 +10,7 @@ import {
   ensurePlaceholder,
 } from "../keyboard-view/keyboard-input-behavior.js";
 import { ensureCaret } from "../keyboard-view/keyboard-input-caret.js";
-import { elements } from "../todos-controller.js/todos-controller.js";
+import { elements } from "../todos-controller/todos-controller.js";
 import { saveInputText } from "./save-drafted-text-input-to-local-storage.js";
 import { appStateUi } from "./todo-states/states.js";
 

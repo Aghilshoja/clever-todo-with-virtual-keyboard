@@ -1,4 +1,4 @@
-import { elements } from "../../todos-controller.js/todos-controller.js";
+import { elements } from "../../todos-controller/todos-controller.js";
 import { openKeyboardToAddATask } from "../add-task-relative-to-selected-task.js";
 import { addTask } from "../add-task.js";
 import {
@@ -53,6 +53,7 @@ import {
 } from "../select-tasks.js";
 import { showCalendar } from "../set-due-date-on-multiple-tasks.js";
 import { handleUndoCompletingAndUncompleting } from "../undo-completed-task.js";
+import { hideOrShowCompletedTasks } from "../show-or-hide-completed-tasks.js";
 
 export const registerTodoListeners = () => {
   elements.warningPopup.addEventListener("click", deleteTask);
@@ -85,6 +86,10 @@ export const registerTodoListeners = () => {
   elements.speechToTextBtn.addEventListener("click", startVoiceTaskInput);
   document.addEventListener("click", abortVoiceRecording);
   document.addEventListener("click", stopVoiceRecording);
+  elements.showCompletedTasksBtn.addEventListener(
+    "click",
+    hideOrShowCompletedTasks,
+  );
 };
 
 export const addTaskListeners = (list) => {

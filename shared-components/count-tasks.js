@@ -1,5 +1,4 @@
-import { getCachedElements } from "./get-cached-element.js";
-import { elements, lists } from "../todos-controller.js/todos-controller.js";
+import { elements, lists } from "../todos-controller/todos-controller.js";
 import { ACTIVE, ATTR_STATES, INACTIVE } from "../constants/todo-constants.js";
 
 export const countTasks = () => {
