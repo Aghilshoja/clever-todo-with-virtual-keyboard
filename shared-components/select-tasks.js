@@ -89,8 +89,13 @@ export const triggerTaskSelectionUi = (e) => {
 
 export const updateLabelsOfOperationalButtonsForSelectedTasks = () => {
   const counter = appStateUi.selectedTasksCounter;
+
+  const completedTask = document.querySelector(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}`,
+  );
+
   const isCompletedTask =
-    appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST;
+    completedTask?.getAttribute("data-is-completed") === "true";
 
   elements.selectedTasksCount.textContent =
     counter === 1 ? "1 selected task" : `${counter} selected tasks`;
@@ -123,29 +128,26 @@ export const disableOrEnableButtons = () => {
   });
 };
 
-const fadeHighlightedTasksOfCompletedTasks = () => {
-  const tasksContainer = getList();
-
-  if (!tasksContainer) return;
+const fadeHighlightedTasksOfSectionList = () => {
+  const tasksContainer = elements.sectionListContainer;
   const removeHighlightedTaskOfCompletedList = tasksContainer.querySelectorAll(
-    `[${CHECK_STATES.SELECTED_TASK}][data-is-completed="true"]`,
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
+
   removeHighlightedTaskOfCompletedList.forEach(
     (el) => delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
   );
 };
 
-const fadeHighlightedTasksOfActiveTasks = () => {
+const fadeHighlightedTasksOfActiveList = () => {
   const activeList = getList();
   if (!activeList) return;
   const highlightedTasksOfActiveList = activeList.querySelectorAll(
-    `[${CHECK_STATES.SELECTED_TASK}]`,
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
 
   highlightedTasksOfActiveList.forEach((el) => {
-    if (!el.hasAttribute("data-is-completed")) {
-      delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
-    }
+    delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
   });
 };
 
@@ -183,57 +185,102 @@ const showOrHideEllipsis = () => {
   }
 };
 
+const SELECTED_ATTR = ATTR_STATES.HIGHLIGHT_SELECTED_TASK;
+
+const unselectActiveSelectedTasks = () => {
+  const activeTasks = document.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}'][data-is-completed='false']`,
+  );
+
+  activeTasks.forEach((el) => delete el.dataset[SELECTED_ATTR]);
+};
+
+const unselectCompletedTasks = () => {
+  const completedTasks = document.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}'][data-is-completed='true']`,
+  );
+
+  completedTasks.forEach((el) => delete el.dataset[SELECTED_ATTR]);
+};
+
+const updateSelectedTasksCounter = () => {
+  const selected = document.querySelectorAll(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+  );
+  appStateUi.selectedTasksCounter = selected.length;
+};
+
 export const selectTasks = (e) => {
-  /*
-   * If the task-selection counter is not active, then clicking a task should go through the normal toolbar flow, so this selection handler must exit early and avoid highlighting the task.
-   */
+  // Exit early if selection mode is not active
   const isSelectionModeActive =
     elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] ===
     ACTIVE.SELECTION_BAR;
   if (!isSelectionModeActive) return;
-  const selectedTask = e.target.closest(`[${ATTR.TASK_ITEM}]`);
 
+  const selectedTask = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!selectedTask) return;
 
-  const SELECTED_tASK = ATTR_STATES.HIGHLIGHT_SELECTED_TASK;
-
-  const isCurrentlySelected =
-    selectedTask.dataset[SELECTED_tASK] === HIGHLIGHT_SELECTED_TASK.SELECTED;
-  selectedTask.dataset[SELECTED_tASK] = isCurrentlySelected
-    ? HIGHLIGHT_SELECTED_TASK.UNSELECTED
-    : HIGHLIGHT_SELECTED_TASK.SELECTED;
-
-  const isSelectedTask =
-    selectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK] ===
-    HIGHLIGHT_SELECTED_TASK.SELECTED;
+  const wasSelected =
+    selectedTask.dataset[SELECTED_ATTR] === HIGHLIGHT_SELECTED_TASK.SELECTED;
+  const willBeSelected = !wasSelected;
 
   const isCompletedTask = selectedTask.dataset.isCompleted === "true";
 
-  if (isCompletedTask && !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`)) {
-    /* 
-     when users switche betwwen lists reset counter and show number of selected tasks of the current focused list
-    */
-    if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
-      fadeHighlightedTasksOfActiveTasks();
-      appStateUi.selectedTasksCounter = 0;
-    }
+  const parentOfTarget = selectedTask.closest(
+    `[${ATTR.DEFAULT_LIST}], [${ATTR.SECTION_LIST}]`,
+  );
 
-    appStateUi.taskSelectionMode = SELECTION_BAR.COMPLETED_LIST;
-    if (isSelectedTask) appStateUi.selectedTasksCounter++;
-    else appStateUi.selectedTasksCounter--;
-  } else if (!e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`)) {
-    if (appStateUi.taskSelectionMode === SELECTION_BAR.COMPLETED_LIST) {
-      appStateUi.selectedTasksCounter = 0;
-      fadeHighlightedTasksOfCompletedTasks();
-    }
+  if (!parentOfTarget) return;
 
+  const isDefaultList = parentOfTarget.hasAttribute(ATTR.DEFAULT_LIST);
+  const isSectionList = parentOfTarget.hasAttribute(ATTR.SECTION_LIST);
+
+  if (isDefaultList) {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.SECTIONS) {
+      fadeHighlightedTasksOfSectionList();
+    }
     appStateUi.taskSelectionMode = SELECTION_BAR.ACTIVE_LIST;
-    if (isSelectedTask) appStateUi.selectedTasksCounter++;
-    else appStateUi.selectedTasksCounter--;
+    appStateUi.sectionId = null;
+  } else if (isSectionList) {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
+      fadeHighlightedTasksOfActiveList();
+    }
+
+    if (
+      appStateUi.sectionId &&
+      appStateUi.sectionId !== selectedTask.dataset.sectionId
+    ) {
+      const sectionList = document.querySelector(
+        `[${ATTR.SECTION_LIST}][data-id="${appStateUi.sectionId}"]`,
+      );
+
+      if (sectionList) {
+        const previousSelectedTasks = sectionList.querySelectorAll(
+          `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+        );
+        previousSelectedTasks.forEach((el) => delete el.dataset[SELECTED_ATTR]);
+      }
+    }
+
+    appStateUi.sectionId = selectedTask.dataset.sectionId;
+    appStateUi.taskSelectionMode = SELECTION_BAR.SECTIONS;
   }
 
-  disableOrEnableButtons();
+  if (willBeSelected) {
+    if (isCompletedTask) {
+      unselectActiveSelectedTasks();
+    } else {
+      unselectCompletedTasks();
+    }
+  }
 
+  selectedTask.dataset[SELECTED_ATTR] = willBeSelected
+    ? HIGHLIGHT_SELECTED_TASK.SELECTED
+    : HIGHLIGHT_SELECTED_TASK.UNSELECTED;
+
+  updateSelectedTasksCounter();
+
+  disableOrEnableButtons();
   updateLabelsOfOperationalButtonsForSelectedTasks();
   showOrHideEllipsis();
 };

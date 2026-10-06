@@ -44,11 +44,21 @@ const loadCalendar = () => {
   quickDateLabels.updateLabels();
 };
 
+const getSectionId = () => {
+  const { selectedTaskItems } = getSelectedTasksToSetDateOn();
+  const taskItem = selectedTaskItems[0];
+  if (!taskItem) return;
+  const sectionId = taskItem.dataset.sectionId;
+  return sectionId;
+};
+
 const showCalendar = () => {
   appStateUi.activeMode = EDIT_MODES.EDIT_MULTIPLE_TASK;
   const { taskIds } = getSelectedTasksToSetDateOn();
+  const sectionId = getSectionId();
+  appStateUi.sectionId = sectionId;
   for (let i = 0; i < taskIds.length; i++) {
-    const task = lists.default.getTask(taskIds[i]);
+    const task = lists.default.getTask(taskIds[i], sectionId);
     if (task.dueDate === null) {
       appStateUi.hasTime = false;
       appStateUi.draftedDate = null;
@@ -78,6 +88,7 @@ const saveMultipleTasksDueDate = () => {
     taskIds,
     appStateUi.draftedDate,
     appStateUi.hasTime,
+    appStateUi.sectionId,
   );
 
   selectedTaskItems.forEach((taskEl) => updateDOM(taskEl));

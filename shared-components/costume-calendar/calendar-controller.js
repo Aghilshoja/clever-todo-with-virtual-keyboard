@@ -39,7 +39,6 @@ const openTaskCalendar = () => {
 
 const showCostumeCalendar = (e) => {
   if (!e.target.closest(`[${ACTIONS.TASK_DATE}]`)) return;
-  const taskDateBtn = e.target.closest(`[${ACTIONS.TASK_DATE}]`);
   openTaskCalendar();
 };
 

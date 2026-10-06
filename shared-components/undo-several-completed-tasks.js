@@ -4,14 +4,12 @@ import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,
 } from "./handle-several-completed-and-uncompleted-tasks-undo.js";
-import { activeUlId } from "./render-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralCompletedTasks = () => {
-  const activelist = document.querySelector(`
-    [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
+  const currentList = appStateUi.undoOperation.currentList;
 
-  if (!activelist) return;
+  if (!currentList) return;
 
   removeSelectedTasksHighlightedTasks();
 
@@ -22,15 +20,22 @@ export const undoSeveralCompletedTasks = () => {
 
   tasksToRemoveFromCompletedLIstAfterUndo.forEach((task) => task.remove());
 
-  activelist.innerHTML = "";
+  currentList.innerHTML = "";
   appStateUi.snapshots.domSnapshot.forEach((task) =>
-    activelist.appendChild(task),
+    currentList.appendChild(task),
   );
 
-  const taskIds = appStateUi.snapshots.IdsOfSelectedTasks;
-
   const originalClonedArray = appStateUi.snapshots.dataSnapshot;
-  lists.default.undoSeveralCompletedTasks(originalClonedArray, taskIds);
+
+  const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
+
+  const sectionList = appStateUi.undoOperation.sectionList;
+
+  lists.default.undoSeveralCompletedTasks(
+    originalClonedArray,
+    isSectionList,
+    sectionList,
+  );
 
   refreshUiAfterUndo();
 };

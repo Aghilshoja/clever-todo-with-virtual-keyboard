@@ -15,11 +15,9 @@ import { months } from "./costume-calendar/create-calendar.js";
 import { appStateUi } from "./todo-states/states.js";
 
 const getSelectedTask = () => {
-  const selectedTask = document.querySelector(
+  return document.querySelector(
     `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
-
-  return selectedTask;
 };
 
 export const handleSeveralTasksCompletionOrUncompletion = () => {
@@ -69,7 +67,11 @@ export const ShowUndoStatusLabel = (selectedTask, length) => {
 };
 
 // snapshot of DOM for the undo operation
-export const takeSnapshotOfDom = (currentList) => {
+export const takeSnapshotOfDom = () => {
+  const selectedTask = getSelectedTask();
+  if (!selectedTask) return;
+  const currentList = selectedTask.parentElement;
+  appStateUi.undoOperation.currentList = currentList;
   const taskElements = currentList.querySelectorAll(`[${ATTR.TASK_ITEM}]`);
   if (taskElements.length === 0) return;
 
@@ -77,7 +79,16 @@ export const takeSnapshotOfDom = (currentList) => {
     task.cloneNode(true),
   );
   appStateUi.snapshots.domSnapshot = cloneTaskElements;
-  appStateUi.snapshots.dataSnapshot = structuredClone(lists.default.tasks);
+
+  if (currentList.hasAttribute(ATTR.SECTION_LIST)) {
+    const sectionList = lists.default.getSectionList(currentList.dataset.id);
+    appStateUi.undoOperation.sectionList = sectionList;
+    if (!sectionList) return;
+    appStateUi.snapshots.dataSnapshot = structuredClone(sectionList.tasks);
+  } else {
+    appStateUi.snapshots.dataSnapshot = structuredClone(lists.default.tasks);
+  }
+  return currentList;
 };
 
 // remove original selected tasks and clone it so that we do not work on a live refrence

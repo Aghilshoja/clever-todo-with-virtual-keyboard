@@ -443,9 +443,18 @@ const quickDateActions = {
 const getTaskObject = () => {
   const { taskId } = getTaskItem();
 
-  const task = lists.default.getTask(taskId);
+  const taskItem = document.querySelector(
+    `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
+  );
 
-  return task;
+  appStateUi.sectionId = taskItem.dataset.sectionId;
+
+  const result = lists.default.getTaskFromlists(appStateUi.sectionId, taskId);
+  if (!result) throw new Error("task object was not found");
+
+  const { foundTask } = result;
+
+  return foundTask;
 };
 
 export {

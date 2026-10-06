@@ -1,4 +1,5 @@
 import {
+  ATTR,
   CHECK_STATES,
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
@@ -17,7 +18,17 @@ export const duplicateSeveralTasks = () => {
     (task) => task.dataset.id,
   );
 
-  const duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds);
+  let duplicatedTasks;
+
+  const sectioniTEM = selectedTaskElements[0].closest(`[${ATTR.SECTION_ITEM}]`);
+
+  if (sectioniTEM) {
+    const sectionId = sectioniTEM.dataset.id;
+    if (sectionId)
+      duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds, sectionId);
+  } else {
+    duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds);
+  }
 
   selectedTaskElements.forEach((selectedTask) => {
     const originalId = selectedTask.dataset.id;

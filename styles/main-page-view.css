@@ -40,6 +40,7 @@
 .main-page__navigation {
   position: fixed;
   bottom: 0;
+  z-index: 2;
   width: 100%;
 }
 
@@ -199,6 +200,7 @@
   justify-content: space-between;
   position: fixed;
   bottom: 0;
+  z-index: 3;
   width: 100%;
   padding: 0.4rem;
   box-shadow: 1px 1px 10px black;
@@ -212,11 +214,12 @@
   display: none;
 }
 
-.main-page__toolbar-manu {
+[data-batch-menu-state] {
   position: absolute;
   bottom: 40px;
   right: 2px;
   opacity: 0;
+  z-index: 3;
   transform: scaleY(0);
   transform-origin: bottom;
   pointer-events: none;

@@ -16,8 +16,19 @@ export const duplicateTask = (event) => {
     const taskItem = event.target.closest(`[${ATTR.TASK_ITEM}]`);
     if (!taskItem) return;
     const taskId = event.target.dataset.id;
-    const duplicatedTask = lists.default.duplicateTask(taskId);
+
+    const sectionItem = taskItem.closest(`[${ATTR.SECTION_ITEM}]`);
+
+    let duplicatedTask = null;
+    if (sectionItem) {
+      const sectionId = sectionItem.dataset.id;
+      duplicatedTask = lists.default.duplicateTask(taskId, sectionId);
+    } else {
+      duplicatedTask = lists.default.duplicateTask(taskId);
+    }
+
     const clonedTaskItem = taskItem.cloneNode(true);
+
     clonedTaskItem.dataset.id = duplicatedTask.id;
     const clonedTaskItemChildren = clonedTaskItem.querySelectorAll("[data-id]");
     clonedTaskItemChildren.forEach((el) => (el.dataset.id = duplicatedTask.id));

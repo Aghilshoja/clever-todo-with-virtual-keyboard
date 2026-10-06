@@ -51,11 +51,23 @@ const mockTaskImage = (task) => {
   return draggedImageWrapper;
 };
 
+const prepareDragImage = (task) => {
+  currentDragImage = document.createElement("div");
+  const draggedImage = mockTaskImage(task);
+  const checkBox = task.querySelector(`[${ACTIONS.COMPLETE_TASK}]`);
+  if (!checkBox) return;
+  const clonedCheckbox = checkBox.cloneNode(false);
+  draggedImage.prepend(clonedCheckbox);
+  currentDragImage.appendChild(draggedImage);
+  return currentDragImage;
+};
+
 export const dragStart = (e) => {
   const task = e.target.closest(`[${ATTR.TASK_ITEM}]`);
+
   if (!task) return;
 
-  const isTheTaskCompleted = task.hasAttribute("data-is-completed");
+  const isTheTaskCompleted = task.getAttribute("data-is-completed") === "true";
   if (isTheTaskCompleted) {
     elements.completionStatusLabel.textContent =
       "Completed tasks cannot be reordered";
@@ -73,27 +85,11 @@ export const dragStart = (e) => {
 
   e.dataTransfer.setData("text/plain", task.dataset.id);
 
-  currentDragImage = document.createElement("div");
+  const dragImage = prepareDragImage(task);
 
-  const draggedImage = mockTaskImage(task);
+  document.body.appendChild(dragImage);
 
-  if (e.currentTarget.hasAttribute(ATTR.DEFAULT_LIST)) {
-    const checkBox = task.querySelector(`[${ACTIONS.COMPLETE_TASK}]`);
-    if (!checkBox) return;
-    const clonedCheckbox = checkBox.cloneNode(false);
-    draggedImage.prepend(clonedCheckbox);
-    currentDragImage.appendChild(draggedImage);
-  } else if (e.currentTarget.hasAttribute(ATTR.COMPLETED_LIST)) {
-    const checkbox = task.querySelector(`[${ACTIONS.UNCOMPLETE_TASK}]`);
-    if (!checkbox) return;
-    const clonedCheckBox = checkbox.cloneNode(false);
-    draggedImage.prepend(clonedCheckBox);
-    currentDragImage.appendChild(draggedImage);
-  }
-
-  document.body.appendChild(currentDragImage);
-
-  e.dataTransfer.setDragImage(currentDragImage, 20, 10);
+  e.dataTransfer.setDragImage(dragImage, 20, 10);
 
   setTimeout(() => {
     task.dataset[ATTR_STATES.DRAGGING_TASK] = "";
@@ -134,25 +130,55 @@ export const dropTarget = (e) => {
   );
 
   const dropT = e.target.closest(`[${ATTR.TASK_ITEM}]`);
-  const tasksContainer = e.currentTarget;
+  let tasksContainer = null;
+
+  if (draggedTask.hasAttribute("data-section-id")) {
+    tasksContainer = document.querySelector(
+      `[${ATTR.SECTION_LIST}][data-id="${draggedTask.dataset.sectionId}"]`,
+    );
+  } else {
+    tasksContainer = e.currentTarget;
+  }
+
   if (!dropT || !draggedTask) return;
 
-  if (dropT.hasAttribute("data-is-completed")) return;
+  const isCompleted = dropT.getAttribute("data-is-completed") === "true";
+  if (isCompleted) return;
+
+  const sourceContainer = draggedTask.closest(
+    `[${ATTR.DEFAULT_LIST}], [${ATTR.SECTION_LIST}]`,
+  );
+
+  if (!sourceContainer || sourceContainer !== tasksContainer) return;
 
   clearDragState();
 
-  const list = lists.default.getTasks();
+  const section = tasksContainer.hasAttribute(ATTR.SECTION_LIST);
+  const sectionId = section ? draggedTask.dataset.sectionId : null;
+
+  const list = section
+    ? lists.default.getTaskFromlists(sectionId, taskId)
+    : lists.default.getTasks();
+
+  let currentList = null;
+
+  if (section) {
+    const { sectionList } = list;
+    currentList = sectionList.tasks;
+  } else currentList = list;
 
   const rect = dropT.getBoundingClientRect();
   const isAfter = e.clientY > rect.top + rect.height / 1.8;
 
-  const draggedTaskIndex = list.findIndex((t) => t.id === taskId);
-  const droppedTaskIndex = list.findIndex((t) => t.id === dropT.dataset.id);
+  const draggedTaskIndex = currentList.findIndex((t) => t.id === taskId);
+  const droppedTaskIndex = currentList.findIndex(
+    (t) => t.id === dropT.dataset.id,
+  );
 
   if (draggedTaskIndex === -1 || droppedTaskIndex === -1) return;
 
-  const [removedTask] = list.splice(draggedTaskIndex, 1);
-  list.splice(droppedTaskIndex, 0, removedTask);
+  const [removedTask] = currentList.splice(draggedTaskIndex, 1);
+  currentList.splice(droppedTaskIndex, 0, removedTask);
   tasksContainer.insertBefore(
     draggedTask,
     isAfter ? dropT.nextElementSibling : dropT,

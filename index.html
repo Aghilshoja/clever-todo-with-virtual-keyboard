@@ -73,6 +73,8 @@
                 <button
                   class="main-page__add-section button-reset pd fs cursor"
                   aria-label="add a section"
+                  title="add a section"
+                  data-action="add-sections"
                 >
                   add section
                 </button>
@@ -388,7 +390,11 @@
             >
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
-            <ul class="main-page__toolbar-manu" data-batch-menu>
+            <ul
+              class="main-page__toolbar-manu"
+              data-batch-menu
+              data-batch-menu-state
+            >
               <li class="main-page__delete-operation">
                 <button
                   class="main-page__delete-tasks button-reset fs pd cursor deactivate"
@@ -478,6 +484,8 @@
               data-edit-placeholder="Edit your task"
               data-description="Description"
               data-edit-task-date="etc... Aug 29"
+              data-section-name="Section name"
+              data-section-description="Description"
               data-keyboard-input
             ></div>
 
@@ -920,6 +928,55 @@
         </div>
 
         <ul class="all-task-history" data-task-history-container></ul>
+      </section>
+
+      <section class="sections" data-section-list-container>
+        <h3 class="sections__title">sections</h3>
+        <div
+          class="sections__form"
+          data-section-form-container
+          data-section-form-state="inactive"
+        >
+          <div class="sections__section-header">
+            <div class="sections__section-bar">
+              <button
+                class="sections__cancel-adding-section button-reset fs"
+                data-action="cancel-adding-section"
+                aria-label="cancel adding a section list"
+                title="cancel adding a section list"
+              >
+                <i class="fas fa-arrow-left"></i>
+              </button>
+              <h3 class="sections-title">Add section</h3>
+            </div>
+            <button
+              class="sections__save-section-name button-reset fs"
+              data-action="save-section"
+              title="add a section"
+              aria-label="add a section"
+            >
+              save
+            </button>
+          </div>
+          <div class="sections__actions">
+            <button
+              class="sections__enter-section-name button-reset fs word-wrap"
+              data-action="enter-section-name"
+              aria-label="enter section name "
+              title="enter section name "
+            >
+              Section name
+            </button>
+            <button
+              class="sections__enter-section-description button-reset fs"
+              data-action="enter-section-description"
+              aria-label="enter section description"
+              title="enter section description"
+            >
+              Description
+            </button>
+          </div>
+        </div>
       </section>
     </main>
 

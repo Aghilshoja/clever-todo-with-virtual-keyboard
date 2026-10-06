@@ -35,7 +35,7 @@ export const createTaskEmptyState = () => {
 export const handleEmptyTaskStateUi = () => {
   const listContainer = document.querySelector(`
   [${ATTR.DEFAULT_LIST}][data-id="${activeUlId.ul}"]`);
-  if (lists.default.tasks.length === 0) {
+  if (lists.default.tasks.length === 0 && lists.default.sections.length === 0) {
     listContainer.innerHTML = createTaskEmptyState();
   }
 };
@@ -50,11 +50,23 @@ export const deleteTask = (e) => {
     const taskItem = document.querySelector(
       `[${ATTR.TASK_ITEM}][data-id="${appStateUi.taskId}"]`,
     );
-    if (taskItem) taskItem.remove();
-    lists.default.deleteTask(appStateUi.taskId);
+
+    if (!taskItem) return;
+
+    const sectionItem = taskItem.closest(`[${ATTR.SECTION_ITEM}]`);
+
+    if (sectionItem) {
+      const sectionId = sectionItem.dataset.id;
+      if (sectionId) lists.default.deleteTask(appStateUi.taskId, sectionId);
+    } else {
+      lists.default.deleteTask(appStateUi.taskId);
+    }
+
     if (elements.warningPopup)
       elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
     appStateUi.deletionMode = DELETION_MODES.NONE;
+
+    taskItem.remove();
   }
 
   handleEmptyTaskStateUi();

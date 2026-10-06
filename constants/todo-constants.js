@@ -79,6 +79,11 @@ export const ATTR = {
   HISTORY_SECTION: "data-task-history-section",
   HISTORY_CONTAINER: "data-task-history-container",
   EMPTY_STATE_TASK: "data-empty-state",
+  SECTION_LIST_CONTAINER: "data-section-list-container",
+  SECTION_FORM_CONTAINER: "data-section-form-container",
+  SECTION_MENU: "data-section-menu",
+  SECTION_LIST: "data-section-list",
+  SECTION_ITEM: "data-section-item",
 };
 
 // elements that perform actions
@@ -152,6 +157,16 @@ export const ACTIONS = {
   CONFIRM_VOICE: 'data-action="confirm-voice-input"',
   TOGGLE_COMPLETED_TASKS_VISIBILITY:
     'data-action="show-or-hide-completed-tasks"',
+  ADD_SECTIONS: 'data-action="add-sections"',
+  ENTER_SECTION_NAME: 'data-action="enter-section-name"',
+  SECTION_DESCRIPTION: 'data-action="enter-section-description"',
+  CNACEL_ADDING_SECTION: 'data-action="cancel-adding-section"',
+  SAVE_SECTION: 'data-action="save-section"',
+  SECTION_ELLIPSIS: 'data-action="more-section-options"',
+  ADD_TASK_TO_SECTION: 'data-action="add-task-to-section"',
+  SECTION_LIST_TOGGLER: "data-action='data-section-list-toggler'",
+  EDIT_SECTION_NAME: 'data-action="edit-section-name"',
+  EDIT_SECTION_DESCRIPTION: 'data-action="edit-section-description"',
 };
 
 // check states using selectors
@@ -176,6 +191,7 @@ export const CHECK_STATES = {
   CLOCK_MINUTES: "data-minutes-state",
   TIME_HOUR: "data-time-hour",
   TIME_MINUTE: "data-time-minute",
+  SECTION_ID: "data-section-id",
 };
 
 // get or set state attributes in JS
@@ -246,6 +262,10 @@ export const ATTR_STATES = {
   CLOCK_BACKDROP: "backdrop",
   HISTROY_DROP_LIST: "activityLogState",
   HISTORY_SECTION: "historySectionState",
+  FORM_SECTION: "sectionFormState",
+  SECTION_MENU: "sectionMenuState",
+  TRIANGLE: "dataTriangleState",
+  SECTION_ID: "sectionId",
 };
 
 export const VISIBLE = {
@@ -291,6 +311,7 @@ export const OPEN = {
   SELECTION_BAR_MENU: "open",
   HISTROY_DROP_LIST: "open",
   HISTORY_SECTION: "open",
+  SECTION_MENU: "open",
 };
 
 export const CLOSED = {
@@ -302,6 +323,7 @@ export const CLOSED = {
   SELECTION_BAR_MENU: "closed",
   HISTROY_DROP_LIST: "closed",
   HISTORY_SECTION: "closed",
+  SECTION_MENU: "closed",
 };
 
 export const ACTIVE = {
@@ -321,6 +343,7 @@ export const ACTIVE = {
   TIME_CONTAINER: "active",
   TIME_HOURS: "active",
   TIME_MINUTES: "active",
+  FORM_SECTION: "active",
 };
 
 export const INACTIVE = {
@@ -340,6 +363,7 @@ export const INACTIVE = {
   TIME_CONTAINER: "inactive",
   TIME_HOURS: "inactive",
   TIME_MINUTES: "inactive",
+  FORM_SECTION: "inactive",
 };
 
 export const EDIT_MODES = {
@@ -364,6 +388,7 @@ export const UNDO_STATES = {
 export const SELECTION_BAR = {
   COMPLETED_LIST: "completed",
   ACTIVE_LIST: "active-list",
+  SECTIONS: "sections",
 };
 
 export const HIGHLIGHT_SELECTED_TASK = {
@@ -396,4 +421,8 @@ export const TIME_PERIODS = {
 
 export const MICROPHONE_MODE = {
   MIC_PROMPT: "listening...",
+};
+
+export const ADD_SECTION = {
+  SECTION: "add-section",
 };

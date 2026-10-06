@@ -16,6 +16,7 @@ import { EDIT_MODES } from "../constants/todo-constants.js";
 import { updateTextEditor } from "../keyboard-view/keyboard-caret-positioning.js";
 import { handleTaskCharacterLimit } from "./handle-task-character-limit.js";
 import { appStateUi } from "./todo-states/states.js";
+import { keyboardUiState } from "../keyboard-view/keyboard-states/states.js";
 
 export const updateEditorState = (key, value) => {
   const savedData =
@@ -31,7 +32,12 @@ export const saveInputText = () => {
   const caretState =
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.TEXT_EDITOR)) || {};
 
-  if (appStateUi.activeMode === EDIT_MODES.NO_MODES) {
+  const isNoEditMode = appStateUi.activeMode === EDIT_MODES.NO_MODES;
+
+  if (
+    isNoEditMode &&
+    keyboardUiState.activePlaceholder === PLACEHOLDERS.ENTER_TASK
+  ) {
     caretState.caretPosition = virtualKeyboard.caretManeger.caretPosition;
     caretState.draftedNewTask = virtualKeyboard.caretManeger.text;
   }
@@ -42,7 +48,7 @@ export const saveInputText = () => {
   );
 };
 
-const loadDraft = (input, draft) => {
+const loadDraft = (input) => {
   clearPlaceholder(input);
   delete input.dataset[KEYBOARD_STATES.INPUT_CARET];
   const caret = ensureCaret(input);

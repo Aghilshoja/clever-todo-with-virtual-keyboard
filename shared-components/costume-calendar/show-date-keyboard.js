@@ -28,7 +28,6 @@ const showDateKeyboard = () => {
   const unrelatedElements = elements.unrelatedKeyboardOptions;
   const quickOptionsContainer = elements.quickOptionsContainer;
   const taskDateSeggestionEl = elements.taskDateSuggestion;
-  const input = elements.inputElement;
 
   appStateUi.activeMode = EDIT_MODES.EDIT_TASK_DATE;
 

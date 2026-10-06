@@ -9,6 +9,7 @@ import {
   ATTR_STATES,
   ACTIVE,
   INACTIVE,
+  CHECK_STATES,
 } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
 import { getList } from "./complete-mode.js";
@@ -73,6 +74,23 @@ const unhighlightSelectedTaskAfterUndoOperation = (taskItem) => {
   delete taskItem.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
 };
 
+const restoreTaskItemWhenAlone = (removedTaskItem) => {
+  if (removedTaskItem.hasAttribute(CHECK_STATES.SECTION_ID)) {
+    const sectionListId = removedTaskItem.dataset.sectionId;
+    const sectionList = document.querySelector(
+      `[${ATTR.SECTION_LIST}][data-id="${sectionListId}"]`,
+    );
+
+    if (!sectionList) return;
+    sectionList.prepend(removedTaskItem);
+  } else {
+    const tasksContainer = getList();
+    if (!tasksContainer) return;
+    tasksContainer.textContent = "";
+    tasksContainer.appendChild(removedTaskItem);
+  }
+};
+
 const undoCompletedTask = () => {
   const originalTaskObject = appStateUi.undoOperation.originalTaskObject;
   const removedTaskItem = appStateUi.undoOperation.removedEl;
@@ -94,12 +112,7 @@ const undoCompletedTask = () => {
 
   if (previousEl) previousEl.after(removedTaskItem);
   else if (nextEl) nextEl.before(removedTaskItem);
-  else {
-    const tasksContainer = getList();
-    if (!tasksContainer) return;
-    tasksContainer.textContent = "";
-    tasksContainer.appendChild(removedTaskItem);
-  }
+  else restoreTaskItemWhenAlone(removedTaskItem);
 
   countTasks();
   hideUndoPopup();

@@ -4,6 +4,7 @@ import {
   INACTIVE,
 } from "../../constants/todo-constants.js";
 import { virtualKeyboard } from "../../keyboard-controler/keyboard-controler.js";
+import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
 import { ensurePlaceholder } from "../../keyboard-view/keyboard-input-behavior.js";
 import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
@@ -62,6 +63,7 @@ const exitClockUi = () => {
   showClock();
   putInputElementWhereThatWas();
   virtualKeyboard.clearNextHandler();
+  closeKeyboard();
 };
 
 export { exitClockUi, restoreDateEditorAfterCancel };

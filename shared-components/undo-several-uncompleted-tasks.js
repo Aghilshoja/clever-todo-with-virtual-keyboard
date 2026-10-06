@@ -8,9 +8,9 @@ import {
 import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralUncompletedTasks = () => {
-  const tasksContainer = getList();
+  const currentList = appStateUi.undoOperation.currentList;
 
-  if (!tasksContainer) return;
+  if (!currentList) return;
 
   removeSelectedTasksHighlightedTasks();
 
@@ -22,14 +22,22 @@ export const undoSeveralUncompletedTasks = () => {
 
   tasksToRemoveFromActiveListAfterUndo.forEach((task) => task.remove());
 
-  tasksContainer.innerHTML = "";
+  currentList.innerHTML = "";
   appStateUi.snapshots.domSnapshot.forEach((task) =>
-    tasksContainer.appendChild(task),
+    currentList.appendChild(task),
   );
 
   const originalClonedArray = appStateUi.snapshots.dataSnapshot;
 
-  lists.default.undoSeveralUncompletedTasks(originalClonedArray);
+  const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
+
+  const sectionList = appStateUi.undoOperation.sectionList;
+
+  lists.default.undoSeveralUncompletedTasks(
+    originalClonedArray,
+    isSectionList,
+    sectionList,
+  );
 
   refreshUiAfterUndo();
 };

@@ -1,6 +1,7 @@
 import {
   ACTIONS,
   ACTIVE,
+  ATTR,
   ATTR_STATES,
   CHECK_STATES,
   DELETION_MODES,
@@ -43,7 +44,16 @@ export const deleteSeveralTasks = (e) => {
       (task) => task.dataset.id,
     );
 
-    lists.default.deleteSeveralTasks(taskIds);
+    const sectionItem = selectedTaskElements[0].closest(
+      `[${ATTR.SECTION_ITEM}]`,
+    );
+
+    if (sectionItem) {
+      const sectionId = sectionItem.dataset.id;
+      if (sectionId) lists.default.deleteSeveralTasks(taskIds, sectionId);
+    } else {
+      lists.default.deleteSeveralTasks(taskIds);
+    }
 
     selectedTaskElements.forEach((selectedTask) => selectedTask.remove());
     appStateUi.selectedTasksCounter = 0;

@@ -63,14 +63,17 @@ const hideEditTaskDateUI = () => {
   elements.unrelatedKeyboardOptions.forEach(
     (fade) => (fade.dataset[ATTR_STATES.UNRELATED_ELS] = VISIBLE.UNRELATED_ELS),
   );
+
+  resetModesAndEnsurePlaceholder();
 };
 
 const exitDateMode = () => {
   hideDateMode();
   appStateUi.draftedDate = null;
+  hideEditTaskDateUI();
 };
 
-const exitEditingDate = (event) => {
+const exitEditingDate = () => {
   hideEditTaskDateUI();
 };
 

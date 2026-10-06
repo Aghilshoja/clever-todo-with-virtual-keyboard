@@ -1,34 +1,22 @@
 import {
-  ACTIONS,
   ADD_TASK_MODE,
   ATTR,
-  ATTR_STATES,
   CHECK_STATES,
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
 import { toggleKeyboard } from "../keyboard-view/toggle-keyboard.js";
 import { lists } from "../todos-controller/todos-controller.js";
+import { renderTask } from "./render-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 
 const performDOMOperationOfAddingNewTask = (selectedTask, newTask) => {
-  const cloneSelectedTask = selectedTask.cloneNode(true);
-  cloneSelectedTask.dataset.id = newTask.id;
-  delete cloneSelectedTask.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
-
-  const taskTextEls = cloneSelectedTask.querySelectorAll(
-    `[${ATTR.MAIN_TASK_TEXT}], [${ATTR.TASK_TEXT}]`,
-  );
-
-  taskTextEls.forEach((task) => {
-    task.textContent = newTask.text;
-    task.dataset.truncateText = newTask.text;
-  });
-
-  const children = cloneSelectedTask.querySelectorAll(`[data-id]`);
-
-  children.forEach((el) => (el.dataset.id = newTask.id));
-
-  return cloneSelectedTask;
+  const template = document.createElement("ul");
+  template.innerHTML = renderTask(newTask);
+  const taskItem = template.firstElementChild;
+  if (selectedTask.hasAttribute("data-section-id")) {
+    taskItem.dataset.sectionId = selectedTask.dataset.sectionId;
+  }
+  return taskItem;
 };
 
 const getSelectedTask = () => {
@@ -43,7 +31,22 @@ export const addTaskAboveSelectedTask = (text) => {
 
   const selectedTaskId = selectedTask.dataset.id;
 
-  const newTask = lists.default.addTaskAboveSelectedTask(selectedTaskId, text);
+  const sectionItem = selectedTask.closest(`[${ATTR.SECTION_ITEM}]`);
+
+  let newTask = null;
+
+  if (sectionItem) {
+    const sectionId = sectionItem.dataset.id;
+    if (sectionId) {
+      newTask = lists.default.addTaskAboveSelectedTask(
+        selectedTaskId,
+        text,
+        sectionId,
+      );
+    }
+  } else {
+    newTask = lists.default.addTaskAboveSelectedTask(selectedTaskId, text);
+  }
 
   const newTaskAboveSelectedTask = performDOMOperationOfAddingNewTask(
     selectedTask,
@@ -59,7 +62,22 @@ export const addTaskBelowSelectedTask = (text) => {
 
   const selectedTaskId = selectedTask.dataset.id;
 
-  const newTask = lists.default.addTaskBelowSelectedTask(selectedTaskId, text);
+  const sectionItem = selectedTask.closest(`[${ATTR.SECTION_ITEM}]`);
+
+  let newTask = null;
+
+  if (sectionItem) {
+    const sectionId = sectionItem.dataset.id;
+    if (sectionId) {
+      newTask = lists.default.addTaskAboveSelectedTask(
+        selectedTaskId,
+        text,
+        sectionId,
+      );
+    }
+  } else {
+    newTask = lists.default.addTaskAboveSelectedTask(selectedTaskId, text);
+  }
 
   const newTaskBelowSelectedTask = performDOMOperationOfAddingNewTask(
     selectedTask,

@@ -42,6 +42,7 @@ const initTodo = () => {
   addTaskListeners(listContainer);
 
   addDragAndDropListeners(listContainer);
+  addDragAndDropListeners(elements.sectionListContainer);
 
   registerNotificationListener();
 

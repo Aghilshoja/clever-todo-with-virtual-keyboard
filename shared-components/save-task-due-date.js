@@ -16,7 +16,12 @@ import { appStateUi } from "./todo-states/states.js";
 const saveSingleTaskDate = () => {
   const { taskItem, taskId } = getTaskItem();
 
-  lists.default.setDueDate(taskId, appStateUi.draftedDate, appStateUi.hasTime);
+  lists.default.setDueDate(
+    taskId,
+    appStateUi.draftedDate,
+    appStateUi.hasTime,
+    appStateUi.sectionId,
+  );
   updateDOM(taskItem);
   quickDateLabels.updateLabels();
 

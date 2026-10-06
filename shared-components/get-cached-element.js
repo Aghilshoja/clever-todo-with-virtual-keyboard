@@ -264,6 +264,34 @@ export const getCachedElements = () => {
       `[${ATTR.EMPTY_STATE_TASK}]`,
       "taskEmptyStateEl",
     ),
+    sectionButtonn: requireElement(
+      `[${ACTIONS.ADD_SECTIONS}]`,
+      "sectionButton",
+    ),
+    sectionListContainer: requireElement(
+      `[${ATTR.SECTION_LIST_CONTAINER}]`,
+      "sectionListContainer",
+    ),
+    sectionFormContainer: requireElement(
+      `[${ATTR.SECTION_FORM_CONTAINER}]`,
+      "sectionFormContainer",
+    ),
+    enterSectionNameBtn: requireElement(
+      `[${ACTIONS.ENTER_SECTION_NAME}]`,
+      "enterSectionName",
+    ),
+    sectionDescriptionBtn: requireElement(
+      `[${ACTIONS.SECTION_DESCRIPTION}]`,
+      "sectionDescriptionButton",
+    ),
+    cancelSectionBtn: requireElement(
+      `[${ACTIONS.CNACEL_ADDING_SECTION}]`,
+      "cancelAddingSectionbtn",
+    ),
+    saveSectionBtn: requireElement(
+      `[${ACTIONS.SAVE_SECTION}]`,
+      "saveSectionButton",
+    ),
     /* end of the elements that are related to the task manager */
   };
   return elements;

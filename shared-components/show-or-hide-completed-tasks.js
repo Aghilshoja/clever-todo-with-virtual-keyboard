@@ -30,12 +30,22 @@ const removeEmptyStateIfNoActiveTasks = (tasksContainer) => {
     `[${ATTR.TASK_ITEM}][data-is-completed="false"]`,
   );
 
-  if (activeTasks.length === 0) {
+  const completedTasks = document.querySelectorAll(
+    `[${ATTR.TASK_ITEM}][data-is-completed="true"]`,
+  );
+
+  if (activeTasks.length === 0 && completedTasks.length > 0) {
     tasksContainer.querySelector(`[${ATTR.EMPTY_STATE_TASK}]`)?.remove();
   }
 };
 
 const addEmptyStateIfNoActiveTasks = (tasksContainer) => {
+  const listEmptyState = tasksContainer.querySelector(
+    `[${ATTR.EMPTY_STATE_TASK}]`,
+  );
+
+  if (listEmptyState) return;
+
   const activeTasks = document.querySelectorAll(
     `[${ATTR.TASK_ITEM}][data-is-completed="false"]`,
   );

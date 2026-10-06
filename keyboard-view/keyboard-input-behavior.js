@@ -15,6 +15,7 @@ import { limitTimeInput } from "../shared-components/costume-clock/validate-time
 import { appStateUi } from "../shared-components/todo-states/states.js";
 import { keyboardUiState } from "./keyboard-states/states.js";
 import { MICROPHONE_MODE } from "../constants/todo-constants.js";
+import { disableOrEnableSectionSaveBtn } from "../shared-components/sections/section-helpers.js";
 
 export const pressBackspace = (e) => {
   if (e.target.closest(`[${KEYBOARD_ACTIONS.BACKSPACE}]`)) {
@@ -88,6 +89,21 @@ export const ensurePlaceholder = (input) => {
   const isInputEmpty = input.textContent === "";
 
   if (
+    keyboardUiState.activePlaceholder === PLACEHOLDERS.SECTION_DESCRIPTION &&
+    isInputEmpty
+  ) {
+    addCaretToInput(input);
+    input.textContent = input.dataset.sectionDescription;
+  }
+  if (
+    keyboardUiState.activePlaceholder === PLACEHOLDERS.SECTION_NAME &&
+    isInputEmpty
+  ) {
+    addCaretToInput(input);
+    input.textContent = input.dataset.sectionName;
+  }
+
+  if (
     keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TIME &&
     isInputEmpty
   ) {
@@ -155,6 +171,7 @@ const deleteLastCharacterOfInput = () => {
   handleTaskCharacterLimit();
   virtualKeyboard.updateAutoCaps();
   showDateSuggestion();
+  disableOrEnableSectionSaveBtn();
 };
 
 export const insertText = (input, char, caret) => {
@@ -198,4 +215,5 @@ export const typeIntoInput = (char) => {
   handleTaskCharacterLimit();
   saveInputText();
   virtualKeyboard.updateAutoCaps();
+  disableOrEnableSectionSaveBtn();
 };

@@ -8,6 +8,7 @@ export class TaskList {
     this.id = id;
     this.tasks = [];
     this.notifiedTasks = new Set();
+    this.sections = [];
     this.listeners = {
       renderTask: [],
       markTaskAsDue: [],
@@ -33,13 +34,34 @@ export class TaskList {
     return this.tasks;
   }
 
-  getAllTasks() {
-    return [...this.getTasks()];
+  getSectionList(sectionId) {
+    return this.sections.find((section) => section.id === sectionId);
   }
 
-  deleteTask(taskId) {
-    const foundTask = this.getTask(taskId);
-    if (!foundTask) throw new Error("task object was not found");
+  getTaskFromlists(sectionId, taskId) {
+    let sectionList = null;
+    let foundTask = null;
+    if (sectionId) {
+      sectionList = this.getSectionList(sectionId);
+      if (!sectionList) return null;
+      foundTask = sectionList.tasks.find((task) => task.id === taskId);
+      if (!foundTask) return null;
+      return {
+        foundTask,
+        sectionList,
+      };
+    } else {
+      foundTask = this.getTask(taskId);
+      if (!foundTask) return null;
+      return { foundTask };
+    }
+  }
+
+  deleteTask(taskId, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    if (!result) throw new Error("task object was not found");
+
+    const { sectionList, foundTask } = result;
 
     this.removeNotifications(taskId);
 
@@ -53,7 +75,20 @@ export class TaskList {
     };
     this.taskHistory.deletedTasks.push(deletedTask);
 
-    this.tasks = this.tasks.filter((task) => task.id !== taskId);
+    if (sectionList) {
+      sectionList.tasks = sectionList.tasks.filter(
+        (task) => task.id !== taskId,
+      );
+    } else {
+      this.tasks = this.tasks.filter((task) => task.id !== taskId);
+    }
+
+    console.log(
+      "this.tasks in delete task:",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
   }
 
   removeNotifications(taskIds) {
@@ -64,10 +99,33 @@ export class TaskList {
     }
   }
 
-  deleteSeveralTasks(taskIds) {
-    const tasksToDelete = this.getAllTasks().filter((task) =>
-      taskIds.includes(task.id),
-    );
+  getSeveralTasksFromList(sectionId, taskIds) {
+    let sectionList = null;
+    let foundTasks = null;
+    if (sectionId) {
+      sectionList = this.getSectionList(sectionId);
+      if (!sectionList) return null;
+      foundTasks = sectionList.tasks.filter((task) =>
+        taskIds.includes(task.id),
+      );
+      if (!foundTasks) return null;
+      return {
+        foundTasks,
+        sectionList,
+      };
+    } else {
+      foundTasks = this.getTasks().filter((task) => taskIds.includes(task.id));
+      if (!foundTasks) return null;
+      return { foundTasks };
+    }
+  }
+
+  deleteSeveralTasks(taskIds, sectionId) {
+    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    if (!result) throw new Error("no tasks to delete found ");
+    const { sectionList, foundTasks } = result;
+
+    const tasksToDelete = foundTasks;
 
     tasksToDelete.forEach((task) => {
       const deletedTask = {
@@ -81,14 +139,28 @@ export class TaskList {
       this.taskHistory.deletedTasks.push(deletedTask);
     });
 
-    this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+    if (sectionList) {
+      sectionList.tasks = sectionList.tasks.filter(
+        (task) => !taskIds.includes(task.id),
+      );
+    } else {
+      this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
+    }
 
     this.removeNotifications(taskIds);
+
+    console.log(
+      "this.tasks in delete multiple tasks :",
+      this.tasks,
+      "this.sections:",
+      this.sections,
+    );
   }
 
-  duplicateTask(taskId) {
-    const foundTask = this.getTask(taskId);
-    if (!foundTask) throw new Error("task object was not found");
+  duplicateTask(taskId, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    if (!result) throw new Error("no task found to duplicate");
+    const { sectionList, foundTask } = result;
 
     const duplicatedTask = {
       id: this.generateId(),
@@ -99,43 +171,92 @@ export class TaskList {
       dueDate: foundTask.dueDate,
     };
 
-    const indexOfOriginalTask = this.getTasks().indexOf(foundTask);
-    this.getTasks().splice(indexOfOriginalTask + 1, 0, duplicatedTask);
+    if (sectionList) {
+      const indexOfOriginalTask = sectionList.tasks.indexOf(foundTask);
+      if (indexOfOriginalTask === -1) return;
 
+      sectionList.tasks.splice(indexOfOriginalTask + 1, 0, duplicatedTask);
+    } else {
+      const indexOfOriginalTask = this.getTasks().indexOf(foundTask);
+      if (indexOfOriginalTask === -1) return;
+      this.getTasks().splice(indexOfOriginalTask + 1, 0, duplicatedTask);
+    }
+
+    console.log(
+      "this.tasks in duplicate task :",
+      this.tasks,
+      "this.sections:",
+      this.sections,
+    );
     return duplicatedTask;
   }
 
-  duplicateSeveralTasks(taskIds) {
-    const copiesOfDuplicatedTasks = [];
+  duplicatedTask(task) {
+    return {
+      id: this.generateId(),
+      text: task.text,
+      createdAt: Date.now(),
+      isCompleted: task.isCompleted,
+      description: task.description,
+      dueDate: task.dueDate,
+      originalId: task.id,
+    };
+  }
+
+  duplicateSeveralTasks(taskIds, sectionId) {
+    let copiesOfDuplicatedTasks = [];
+
+    let sectionList = null;
+
+    if (sectionId) sectionList = this.getSectionList(sectionId);
+
+    let sourceList = null;
+
+    if (sectionList) sourceList = this.sections;
+    else sourceList = this.getTasks();
 
     const newList = [];
 
-    this.getTasks().forEach((task) => {
-      newList.push(task);
-
-      if (taskIds.includes(task.id)) {
-        const duplicatedTask = {
-          id: this.generateId(),
-          text: task.text,
-          createdAt: Date.now(),
-          isCompleted: task.isCompleted,
-          description: task.description,
-          dueDate: task.dueDate,
-          originalId: task.id,
-        };
-        copiesOfDuplicatedTasks.push(duplicatedTask);
-        newList.push(duplicatedTask);
+    sourceList.forEach((task) => {
+      if ("sectionName" in task) {
+        for (const sectionTask of task.tasks) {
+          newList.push(sectionTask);
+          if (taskIds.includes(sectionTask.id)) {
+            const duplicatedTask = this.duplicatedTask(sectionTask);
+            copiesOfDuplicatedTasks.push(duplicatedTask);
+            newList.push(duplicatedTask);
+          }
+        }
+      } else {
+        newList.push(task);
+        if (taskIds.includes(task.id)) {
+          const duplicatedTask = this.duplicatedTask(task);
+          copiesOfDuplicatedTasks.push(duplicatedTask);
+          newList.push(duplicatedTask);
+        }
       }
     });
 
-    this.tasks = newList;
+    if (sectionList) sectionList.tasks = newList;
+    else this.tasks = newList;
+
+    console.log(
+      "this.tasks in duplicate multiple tasks :",
+      this.tasks,
+      "this.sections:",
+      this.sections,
+    );
 
     return copiesOfDuplicatedTasks;
   }
 
-  markTaskAsCompleted(taskId) {
-    const taskToComplete = this.getTasks().find((t) => t.id === taskId);
-    if (!taskToComplete) throw new Error("Task object was not found");
+  markTaskAsCompleted(taskId, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    if (!result) throw new Error("task object was not found");
+
+    const { foundTask } = result;
+
+    const taskToComplete = foundTask;
 
     taskToComplete.isCompleted = true;
 
@@ -150,13 +271,22 @@ export class TaskList {
 
     this.taskHistory.completedTasks.push(completedTask);
 
+    console.log(
+      "this.tasks in single task completion :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
+
     return taskToComplete;
   }
 
-  markSeveralTasksAsCompleted(taskIds) {
-    const tasksToComplete = this.tasks.filter((task) =>
-      taskIds.includes(task.id),
-    );
+  markSeveralTasksAsCompleted(taskIds, sectionId) {
+    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    if (!result) throw new Error("no tasks to delete found ");
+    const { foundTasks } = result;
+
+    const tasksToComplete = foundTasks;
 
     tasksToComplete.forEach((task) => (task.isCompleted = true));
 
@@ -173,43 +303,89 @@ export class TaskList {
       this.taskHistory.completedTasks.push(completedTask);
     });
 
+    console.log(
+      "this.task sin mulitple tasks completion :",
+      this.tasks,
+      "this.sections:",
+      this.sections,
+    );
+
     return tasksToComplete;
   }
 
-  moveTaskFromCompletedToActive(taskId) {
-    const taskToUncomplete = this.getTask(taskId);
+  moveTaskFromCompletedToActive(taskId, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    if (!result) throw new Error("task object was not found");
 
-    if (!taskToUncomplete) throw new Error("task object was not found");
+    const { foundTask } = result;
+
+    const taskToUncomplete = foundTask;
 
     taskToUncomplete.isCompleted = false;
 
+    console.log(
+      "this.tasks in uncomplete a task :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
     return taskToUncomplete;
   }
 
-  uncompleteSeveralTasks(taskIds) {
-    const tasksToUncomplete = this.getAllTasks().filter((task) =>
-      taskIds.includes(task.id),
-    );
+  uncompleteSeveralTasks(taskIds, sectionId) {
+    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    if (!result) throw new Error("no tasks to uncomplete ");
+    const { foundTasks } = result;
+
+    const tasksToUncomplete = foundTasks;
 
     tasksToUncomplete.forEach((task) => (task.isCompleted = false));
 
+    console.log(
+      "this.tasks in uncomplete multiple tasks :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
     return tasksToUncomplete;
   }
 
   undoCompletedTask(taskObject) {
     taskObject.isCompleted = false;
+    console.log(
+      "this.tasks in undo completed task :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
   }
 
-  undoSeveralCompletedTasks(originalTasksOrder) {
-    this.tasks = originalTasksOrder;
+  undoSeveralCompletedTasks(undoneTasks, isSectionList, sectionList) {
+    if (isSectionList) sectionList.tasks = undoneTasks;
+    else this.tasks = undoneTasks;
+
+    console.log(
+      "this.tasks in undo multiple tasks completion :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
   }
 
   undoUncompletedTask(task) {
     task.isCompleted = true;
   }
 
-  undoSeveralUncompletedTasks(originalTasksOrder) {
-    this.tasks = originalTasksOrder;
+  undoSeveralUncompletedTasks(undoneTasks, isSectionList, sectionList) {
+    if (isSectionList) sectionList.tasks = undoneTasks;
+    else this.tasks = undoneTasks;
+
+    console.log(
+      "this.tasks in multiple uncompleted tasks :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
   }
 
   generateId() {
@@ -222,15 +398,41 @@ export class TaskList {
     return Date.now() + "-" + Math.random().toString(36).substring(2, 9);
   }
 
-  editTaskOrDescription(taskId) {
-    const taskToEdit = this.getTask(taskId);
+  editTaskOrDescription(taskId, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    if (!result) throw new Error("task object was not found");
 
-    if (!taskToEdit) throw new Error("task object was not found");
+    const { foundTask } = result;
+
+    const taskToEdit = foundTask;
+
+    console.log(
+      "this.tasks in edit task :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+      "here is also the found task :",
+      foundTask,
+    );
+
     return taskToEdit;
   }
 
-  createInsertionContext(selectedTaskId, text) {
-    const selectedTask = this.getTask(selectedTaskId);
+  createInsertionContext(selectedTaskId, text, sectionId) {
+    let selectedTask = null;
+    let sourceList = null;
+
+    if (sectionId) {
+      const sectionList = this.getSectionList(sectionId);
+      if (!sectionList) return;
+      sourceList = sectionList.tasks;
+      selectedTask = sectionList.tasks.find(
+        (task) => task.id === selectedTaskId,
+      );
+    } else {
+      selectedTask = this.getTask(selectedTaskId);
+      sourceList = this.getTasks();
+    }
 
     if (!selectedTask) return;
 
@@ -240,49 +442,95 @@ export class TaskList {
       createdAt: Date.now(),
       isCompleted: false,
       description: null,
+      dueDate: null,
     };
 
-    const selectedIndex = this.getTasks().indexOf(selectedTask);
+    console.log("here is teh new task ob:", newTask);
+
+    const selectedIndex = sourceList.indexOf(selectedTask);
 
     return {
       newTask,
       selectedIndex,
+      sourceList,
     };
   }
 
-  addTaskAboveSelectedTask(selectedTaskId, text) {
-    const taskToAdd = this.createInsertionContext(selectedTaskId, text);
-    const { newTask, selectedIndex } = taskToAdd;
+  addTaskAboveSelectedTask(selectedTaskId, text, sectionId) {
+    const { newTask, selectedIndex, sourceList } = this.createInsertionContext(
+      selectedTaskId,
+      text,
+      sectionId,
+    );
 
-    this.getTasks().splice(selectedIndex + 1, 0, newTask);
+    sourceList.splice(selectedIndex + 1, 0, newTask);
 
+    console.log(
+      "this.tasks in add task above :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
     return newTask;
   }
 
   addTaskBelowSelectedTask(selectedTaskId, text) {
-    const taskToAdd = this.createInsertionContext(selectedTaskId, text);
-    const { newTask, selectedIndex } = taskToAdd;
+    const { newTask, selectedIndex, sourceList } = this.createInsertionContext(
+      selectedTaskId,
+      text,
+      sectionId,
+    );
 
-    this.getTasks().splice(selectedIndex, 0, newTask);
+    sourceList.splice(selectedIndex + 1, 0, newTask);
 
+    console.log(
+      "tihs.tasks in ad task below :",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
     return newTask;
   }
 
-  setDueDate(taskId, taskDueDate, hasTime) {
-    const taskToSetItsDueDate = this.getTask(taskId);
-    if (!taskToSetItsDueDate) throw new Error("task object was not found");
+  getAllTasks() {
+    const activeTasks = this.getTasks() ?? [];
+
+    const sectionTasks = (this.sections ?? []).flatMap(
+      (section) => section.tasks ?? [],
+    );
+
+    return [...activeTasks, ...sectionTasks];
+  }
+
+  setDueDate(taskId, taskDueDate, hasTime, sectionId) {
+    const result = this.getTaskFromlists(sectionId, taskId);
+    console.log("what is the result ?", result);
+    if (!result) throw new Error("task object was not found");
+
+    const { foundTask } = result;
+
+    const taskToSetItsDueDate = foundTask;
 
     if (!(taskDueDate instanceof Date)) throw new Error("no date object !");
 
     taskToSetItsDueDate.hasTime = hasTime;
     this.removeNotifications(taskId);
     taskToSetItsDueDate.dueDate = taskDueDate.getTime();
+
+    console.log(
+      "this.tasks in setDueDAte func:",
+      this.tasks,
+      "this.sections :",
+      this.sections,
+    );
   }
 
-  setMultipleDueDates(taskIds, dueDate, hasTime) {
-    const targetedTasks = this.getAllTasks().filter((task) =>
-      taskIds.includes(task.id),
-    );
+  setMultipleDueDates(taskIds, dueDate, hasTime, sectionId) {
+    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    if (!result) throw new Error("no tasks to delete found ");
+    const { foundTasks } = result;
+
+    const targetedTasks = foundTasks;
 
     if (targetedTasks.length === 0) {
       throw new Error("No matching task objects were found.");
@@ -291,9 +539,17 @@ export class TaskList {
     if (!(dueDate instanceof Date)) throw new Error("no date object !");
 
     targetedTasks.forEach((task) => {
+      this.removeNotifications(task.id);
       task.dueDate = dueDate.getTime();
       task.hasTime = hasTime;
     });
+
+    console.log(
+      "this.tasks in multiple due dates :",
+      this.tasks,
+      "this.sectinos :",
+      this.sections,
+    );
   }
 
   async showNotification(task) {
@@ -344,8 +600,33 @@ export class TaskList {
     }, 1000);
   }
 
-  getTask(taskId) {
-    return this.getAllTasks().find((task) => task.id === taskId) || null;
+  getTask(taskId, sectionId) {
+    if (sectionId) {
+      const sectionList = this.sections.find((task) => task.id === sectionId);
+      if (!sectionList) return null;
+      return sectionList.tasks.find((task) => task.id === taskId);
+    } else {
+      return this.getTasks().find((task) => task.id === taskId) || null;
+    }
+  }
+
+  addTaskToSection(sectionId, text) {
+    const foundSectionList = this.sections.find(
+      (task) => task.id === sectionId,
+    );
+
+    const task = {
+      id: this.generateId(),
+      text: text,
+      createdAt: Date.now(),
+      isCompleted: false,
+      description: null,
+      dueDate: null,
+    };
+
+    foundSectionList.tasks.push(task);
+
+    return task;
   }
 
   addTask(text) {

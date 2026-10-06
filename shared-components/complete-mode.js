@@ -23,15 +23,20 @@ export const showEmptyStateWhenNoVisibleTasks = () => {
 
   const areCompletedTasksHidden =
     elements.showCompletedTasksBtn.dataset.isVisible === "false";
-  if (taskItems.length === 0 && areCompletedTasksHidden) {
+  if (
+    taskItems.length === 0 &&
+    areCompletedTasksHidden &&
+    lists.default.sections.length === 0
+  ) {
     const template = document.createElement("ul");
     template.innerHTML = createTaskEmptyState();
     tasksContainer.prepend(template.firstElementChild);
   }
 };
 
-export const captureAndRemoveTaskItem = (taskId) => {
-  const taskItem = document.querySelector(
+export const captureAndRemoveTaskItem = (taskId, currentlist) => {
+  if (!currentlist) return;
+  const taskItem = currentlist.querySelector(
     `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
   );
   if (!taskItem) return;
@@ -80,19 +85,33 @@ export const completeTask = (e) => {
   if (!clickedCheckbox) return;
   const taskId = clickedCheckbox.dataset.id;
   if (!taskId) return;
-  const taskObject = lists.default.markTaskAsCompleted(taskId);
   const tasksContainer = getList();
 
   if (!tasksContainer) return;
 
-  captureAndRemoveTaskItem(taskId);
+  const sectionItem = clickedCheckbox.closest(`[${ATTR.SECTION_ITEM}]`);
+
+  let taskObject = null;
+
+  if (sectionItem) {
+    const sectionId = sectionItem.dataset.id;
+    if (sectionId)
+      taskObject = lists.default.markTaskAsCompleted(taskId, sectionId);
+    const taskItem = createTaskItem(taskObject);
+    const sectionList = sectionItem.querySelector(`[${ATTR.SECTION_LIST}]`);
+    captureAndRemoveTaskItem(taskId, sectionList);
+    if (sectionList) sectionList.appendChild(taskItem);
+  } else {
+    taskObject = lists.default.markTaskAsCompleted(taskId);
+    captureAndRemoveTaskItem(taskId, tasksContainer);
+    const taskItem = createTaskItem(taskObject);
+    tasksContainer.appendChild(taskItem);
+  }
+
   appStateUi.undoOperation.originalTaskObject = taskObject;
 
-  const taskItem = createTaskItem(taskObject);
-  tasksContainer.appendChild(taskItem);
-
-  countTasks(); //update badge of active list
   handleEmptyTaskStateUi();
+  countTasks();
 
   updateCompletionStatusLabel(e);
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_COMPLETED;

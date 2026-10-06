@@ -26,6 +26,8 @@ export const appStateUi = {
     undoType: UNDO_STATES.NO_UNDO,
     hasTime: null,
     dueDate: null,
+    sectionList: null,
+    currentList: null,
   },
   taskSelectionMode: SELECTION_BAR.ACTIVE_LIST,
   selectedTasksCounter: 0,
@@ -46,4 +48,10 @@ export const appStateUi = {
   originalHour: null,
   originalMinute: null,
   microphoneMode: null,
+  addSectionMode: null,
+  sectionObject: {
+    sectionName: null,
+    description: null,
+  },
+  sectionId: null,
 };

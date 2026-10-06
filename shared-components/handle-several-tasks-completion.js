@@ -1,7 +1,7 @@
+import { ATTR } from "../constants/todo-constants.js";
 import { lists } from "../todos-controller/todos-controller.js";
 import {
   createTaskItem,
-  getList,
   showEmptyStateWhenNoVisibleTasks,
 } from "./complete-mode.js";
 import {
@@ -10,23 +10,38 @@ import {
   takeSnapshotOfDom,
 } from "./handle-several-tasks-completion-or-uncompletion.js";
 
+const createCompletedTask = (currentList, completedTasks) => {
+  for (const task of completedTasks) {
+    const taskItem = createTaskItem(task);
+    currentList.appendChild(taskItem);
+  }
+};
+
 export const handleSeveralTasksCompletion = () => {
-  const tasksContainer = getList();
-
-  if (!tasksContainer) return;
-
-  takeSnapshotOfDom(tasksContainer);
+  const currentList = takeSnapshotOfDom();
 
   const selectedTasksInfo = removeOriginallySelectedTasks();
   const { taskIds, selectedTasksLength } = selectedTasksInfo;
 
   if (!taskIds || !selectedTasksLength) return;
 
-  const completedTasks = lists.default.markSeveralTasksAsCompleted(taskIds);
+  let completedTasks = null;
 
-  for (const task of completedTasks) {
-    const taskItem = createTaskItem(task);
-    tasksContainer.appendChild(taskItem);
+  if (currentList.hasAttribute(ATTR.SECTION_LIST)) {
+    const sectionItem = currentList.closest(`[${ATTR.SECTION_ITEM}]`);
+    if (!sectionItem) return;
+    const sectionId = sectionItem.dataset.id;
+    if (sectionId) {
+      completedTasks = lists.default.markSeveralTasksAsCompleted(
+        taskIds,
+        sectionId,
+      );
+    }
+
+    createCompletedTask(currentList, completedTasks);
+  } else {
+    completedTasks = lists.default.markSeveralTasksAsCompleted(taskIds);
+    createCompletedTask(currentList, completedTasks);
   }
 
   refreshUi();

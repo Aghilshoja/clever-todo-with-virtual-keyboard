@@ -1,4 +1,4 @@
-import { ATTR } from "../constants/todo-constants.js";
+import { ACTIONS, ATTR } from "../constants/todo-constants.js";
 
 export const truncateTaskText = () => {
   const taskEl = document.querySelectorAll(`[${ATTR.MAIN_TASK_TEXT}]`);
@@ -53,5 +53,62 @@ export const truncateTaskDescription = () => {
     if (maxLength !== null && fullText.length > maxLength)
       desEl.textContent = fullText.slice(0, maxLength) + "...";
     else desEl.textContent = fullText;
+  });
+};
+
+const SECTION_NAME_BREAKPOINTS = [
+  { maxWidth: 400, maxTextLength: 12 },
+  { maxWidth: 768, maxTextLength: 18 },
+  { maxWidth: 1000, maxTextLength: 24 },
+  { maxWidth: 1200, maxTextLength: 30 },
+];
+
+const SECTION_DESCRIPTION_BREAKPOINTS = [
+  { maxWidth: 400, maxTextLength: 20 },
+  { maxWidth: 768, maxTextLength: 40 },
+  { maxWidth: 1000, maxTextLength: 60 },
+  { maxWidth: 1200, maxTextLength: 80 },
+];
+
+export const truncateSectionName = () => {
+  const nameEls = document.querySelectorAll(`[${ACTIONS.EDIT_SECTION_NAME}]`);
+  if (!nameEls.length) return;
+
+  const bp = SECTION_NAME_BREAKPOINTS.find(
+    (b) => window.innerWidth <= b.maxWidth,
+  );
+  const maxLength = bp ? bp.maxTextLength : null;
+
+  nameEls.forEach((el) => {
+    const fullText = el.dataset.truncateText;
+    if (!fullText) return;
+
+    el.textContent =
+      maxLength !== null && fullText.length > maxLength
+        ? fullText.slice(0, maxLength) + "..."
+        : fullText;
+  });
+};
+
+export const truncateSectionDescription = () => {
+  const descEls = document.querySelectorAll(
+    `[${ACTIONS.EDIT_SECTION_DESCRIPTION}]`,
+  );
+
+  if (!descEls.length) return;
+
+  const bp = SECTION_DESCRIPTION_BREAKPOINTS.find(
+    (b) => window.innerWidth <= b.maxWidth,
+  );
+  const maxLength = bp ? bp.maxTextLength : null;
+
+  descEls.forEach((el) => {
+    const fullText = el.dataset.truncateText;
+
+    if (!fullText) return;
+    el.textContent =
+      maxLength !== null && fullText.length > maxLength
+        ? fullText.slice(0, maxLength) + "..."
+        : fullText;
   });
 };

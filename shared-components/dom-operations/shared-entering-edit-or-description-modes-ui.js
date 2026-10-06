@@ -62,8 +62,8 @@ const checkWhatIsClicked = (event) => {
   return result;
 };
 
-const findTaskToEdit = (taskId) => {
-  const foundTask = lists.default.editTaskOrDescription(taskId);
+const findTaskToEdit = (taskId, sectionId) => {
+  const foundTask = lists.default.editTaskOrDescription(taskId, sectionId);
   appStateUi.taskObjectToEdit = foundTask;
   return foundTask;
 };
@@ -175,10 +175,28 @@ const moveInputAndHideTaskDescription = (toolbar, task) => {
   }
 };
 
-export const detectClickedElementAndGetTaskObject = (event) => {
+/* export const detectClickedElementAndGetTaskObject = (event) => {
   const eventTarget = checkWhatIsClicked(event);
   if (!eventTarget) return;
   const taskObject = findTaskToEdit(eventTarget.dataset.id);
+  const taskItem = getTaskItem(event);
+  return {
+    eventTarget,
+    taskObject,
+    taskItem,
+  };
+}; */
+
+export const detectClickedElementAndGetTaskObject = (event) => {
+  const eventTarget = checkWhatIsClicked(event);
+  if (!eventTarget) return;
+  const sectionEl = eventTarget.closest(`[${ATTR.SECTION_ITEM}]`);
+  let taskObject;
+
+  if (sectionEl)
+    taskObject = findTaskToEdit(eventTarget.dataset.id, sectionEl.dataset?.id);
+  else taskObject = findTaskToEdit(eventTarget.dataset.id);
+
   const taskItem = getTaskItem(event);
   return {
     eventTarget,

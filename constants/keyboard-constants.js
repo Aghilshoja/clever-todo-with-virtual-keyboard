@@ -53,6 +53,8 @@ export const PLACEHOLDERS = {
   DESCRIPTION: "Description",
   EDIT_TASK_DATE: "etc... Aug 29",
   EDIT_TIME: "time",
+  SECTION_NAME: "Section name",
+  SECTION_DESCRIPTION: "Description",
 };
 
 export const KEYBOARD_OPEN = {

@@ -54,6 +54,20 @@ import {
 import { showCalendar } from "../set-due-date-on-multiple-tasks.js";
 import { handleUndoCompletingAndUncompleting } from "../undo-completed-task.js";
 import { hideOrShowCompletedTasks } from "../show-or-hide-completed-tasks.js";
+import {
+  cancelAddingSection,
+  saveSection,
+  showSectionUi,
+} from "../sections/section-form.js";
+import {
+  moveFocusOnDescription,
+  moveFocusOnSectionName,
+} from "../sections/section-form-focus.js";
+import {
+  toggleSectionListVisibility,
+  toggleSectionMenuVisibility,
+} from "../sections/section-toggles.js";
+import { revealKeyboard } from "../sections/add-task-to-section.js";
 
 export const registerTodoListeners = () => {
   elements.warningPopup.addEventListener("click", deleteTask);
@@ -89,6 +103,23 @@ export const registerTodoListeners = () => {
   elements.showCompletedTasksBtn.addEventListener(
     "click",
     hideOrShowCompletedTasks,
+  );
+  elements.sectionButtonn.addEventListener("click", showSectionUi);
+  elements.enterSectionNameBtn.addEventListener(
+    "click",
+    moveFocusOnSectionName,
+  );
+  elements.sectionDescriptionBtn.addEventListener(
+    "click",
+    moveFocusOnDescription,
+  );
+  elements.cancelSectionBtn.addEventListener("click", cancelAddingSection);
+  elements.saveSectionBtn.addEventListener("click", saveSection);
+  document.addEventListener("click", toggleSectionMenuVisibility);
+  elements.sectionListContainer.addEventListener("click", revealKeyboard);
+  elements.sectionListContainer.addEventListener(
+    "click",
+    toggleSectionListVisibility,
   );
 };
 
