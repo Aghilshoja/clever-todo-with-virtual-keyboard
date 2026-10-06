@@ -62,8 +62,7 @@ export const deleteTask = (e) => {
       lists.default.deleteTask(appStateUi.taskId);
     }
 
-    if (elements.warningPopup)
-      elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
+    elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
     appStateUi.deletionMode = DELETION_MODES.NONE;
 
     taskItem.remove();

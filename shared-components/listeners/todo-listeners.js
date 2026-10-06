@@ -68,9 +68,14 @@ import {
   toggleSectionMenuVisibility,
 } from "../sections/section-toggles.js";
 import { revealKeyboard } from "../sections/add-task-to-section.js";
+import {
+  deleteSection,
+  warnSectionDeletion,
+} from "../sections/delete-section.js";
 
 export const registerTodoListeners = () => {
   elements.warningPopup.addEventListener("click", deleteTask);
+  elements.warningPopup.addEventListener("click", deleteSection);
   elements.undoCompletedTask.addEventListener(
     "click",
     handleUndoCompletingAndUncompleting,
@@ -121,6 +126,8 @@ export const registerTodoListeners = () => {
     "click",
     toggleSectionListVisibility,
   );
+
+  elements.sectionListContainer.addEventListener("click", warnSectionDeletion);
 };
 
 export const addTaskListeners = (list) => {

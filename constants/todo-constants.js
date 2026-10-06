@@ -167,6 +167,7 @@ export const ACTIONS = {
   SECTION_LIST_TOGGLER: "data-action='data-section-list-toggler'",
   EDIT_SECTION_NAME: 'data-action="edit-section-name"',
   EDIT_SECTION_DESCRIPTION: 'data-action="edit-section-description"',
+  DELETE_SECTION: 'data-action="delete-section"',
 };
 
 // check states using selectors
@@ -400,6 +401,7 @@ export const DELETION_MODES = {
   NONE: "none",
   SINGLE: "single",
   BATCH: "batch",
+  SECTION: "section",
 };
 
 export const ADD_TASK_MODE = {

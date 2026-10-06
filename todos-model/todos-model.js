@@ -57,6 +57,18 @@ export class TaskList {
     }
   }
 
+  deleteSection(sectionId) {
+    const section = this.sections.find((section) => section.id === sectionId);
+
+    if (!section) throw new Error("section object was not found");
+
+    this.sections = this.sections.filter((section) => section.id !== sectionId);
+
+    const ids = section.tasks.map((t) => t.id);
+
+    this.removeNotifications(ids);
+  }
+
   deleteTask(taskId, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
     if (!result) throw new Error("task object was not found");
@@ -82,13 +94,6 @@ export class TaskList {
     } else {
       this.tasks = this.tasks.filter((task) => task.id !== taskId);
     }
-
-    console.log(
-      "this.tasks in delete task:",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
   }
 
   removeNotifications(taskIds) {
@@ -148,13 +153,6 @@ export class TaskList {
     }
 
     this.removeNotifications(taskIds);
-
-    console.log(
-      "this.tasks in delete multiple tasks :",
-      this.tasks,
-      "this.sections:",
-      this.sections,
-    );
   }
 
   duplicateTask(taskId, sectionId) {
@@ -181,13 +179,6 @@ export class TaskList {
       if (indexOfOriginalTask === -1) return;
       this.getTasks().splice(indexOfOriginalTask + 1, 0, duplicatedTask);
     }
-
-    console.log(
-      "this.tasks in duplicate task :",
-      this.tasks,
-      "this.sections:",
-      this.sections,
-    );
     return duplicatedTask;
   }
 
@@ -240,13 +231,6 @@ export class TaskList {
     if (sectionList) sectionList.tasks = newList;
     else this.tasks = newList;
 
-    console.log(
-      "this.tasks in duplicate multiple tasks :",
-      this.tasks,
-      "this.sections:",
-      this.sections,
-    );
-
     return copiesOfDuplicatedTasks;
   }
 
@@ -270,13 +254,6 @@ export class TaskList {
     };
 
     this.taskHistory.completedTasks.push(completedTask);
-
-    console.log(
-      "this.tasks in single task completion :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
 
     return taskToComplete;
   }
@@ -303,13 +280,6 @@ export class TaskList {
       this.taskHistory.completedTasks.push(completedTask);
     });
 
-    console.log(
-      "this.task sin mulitple tasks completion :",
-      this.tasks,
-      "this.sections:",
-      this.sections,
-    );
-
     return tasksToComplete;
   }
 
@@ -323,12 +293,6 @@ export class TaskList {
 
     taskToUncomplete.isCompleted = false;
 
-    console.log(
-      "this.tasks in uncomplete a task :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
     return taskToUncomplete;
   }
 
@@ -341,35 +305,16 @@ export class TaskList {
 
     tasksToUncomplete.forEach((task) => (task.isCompleted = false));
 
-    console.log(
-      "this.tasks in uncomplete multiple tasks :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
     return tasksToUncomplete;
   }
 
   undoCompletedTask(taskObject) {
     taskObject.isCompleted = false;
-    console.log(
-      "this.tasks in undo completed task :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
   }
 
   undoSeveralCompletedTasks(undoneTasks, isSectionList, sectionList) {
     if (isSectionList) sectionList.tasks = undoneTasks;
     else this.tasks = undoneTasks;
-
-    console.log(
-      "this.tasks in undo multiple tasks completion :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
   }
 
   undoUncompletedTask(task) {
@@ -379,13 +324,6 @@ export class TaskList {
   undoSeveralUncompletedTasks(undoneTasks, isSectionList, sectionList) {
     if (isSectionList) sectionList.tasks = undoneTasks;
     else this.tasks = undoneTasks;
-
-    console.log(
-      "this.tasks in multiple uncompleted tasks :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
   }
 
   generateId() {
@@ -405,15 +343,6 @@ export class TaskList {
     const { foundTask } = result;
 
     const taskToEdit = foundTask;
-
-    console.log(
-      "this.tasks in edit task :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-      "here is also the found task :",
-      foundTask,
-    );
 
     return taskToEdit;
   }
@@ -445,8 +374,6 @@ export class TaskList {
       dueDate: null,
     };
 
-    console.log("here is teh new task ob:", newTask);
-
     const selectedIndex = sourceList.indexOf(selectedTask);
 
     return {
@@ -465,12 +392,6 @@ export class TaskList {
 
     sourceList.splice(selectedIndex + 1, 0, newTask);
 
-    console.log(
-      "this.tasks in add task above :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
     return newTask;
   }
 
@@ -483,12 +404,6 @@ export class TaskList {
 
     sourceList.splice(selectedIndex + 1, 0, newTask);
 
-    console.log(
-      "tihs.tasks in ad task below :",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
     return newTask;
   }
 
@@ -504,7 +419,6 @@ export class TaskList {
 
   setDueDate(taskId, taskDueDate, hasTime, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
-    console.log("what is the result ?", result);
     if (!result) throw new Error("task object was not found");
 
     const { foundTask } = result;
@@ -516,13 +430,6 @@ export class TaskList {
     taskToSetItsDueDate.hasTime = hasTime;
     this.removeNotifications(taskId);
     taskToSetItsDueDate.dueDate = taskDueDate.getTime();
-
-    console.log(
-      "this.tasks in setDueDAte func:",
-      this.tasks,
-      "this.sections :",
-      this.sections,
-    );
   }
 
   setMultipleDueDates(taskIds, dueDate, hasTime, sectionId) {
@@ -543,13 +450,6 @@ export class TaskList {
       task.dueDate = dueDate.getTime();
       task.hasTime = hasTime;
     });
-
-    console.log(
-      "this.tasks in multiple due dates :",
-      this.tasks,
-      "this.sectinos :",
-      this.sections,
-    );
   }
 
   async showNotification(task) {
