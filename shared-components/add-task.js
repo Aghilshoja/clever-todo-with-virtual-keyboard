@@ -41,7 +41,7 @@ export const addTask = () => {
     appStateUi.addTaskModes === ADD_TASK_MODE.ADD_BELOW;
 
   const shouldAddTaskToSection =
-    appStateUi.addSectionMode === ADD_SECTION.SECTION;
+    appStateUi.addSectionMode === ADD_SECTION.ADD_TASK_TO_SECTION;
 
   if (shouldAddTaskAbove) addTaskAboveSelectedTask(value);
   else if (shouldAddTaskBelow) addTaskBelowSelectedTask(value);

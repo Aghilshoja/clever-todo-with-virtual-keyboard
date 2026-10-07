@@ -168,6 +168,7 @@ export const ACTIONS = {
   EDIT_SECTION_NAME: 'data-action="edit-section-name"',
   EDIT_SECTION_DESCRIPTION: 'data-action="edit-section-description"',
   DELETE_SECTION: 'data-action="delete-section"',
+  EDIT_SECTION: 'data-action="edit-section"',
 };
 
 // check states using selectors
@@ -374,6 +375,7 @@ export const EDIT_MODES = {
   DATE_MODE: "active",
   EDIT_TASK_DATE: "edit-task-date",
   EDIT_MULTIPLE_TASK: "edit-multiple-task",
+  EDIT_SECTION: "edit-section",
   NO_MODES: "none",
 };
 
@@ -427,4 +429,5 @@ export const MICROPHONE_MODE = {
 
 export const ADD_SECTION = {
   SECTION: "add-section",
+  ADD_TASK_TO_SECTION: "add-task-to-section",
 };

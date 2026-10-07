@@ -72,6 +72,7 @@ import {
   deleteSection,
   warnSectionDeletion,
 } from "../sections/delete-section.js";
+import { editSection } from "../sections/edit-section.js";
 
 export const registerTodoListeners = () => {
   elements.warningPopup.addEventListener("click", deleteTask);
@@ -128,6 +129,7 @@ export const registerTodoListeners = () => {
   );
 
   elements.sectionListContainer.addEventListener("click", warnSectionDeletion);
+  elements.sectionListContainer.addEventListener("click", editSection);
 };
 
 export const addTaskListeners = (list) => {

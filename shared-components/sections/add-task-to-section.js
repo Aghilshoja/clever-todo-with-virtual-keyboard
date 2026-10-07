@@ -13,7 +13,7 @@ import { appStateUi } from "../todo-states/states.js";
 const revealKeyboard = (e) => {
   if (!e.target.closest(`[${ACTIONS.ADD_TASK_TO_SECTION}]`)) return;
 
-  appStateUi.addSectionMode = ADD_SECTION.SECTION;
+  appStateUi.addSectionMode = ADD_SECTION.ADD_TASK_TO_SECTION;
   appStateUi.sectionId = e.target.closest(
     `[${ACTIONS.ADD_TASK_TO_SECTION}]`,
   )?.dataset.id;
