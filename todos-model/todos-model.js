@@ -155,6 +155,28 @@ export class TaskList {
     this.removeNotifications(taskIds);
   }
 
+  duplicateSection(sectionId) {
+    const sectionToDuplicate = this.getSectionList(sectionId);
+    if (!sectionToDuplicate) throw new Error("no section found ");
+
+    const duplicatedSection = {
+      sectionName: sectionToDuplicate.sectionName,
+      description: sectionToDuplicate.description,
+      id: this.generateId(),
+      tasks: sectionToDuplicate.tasks.map((task) => ({
+        ...task,
+        id: this.generateId(),
+      })),
+    };
+
+    const indexOfOriginalSection = this.sections.indexOf(sectionToDuplicate);
+    if (indexOfOriginalSection === -1) return;
+
+    this.sections.splice(indexOfOriginalSection + 1, 0, duplicatedSection);
+
+    return duplicatedSection;
+  }
+
   duplicateTask(taskId, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
     if (!result) throw new Error("no task found to duplicate");

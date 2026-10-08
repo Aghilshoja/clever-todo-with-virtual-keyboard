@@ -169,6 +169,7 @@ export const ACTIONS = {
   EDIT_SECTION_DESCRIPTION: 'data-action="edit-section-description"',
   DELETE_SECTION: 'data-action="delete-section"',
   EDIT_SECTION: 'data-action="edit-section"',
+  DUPLICATE_SECTION: 'data-action="duplicate-section"',
 };
 
 // check states using selectors
