@@ -179,7 +179,7 @@ export class TaskList {
 
   duplicateTask(taskId, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
-    if (!result) throw new Error("no task found to duplicate");
+    if (!result) throw new Error("no task to duplicate  found");
     const { sectionList, foundTask } = result;
 
     const duplicatedTask = {
@@ -258,7 +258,7 @@ export class TaskList {
 
   markTaskAsCompleted(taskId, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
-    if (!result) throw new Error("task object was not found");
+    if (!result) throw new Error("no task to complete");
 
     const { foundTask } = result;
 
@@ -282,7 +282,7 @@ export class TaskList {
 
   markSeveralTasksAsCompleted(taskIds, sectionId) {
     const result = this.getSeveralTasksFromList(sectionId, taskIds);
-    if (!result) throw new Error("no tasks to delete found ");
+    if (!result) throw new Error("no tasks to complete");
     const { foundTasks } = result;
 
     const tasksToComplete = foundTasks;
@@ -307,7 +307,7 @@ export class TaskList {
 
   moveTaskFromCompletedToActive(taskId, sectionId) {
     const result = this.getTaskFromlists(sectionId, taskId);
-    if (!result) throw new Error("task object was not found");
+    if (!result) throw new Error("no task to uncomplete");
 
     const { foundTask } = result;
 
@@ -440,14 +440,16 @@ export class TaskList {
   }
 
   setDueDate(taskId, taskDueDate, hasTime, sectionId) {
+    if (!taskDueDate) {
+      console.warn("no date provided ");
+      return;
+    }
     const result = this.getTaskFromlists(sectionId, taskId);
-    if (!result) throw new Error("task object was not found");
+    if (!result) throw new Error("no task to schedule");
 
     const { foundTask } = result;
 
     const taskToSetItsDueDate = foundTask;
-
-    if (!(taskDueDate instanceof Date)) throw new Error("no date object !");
 
     taskToSetItsDueDate.hasTime = hasTime;
     this.removeNotifications(taskId);
@@ -455,8 +457,10 @@ export class TaskList {
   }
 
   setMultipleDueDates(taskIds, dueDate, hasTime, sectionId) {
+    if (!dueDate) return;
     const result = this.getSeveralTasksFromList(sectionId, taskIds);
-    if (!result) throw new Error("no tasks to delete found ");
+    if (!result) throw new Error("no tasks to schedule");
+
     const { foundTasks } = result;
 
     const targetedTasks = foundTasks;
@@ -464,8 +468,6 @@ export class TaskList {
     if (targetedTasks.length === 0) {
       throw new Error("No matching task objects were found.");
     }
-
-    if (!(dueDate instanceof Date)) throw new Error("no date object !");
 
     targetedTasks.forEach((task) => {
       this.removeNotifications(task.id);

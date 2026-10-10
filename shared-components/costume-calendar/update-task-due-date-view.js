@@ -57,6 +57,7 @@ const checkOverdueDate = (dueDateEls) => {
 };
 
 const updateDOM = (taskItem) => {
+  if (!appStateUi.draftedDate) return;
   const dueDateEls = taskItem.querySelectorAll(
     `[${ACTIONS.TASK_DATE}], [${ATTR.VISIBLE_DUE_DATE}]`,
   );

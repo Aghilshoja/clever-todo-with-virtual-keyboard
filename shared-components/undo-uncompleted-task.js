@@ -1,12 +1,12 @@
 import { ACTIONS } from "../constants/todo-constants.js";
 import { lists } from "../todos-controller/todos-controller.js";
-import { getList } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 import {
   hideUndoPopup,
   removeTaskEmptyState,
   removeTaskItemForUndo,
+  restoreTaskItemWhenAlone,
 } from "./undo-completed-task.js";
 
 export const undoUncompletedTask = () => {
@@ -27,11 +27,7 @@ export const undoUncompletedTask = () => {
 
   if (previousEl) previousEl.after(removedTaskItem);
   else if (nextEl) nextEl.before(removedTaskItem);
-  else {
-    const tasksContainer = getList();
-    if (!tasksContainer) return;
-    completedList.appendChild(removedTaskItem);
-  }
+  else restoreTaskItemWhenAlone(removedTaskItem);
 
   hideUndoPopup();
   countTasks(); // update badge of active tasks

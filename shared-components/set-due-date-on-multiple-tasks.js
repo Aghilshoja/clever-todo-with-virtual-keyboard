@@ -1,5 +1,6 @@
 import {
   ACTIVE,
+  ATTR,
   ATTR_STATES,
   CHECK_STATES,
   EDIT_MODES,
@@ -48,8 +49,8 @@ const getSectionId = () => {
   const { selectedTaskItems } = getSelectedTasksToSetDateOn();
   const taskItem = selectedTaskItems[0];
   if (!taskItem) return;
-  const sectionId = taskItem.dataset.sectionId;
-  return sectionId;
+  const sectionEl = taskItem.closest(`[${ATTR.SECTION_ITEM}]`);
+  if (sectionEl && sectionEl.dataset.id) return sectionEl.dataset.id;
 };
 
 const showCalendar = () => {

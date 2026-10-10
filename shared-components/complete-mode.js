@@ -9,7 +9,12 @@ import {
   updateCounterAfterCompletingOrUncompletingATask,
   updateLabelsOfOperationalButtonsForSelectedTasks,
 } from "./select-tasks.js";
-import { ACTIONS, ATTR, UNDO_STATES } from "../constants/todo-constants.js";
+import {
+  ACTIONS,
+  ATTR,
+  ATTR_STATES,
+  UNDO_STATES,
+} from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
 
 export const showEmptyStateWhenNoVisibleTasks = () => {
@@ -40,6 +45,10 @@ export const captureAndRemoveTaskItem = (taskId, currentlist) => {
     `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
   );
   if (!taskItem) return;
+  if (currentlist.hasAttribute(ATTR.SECTION_LIST)) {
+    taskItem.dataset[ATTR_STATES.SECTION_ID] = currentlist.dataset.id;
+  }
+
   appStateUi.undoOperation.removedEl = taskItem;
   appStateUi.undoOperation.previousEl = taskItem.previousElementSibling;
   appStateUi.undoOperation.nextEl = taskItem.nextElementSibling;
@@ -97,15 +106,15 @@ export const completeTask = (e) => {
     const sectionId = sectionItem.dataset.id;
     if (sectionId)
       taskObject = lists.default.markTaskAsCompleted(taskId, sectionId);
-    const taskItem = createTaskItem(taskObject);
+    const completedTask = createTaskItem(taskObject);
     const sectionList = sectionItem.querySelector(`[${ATTR.SECTION_LIST}]`);
     captureAndRemoveTaskItem(taskId, sectionList);
-    if (sectionList) sectionList.appendChild(taskItem);
+    if (sectionList) sectionList.appendChild(completedTask);
   } else {
     taskObject = lists.default.markTaskAsCompleted(taskId);
     captureAndRemoveTaskItem(taskId, tasksContainer);
-    const taskItem = createTaskItem(taskObject);
-    tasksContainer.appendChild(taskItem);
+    const completedTask = createTaskItem(taskObject);
+    tasksContainer.appendChild(completedTask);
   }
 
   appStateUi.undoOperation.originalTaskObject = taskObject;

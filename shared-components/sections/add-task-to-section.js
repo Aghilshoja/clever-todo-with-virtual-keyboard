@@ -1,9 +1,4 @@
-import {
-  ACTIONS,
-  ADD_SECTION,
-  ATTR,
-  ATTR_STATES,
-} from "../../constants/todo-constants.js";
+import { ACTIONS, ADD_SECTION, ATTR } from "../../constants/todo-constants.js";
 import { toggleKeyboard } from "../../keyboard-view/toggle-keyboard.js";
 import { lists } from "../../todos-controller/todos-controller.js";
 import { addTaskListeners } from "../listeners/todo-listeners.js";
@@ -33,8 +28,6 @@ const addTaskToSection = (value) => {
   const list = document.querySelector(
     `[${ATTR.SECTION_LIST}][data-id="${appStateUi.sectionId}"]`,
   );
-
-  taskItemEl.dataset[ATTR_STATES.SECTION_ID] = list.dataset.id;
 
   if (list) list.prepend(taskItemEl);
 

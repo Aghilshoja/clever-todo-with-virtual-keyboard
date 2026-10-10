@@ -447,7 +447,11 @@ const getTaskObject = () => {
     `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
   );
 
-  appStateUi.sectionId = taskItem.dataset.sectionId;
+  const section = taskItem.closest(`[${ATTR.SECTION_ITEM}]`);
+
+  if (section && section.dataset.id) {
+    appStateUi.sectionId = section.dataset.id;
+  }
 
   const result = lists.default.getTaskFromlists(appStateUi.sectionId, taskId);
   if (!result) throw new Error("task object was not found");

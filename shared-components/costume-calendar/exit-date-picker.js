@@ -20,6 +20,7 @@ import { ensureCaret } from "../../keyboard-view/keyboard-input-caret.js";
 import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
+import { disableSaveDateBtn } from "./show-date-suggestion.js";
 
 const resetModesAndEnsurePlaceholder = () => {
   appStateUi.activeMode = EDIT_MODES.NO_MODES;
@@ -49,6 +50,7 @@ const hideDateMode = () => {
     INACTIVE.DATE_CONTAINER;
 
   resetModesAndEnsurePlaceholder();
+  disableSaveDateBtn();
 };
 
 const hideEditTaskDateUI = () => {

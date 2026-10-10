@@ -36,6 +36,10 @@ export const handleSeveralTasksCompletionOrUncompletion = () => {
 };
 
 const formatTime = () => {
+  if (!appStateUi.undoOperation.dueDate) {
+    console.warn("no due date provided");
+    return "no date scheduled";
+  }
   const currentYear = new Date().getFullYear();
 
   const year = appStateUi.undoOperation.dueDate.getFullYear();

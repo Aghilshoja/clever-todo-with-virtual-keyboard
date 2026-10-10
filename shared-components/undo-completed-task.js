@@ -74,7 +74,7 @@ const unhighlightSelectedTaskAfterUndoOperation = (taskItem) => {
   delete taskItem.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
 };
 
-const restoreTaskItemWhenAlone = (removedTaskItem) => {
+export const restoreTaskItemWhenAlone = (removedTaskItem) => {
   if (removedTaskItem.hasAttribute(CHECK_STATES.SECTION_ID)) {
     const sectionListId = removedTaskItem.dataset.sectionId;
     const sectionList = document.querySelector(
@@ -83,6 +83,7 @@ const restoreTaskItemWhenAlone = (removedTaskItem) => {
 
     if (!sectionList) return;
     sectionList.prepend(removedTaskItem);
+    delete removedTaskItem.dataset[ATTR_STATES.SECTION_ID];
   } else {
     const tasksContainer = getList();
     if (!tasksContainer) return;
