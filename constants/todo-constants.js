@@ -84,6 +84,10 @@ export const ATTR = {
   SECTION_MENU: "data-section-menu",
   SECTION_LIST: "data-section-list",
   SECTION_ITEM: "data-section-item",
+  SUBTASKS_CONTAINER: "data-subtasks-container",
+  PARENT_TASK_ID: "data-parent-task-id",
+  MAIN_SUBTASK_TOGGLER_CONTAINER: "data-main-subtask-toggler",
+  SUBTASK_INDENT: "data-subtask-indent",
 };
 
 // elements that perform actions
@@ -170,6 +174,8 @@ export const ACTIONS = {
   DELETE_SECTION: 'data-action="delete-section"',
   EDIT_SECTION: 'data-action="edit-section"',
   DUPLICATE_SECTION: 'data-action="duplicate-section"',
+  SUBTASK_TOGGLER: 'data-action="subtask-toggler"',
+  TOOLBAR_SUBTASKS_TOGGLER: "data-action='toolbar-subtasks-toggler'",
 };
 
 // check states using selectors
@@ -195,6 +201,8 @@ export const CHECK_STATES = {
   TIME_HOUR: "data-time-hour",
   TIME_MINUTE: "data-time-minute",
   SECTION_ID: "data-section-id",
+  MAIN_SUBTASK_TOGGLER: "data-main-subtask-toggler-State",
+  TOOLBAR_SUBTASK_TOGGLER: "data-toolbar-Subtask-Toggler-State",
 };
 
 // get or set state attributes in JS
@@ -269,6 +277,9 @@ export const ATTR_STATES = {
   SECTION_MENU: "sectionMenuState",
   TRIANGLE: "dataTriangleState",
   SECTION_ID: "sectionId",
+  SUBTASKS: "subTasksVisibility",
+  TOOLBAR_SUBTASK_TOGGLER: "toolbarSubtaskTogglerState",
+  MAIN_SUBTASK_TOGGLER: "mainSubtaskTogglerState",
 };
 
 export const VISIBLE = {
@@ -283,6 +294,8 @@ export const VISIBLE = {
   CLOCK_FACE: "visible",
   KEYBOARD_BTN: "visible",
   CLOCK_BTN: "visible",
+  SUBTASKS: "visible",
+  SUBTASK_TOGGLER: "visible",
 };
 
 export const HIDDEN = {
@@ -302,6 +315,8 @@ export const HIDDEN = {
   CLOCK_FACE: "hidden",
   KEYBOARD_BTN: "hidden",
   CLOCK_BTN: "hidden",
+  SUBTASKS: "hidden",
+  SUBTASK_TOGGLER: "hidden",
 };
 
 export const OPEN = {
@@ -411,6 +426,7 @@ export const ADD_TASK_MODE = {
   ADD_ABOVE: "above",
   ADD_BELOW: "below",
   REGULAR: "regular",
+  SUBTASK: "subtask",
 };
 
 export const DUE_DATE_STATES = {

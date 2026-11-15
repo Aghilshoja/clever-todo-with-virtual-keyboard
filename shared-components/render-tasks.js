@@ -164,7 +164,12 @@ const createToolbar = (task) => {
     </li>
     </ul>
     </li>
-    <li class="task__toolbar-subtask" ${ATTR.SUB_TASK_CON}><button class="task__toolbar-subtask-action button-reset fs cursor hover" aria-label="add a subtask" data-id="${task.id}" ${ACTIONS.SUB_TASK}>+  add sub-task</button>
+    <details ${ACTIONS.TOOLBAR_SUBTASKS_TOGGLER} ${CHECK_STATES.TOOLBAR_SUBTASK_TOGGLER}="${HIDDEN.SUBTASK_TOGGLER}">
+    <summary>sub-task</summary>
+    <ul class="task__subtasks-container" data-id="${task.id}" ${ATTR.SUBTASKS_CONTAINER}></ul>
+    </details>
+    <li class="task__toolbar-subtask" ${ATTR.SUB_TASK_CON} data-id="${task.id}"><button class="task__toolbar-subtask-action button-reset fs cursor hover" aria-label="add a subtask" data-id="${task.id}" ${ACTIONS.SUB_TASK}>+  add sub-task</button>
+    </li>
     </li>
     </li> 
     </ul>
@@ -196,10 +201,10 @@ const clearListContainer = (task) => {
 export const renderTask = (task) => {
   const list = `
   <li class="task" draggable="true" data-id="${task.id}" ${ATTR.TASK_ITEM}  data-is-completed=
-  "false">
+  "${task.isCompleted}">
   <ul class="task__container">
   <li class="task__item flex-space-between">
-  <div class="group-input-and-text flex">
+  <div class="group-input-and-text flex" ${ATTR.SUBTASK_INDENT}>
   <input type="checkbox" data-id="${task.id}" class="${task.isCompleted ? `task__completed-main-task-checkbox check-layout` : `task__main-task-checkbox check-layout`}" ${task.isCompleted ? `${ACTIONS.UNCOMPLETE_TASK}` : `${ACTIONS.COMPLETE_TASK}`}  ${task.isCompleted ? "checked" : ""}>
     <div class="task__wrap-task-and-description">
     <p class="task__text word-wrap" ${ATTR.MAIN_TASK_TEXT} data-truncate-text="${task.text}">${task.text}</p>
@@ -207,8 +212,9 @@ export const renderTask = (task) => {
     <p class="task__visible-due-date" data-id="${task.id}" ${ATTR.VISIBLE_DUE_DATE} ${getDueDateStateAttribute(task)}>${formatTaskDueDate(task)}</p>
     </div>
     </div>
-    <div class='task__actions'>
-    <button class="task__important button-reset cursor" aria-label="mark your active task as important" data-id="${task.id}" ${ACTIONS.IMPORTANT_TASK}><i class="fa-regular fa-star"></i></button>
+    <div class='task__actions' ${ATTR.MAIN_SUBTASK_TOGGLER_CONTAINER}>
+    <button class="task__important button-reset cursor" title="mark your tasks as important" aria-label="mark your active task as important" data-id="${task.id}" ${ACTIONS.IMPORTANT_TASK}><i class="fa-regular fa-star"></i></button>
+    <button class="task__subtasks_toggler button-reset cursor" aria-label="hide or show subtasks" data-id="${task.id}" title="show or hide subtasks" ${ACTIONS.SUBTASK_TOGGLER} ${CHECK_STATES.MAIN_SUBTASK_TOGGLER}="${HIDDEN.SUBTASK_TOGGLER}"><i class="fas fa-chevron-down" aria-hidden="true"></i></button>
     </div>
     </li>
     </li>

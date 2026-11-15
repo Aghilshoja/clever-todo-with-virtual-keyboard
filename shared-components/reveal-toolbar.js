@@ -5,6 +5,8 @@ import {
   ATTR_STATES,
   OPEN,
   CHECK_STATES,
+  CLOSED,
+  INACTIVE,
 } from "../constants/todo-constants.js";
 import { elements } from "../todos-controller/todos-controller.js";
 
@@ -38,6 +40,19 @@ export const adjustActiveTaskTextWidth = () => {
   taskTextEl.style.width = `calc(100% - ${totalOffsetWidth}px)`;
 };
 
+const closePreviousOpenToolbar = () => {
+  const toolbars = document.querySelectorAll(
+    `[${CHECK_STATES.TASK_TOOLBAR}='${OPEN.TASK_TOOLBAR}']`,
+  );
+  toolbars.forEach((el) => {
+    el.dataset[ATTR_STATES.TASK_TOOLBAR] = CLOSED.TASK_TOOLBAR;
+    const removeToolbarOverlay = el.previousElementSibling;
+    if (removeToolbarOverlay)
+      removeToolbarOverlay.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
+        INACTIVE.TOOLBAR_OVERLAY;
+  });
+};
+
 export const revealToolbar = (e) => {
   const isSelectionModeActive =
     elements.selectionBar.dataset[ATTR_STATES.SELECTION_BAR] ===
@@ -46,15 +61,24 @@ export const revealToolbar = (e) => {
   if (
     e.target.closest(`[${ATTR.TASK_ITEM}]`) &&
     !e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`) &&
-    !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`)
+    !e.target.closest(`[${ACTIONS.UNCOMPLETE_TASK}]`) &&
+    !e.target.closest(`[${ACTIONS.SUBTASK_TOGGLER}]`)
   ) {
+    closePreviousOpenToolbar();
     const taskItem = e.target.closest(`[${ATTR.TASK_ITEM}]`);
     if (!taskItem) return;
-    const toolbarClosure = taskItem.querySelector(`[${ACTIONS.CLOSE_TOOLBAR}]`);
+    const mainTaskItem = document.querySelector(
+      `[${ATTR.TASK_ITEM}][data-id="${taskItem.dataset.id}"]:not([${ATTR.SUBTASKS_CONTAINER}] *)`,
+    );
+
+    if (!mainTaskItem) return;
+    const toolbarClosure = mainTaskItem.querySelector(
+      `[${ACTIONS.CLOSE_TOOLBAR}]`,
+    );
     if (!toolbarClosure) return;
     toolbarClosure.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
       ACTIVE.TOOLBAR_OVERLAY;
-    const toolbar = taskItem.querySelector(`[${ATTR.TASK_TOOLBAR}]`);
+    const toolbar = mainTaskItem.querySelector(`[${ATTR.TASK_TOOLBAR}]`);
     if (!toolbar) throw new Error("toolbar was not found");
     toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = OPEN.TASK_TOOLBAR;
     adjustActiveTaskTextWidth();

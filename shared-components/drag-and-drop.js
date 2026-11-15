@@ -7,6 +7,7 @@ import {
   OPEN,
 } from "../constants/todo-constants.js";
 import { showUndopopup } from "./undo-completed-task.js";
+import { updateDOM } from "./utils/task-dom-utils.js";
 
 let currentDragImage = null;
 
@@ -180,7 +181,7 @@ export const dropTarget = (e) => {
   const [removedTask] = currentList.splice(draggedTaskIndex, 1);
   currentList.splice(droppedTaskIndex, 0, removedTask);
   tasksContainer.insertBefore(
-    draggedTask,
+    updateDOM(lists.default.getTask(draggedTask.dataset.id), "drag-and-drop"),
     isAfter ? dropT.nextElementSibling : dropT,
   );
 };

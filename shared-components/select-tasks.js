@@ -128,26 +128,42 @@ export const disableOrEnableButtons = () => {
   });
 };
 
-const fadeHighlightedTasksOfSectionList = () => {
-  const tasksContainer = elements.sectionListContainer;
-  const removeHighlightedTaskOfCompletedList = tasksContainer.querySelectorAll(
+const getHighlightedSelectedTasks = (list) => {
+  return list.querySelectorAll(
     `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
+};
 
-  removeHighlightedTaskOfCompletedList.forEach(
-    (el) => delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK],
-  );
+const fadeHighlightedTasksOfSectionList = () => {
+  const tasksContainer = elements.sectionListContainer;
+  const sectionHighlightedTasks = getHighlightedSelectedTasks(tasksContainer);
+
+  sectionHighlightedTasks.forEach((el) => {
+    if (!el.hasAttribute(ATTR.PARENT_TASK_ID)) {
+      delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
+    }
+  });
 };
 
 const fadeHighlightedTasksOfActiveList = () => {
   const activeList = getList();
   if (!activeList) return;
-  const highlightedTasksOfActiveList = activeList.querySelectorAll(
-    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
-  );
+  const activeListHighlightedTasks = getHighlightedSelectedTasks(activeList);
 
-  highlightedTasksOfActiveList.forEach((el) => {
-    delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
+  activeListHighlightedTasks.forEach((el) => {
+    if (!el.hasAttribute(ATTR.PARENT_TASK_ID)) {
+      delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
+    }
+  });
+};
+
+const fadeHighlightedSubtasks = (activeList) => {
+  const activeListHighlightedTasks = getHighlightedSelectedTasks(activeList);
+
+  activeListHighlightedTasks.forEach((el) => {
+    if (el.hasAttribute(ATTR.PARENT_TASK_ID)) {
+      delete el.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK];
+    }
   });
 };
 
@@ -217,9 +233,12 @@ export const selectTasks = (e) => {
     ACTIVE.SELECTION_BAR;
   if (!isSelectionModeActive) return;
 
+  if (e.target.closest(`[${ACTIONS.SUBTASK_TOGGLER}]`)) return;
+
   const selectedTask = e.target.closest(`[${ATTR.TASK_ITEM}]`);
   if (!selectedTask) return;
 
+  // selected task state
   const wasSelected =
     selectedTask.dataset[SELECTED_ATTR] === HIGHLIGHT_SELECTED_TASK.SELECTED;
   const willBeSelected = !wasSelected;
@@ -234,16 +253,29 @@ export const selectTasks = (e) => {
 
   const isDefaultList = parentOfTarget.hasAttribute(ATTR.DEFAULT_LIST);
   const isSectionList = parentOfTarget.hasAttribute(ATTR.SECTION_LIST);
+  const isSubtaskSelected = selectedTask.hasAttribute(ATTR.PARENT_TASK_ID);
 
-  if (isDefaultList) {
+  if (isSubtaskSelected) {
+    if (appStateUi.taskSelectionMode === SELECTION_BAR.SECTIONS) {
+      fadeHighlightedTasksOfSectionList();
+    } else if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
+      fadeHighlightedTasksOfActiveList();
+    }
+  } else if (isDefaultList) {
     if (appStateUi.taskSelectionMode === SELECTION_BAR.SECTIONS) {
       fadeHighlightedTasksOfSectionList();
     }
+
+    fadeHighlightedSubtasks(parentOfTarget);
     appStateUi.taskSelectionMode = SELECTION_BAR.ACTIVE_LIST;
     appStateUi.sectionId = null;
   } else if (isSectionList) {
     if (appStateUi.taskSelectionMode === SELECTION_BAR.ACTIVE_LIST) {
       fadeHighlightedTasksOfActiveList();
+    }
+
+    if (!isSubtaskSelected) {
+      fadeHighlightedSubtasks(parentOfTarget);
     }
 
     if (
@@ -263,6 +295,7 @@ export const selectTasks = (e) => {
     }
 
     appStateUi.sectionId = selectedTask.dataset.sectionId;
+
     appStateUi.taskSelectionMode = SELECTION_BAR.SECTIONS;
   }
 

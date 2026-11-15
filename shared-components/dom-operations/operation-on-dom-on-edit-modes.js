@@ -23,6 +23,7 @@ export const saveEditedTaskText = (toolbar, event) => {
 
   const toolbarTaskText = repetitiveEls.taskTextEl;
   const taskText = repetitiveEls.taskItemText;
+  const clonedTaskInToolbar = repetitiveEls.clonedTaskInToolbar;
   if (!toolbarTaskText || !taskText) return;
 
   if (elements.inputElement.textContent.trim() === "") {
@@ -34,6 +35,11 @@ export const saveEditedTaskText = (toolbar, event) => {
     toolbarTaskText.textContent = elements.inputElement.textContent;
     appStateUi.taskObjectToEdit.text = elements.inputElement.textContent;
     taskText.dataset.truncateText = elements.inputElement.textContent;
+    if (clonedTaskInToolbar) {
+      clonedTaskInToolbar.textContent = elements.inputElement.textContent;
+      clonedTaskInToolbar.dataset.truncateText =
+        elements.inputElement.textContent;
+    }
   }
 
   updateEditedTask();
@@ -44,6 +50,8 @@ export const saveEditedTaskDescription = (toolbar, event) => {
   const repetitiveEls = getRepetitiveElements(toolbar);
   const mainTaskDescription = repetitiveEls.taskItemDescription;
   const toolbarTaskDescription = repetitiveEls.description;
+  const clonedDesInToolbar =
+    repetitiveEls.clonedTaskInToolbar?.nextElementSibling;
   if (!toolbarTaskDescription || !mainTaskDescription) return;
 
   if (elements.inputElement.textContent.trim() === "") {
@@ -58,6 +66,12 @@ export const saveEditedTaskDescription = (toolbar, event) => {
     appStateUi.taskObjectToEdit.description = elements.inputElement.textContent;
     mainTaskDescription.dataset.truncateText =
       elements.inputElement.textContent;
+
+    if (clonedDesInToolbar) {
+      clonedDesInToolbar.textContent = elements.inputElement.textContent;
+      clonedDesInToolbar.dataset.truncateText =
+        elements.inputElement.textContent;
+    }
   }
   updateEditedTask();
   cleanupDescriptionUi(toolbar, event);

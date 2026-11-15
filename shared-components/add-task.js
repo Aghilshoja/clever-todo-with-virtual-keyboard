@@ -17,6 +17,7 @@ import {
 import { appStateUi } from "./todo-states/states.js";
 import { getList } from "./complete-mode.js";
 import { addTaskToSection } from "./sections/add-task-to-section.js";
+import { addSubtask } from "./subtask/add-subtask.js";
 
 const removeEmptyStateImage = () => {
   const tasksContainer = getList();
@@ -43,9 +44,12 @@ export const addTask = () => {
   const shouldAddTaskToSection =
     appStateUi.addSectionMode === ADD_SECTION.ADD_TASK_TO_SECTION;
 
+  const shouldAddSubtask = appStateUi.addTaskModes === ADD_TASK_MODE.SUBTASK;
+
   if (shouldAddTaskAbove) addTaskAboveSelectedTask(value);
   else if (shouldAddTaskBelow) addTaskBelowSelectedTask(value);
   else if (shouldAddTaskToSection) addTaskToSection(value);
+  else if (shouldAddSubtask) addSubtask(value);
   else lists.default.addTask(value);
 
   elements.inputElement.textContent = "";

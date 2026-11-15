@@ -19,6 +19,7 @@ import {
   EDIT_MODES,
   HIDDEN,
   INACTIVE,
+  VISIBLE,
 } from "../../constants/todo-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
@@ -31,9 +32,9 @@ const renderUnrelatedElements = () => {
     `[${CHECK_STATES.UNRELATED_ELS}]`,
   );
   if (unrelatedEls)
-    unrelatedEls.forEach(
-      (unrelatedEls) => delete unrelatedEls.dataset[ATTR_STATES.UNRELATED_ELS],
-    );
+    unrelatedEls.forEach((unrelatedEls) => {
+      delete unrelatedEls.dataset[ATTR_STATES.UNRELATED_ELS];
+    });
 };
 
 const putInputElementWhereThatWas = () => {
@@ -97,7 +98,7 @@ const deactiviateToolbar = (toolbar) => {
   const removeToolbarOverlay = toolbar.previousElementSibling;
   if (removeToolbarOverlay)
     removeToolbarOverlay.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
-      INACTIVE.TOOBAR_OVERLAY;
+      INACTIVE.TOOLBAR_OVERLAY;
 };
 
 // Restores the user's unsubmitted task draft after leaving edit mode.

@@ -10,7 +10,7 @@ import {
 } from "../constants/todo-constants.js";
 import { elements, lists } from "../todos-controller/todos-controller.js";
 import { countTasks } from "./count-tasks.js";
-import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { handleEmptyTaskStateUi, removeTogglerBtn } from "./delete-mode.js";
 import { exitTaskSelection } from "./select-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 
@@ -48,6 +48,14 @@ export const deleteSeveralTasks = (e) => {
       `[${ATTR.SECTION_ITEM}]`,
     );
 
+    const tasksToRemove = Array.from(selectedTaskElements).map((taskEl) =>
+      lists.default.getTask(taskEl.dataset.id, sectionItem?.dataset.id),
+    );
+
+    const subtaskIdsToRemove = taskIds.flatMap((taskId) =>
+      lists.default.getAllDescendants(taskId).map((task) => task.id),
+    );
+
     if (sectionItem) {
       const sectionId = sectionItem.dataset.id;
       if (sectionId) lists.default.deleteSeveralTasks(taskIds, sectionId);
@@ -55,8 +63,16 @@ export const deleteSeveralTasks = (e) => {
       lists.default.deleteSeveralTasks(taskIds);
     }
 
+    subtaskIdsToRemove.forEach((id) => {
+      const subtasks = document.querySelectorAll(
+        `[${ATTR.TASK_ITEM}][data-id="${id}"]`,
+      );
+      subtasks.forEach((el) => el.remove());
+    });
     selectedTaskElements.forEach((selectedTask) => selectedTask.remove());
     appStateUi.selectedTasksCounter = 0;
+
+    tasksToRemove.forEach((task) => removeTogglerBtn(task));
     appStateUi.deletionMode = DELETION_MODES.NONE;
 
     elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;

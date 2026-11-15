@@ -125,19 +125,18 @@ export const editDescriptionAndTask = (event) => {
   }
 };
 
-const getElements = (toolbar, taskItem) => {
-  const repetitiveEls = getRepetitiveElements(toolbar);
-  const taskItemDescription = repetitiveEls.taskItemDescription;
-  const toolbarDescription = repetitiveEls.description;
-  const taskItemTaskEl = repetitiveEls.taskItemText;
-  const toolbarTaskEl = repetitiveEls.taskTextEl;
-  if (
-    !taskItemTaskEl ||
-    !toolbarTaskEl ||
-    !toolbarDescription ||
-    !taskItemDescription
-  )
+const getElements = (toolbar) => {
+  const {
+    description,
+    taskItemDescription,
+    taskItemText,
+    clonedTaskInToolbar,
+    taskTextEl,
+  } = getRepetitiveElements(toolbar);
+
+  if (!description || !taskItemDescription || !taskItemText || !taskTextEl)
     return;
+
   const isTextTask = appStateUi.lastClickedElement.lastEl.hasAttribute(
     `${ATTR.TASK_TEXT}`,
   );
@@ -146,10 +145,11 @@ const getElements = (toolbar, taskItem) => {
     `${ATTR.TASK_DESCRIPTION}`,
   );
   return {
+    description,
     taskItemDescription,
-    toolbarDescription,
-    toolbarTaskEl,
-    taskItemTaskEl,
+    taskItemText,
+    clonedTaskInToolbar,
+    taskTextEl,
     isDescription,
     isTextTask,
   };
@@ -166,71 +166,78 @@ export const saveEditedDescriptionAndTask = (toolbar, taskItem, event) => {
   updateEditedTask();
 };
 
+const updateTaskDescription = (allElements, text, empty) => {
+  allElements.description.textContent = text;
+  allElements.taskItemDescription.textContent = text;
+
+  appStateUi.taskObjectToEdit.description = empty ?? text;
+
+  allElements.taskItemDescription.dataset.truncateText = text;
+
+  if (allElements.clonedTaskInToolbar) {
+    allElements.clonedTaskInToolbar.nextElementSibling.textContent = text;
+  }
+};
+
 const saveEditedDescription = (allElements) => {
   const inputText = elements.inputElement.textContent;
-  const toolbarDescriptionEl = allElements.toolbarDescription;
-  const taskItemDescriptionEl = allElements.taskItemDescription;
-  const isDescription = allElements.isDescription;
   const isTaskEl = allElements.isTextTask;
-  /* update model and UI if the description was the element that was last clicked  */
-  if (
-    isDescription &&
+
+  const isDescriptionLastClicked =
+    allElements.isDescription &&
     inputText.trim() !== "" &&
-    inputText !== PLACEHOLDERS.DESCRIPTION
-  ) {
-    taskItemDescriptionEl.textContent = inputText;
-    toolbarDescriptionEl.textContent = inputText;
-    appStateUi.taskObjectToEdit.description = inputText;
-    // sync truncattion attribute with latest data
-    taskItemDescriptionEl.dataset.truncateText = inputText;
-    /* update model and UI if input = Description, and is still on the still on description mode and not switched */
-  } else if (isDescription && inputText === PLACEHOLDERS.DESCRIPTION) {
-    taskItemDescriptionEl.textContent = "";
-    toolbarDescriptionEl.textContent = "";
-    taskItemDescriptionEl.dataset.truncateText = "";
-    appStateUi.taskObjectToEdit.description = null;
-    /* if  description el = Description  and input = empty or white spcae clear UI and update the model || if description el = Description and switched to edit task text just clear UI and update the model */
-  } else if (
-    (toolbarDescriptionEl.textContent === PLACEHOLDERS.DESCRIPTION &&
+    inputText !== PLACEHOLDERS.DESCRIPTION;
+
+  const isDescriptionUnchanged =
+    allElements.isDescription && inputText === PLACEHOLDERS.DESCRIPTION;
+
+  const shouldClearDescription =
+    (allElements.description.textContent === PLACEHOLDERS.DESCRIPTION &&
       inputText.trim() === "") ||
-    (toolbarDescriptionEl.textContent === PLACEHOLDERS.DESCRIPTION && isTaskEl)
-  ) {
-    taskItemDescriptionEl.textContent = "";
-    toolbarDescriptionEl.textContent = "";
-    taskItemDescriptionEl.dataset.truncateText = "";
-    appStateUi.taskObjectToEdit.description = null;
-    /* if the last clicked element was not the last one meaning text content of the description el has already been updated just update the main task description */
+    (allElements.description.textContent === PLACEHOLDERS.DESCRIPTION &&
+      isTaskEl);
+
+  if (isDescriptionLastClicked) {
+    updateTaskDescription(allElements, inputText);
+  } else if (isDescriptionUnchanged) {
+    updateTaskDescription(allElements, "", null);
+  } else if (shouldClearDescription) {
+    updateTaskDescription(allElements, "", null);
+    /* Sync the updated toolbar description with the main task */
   } else {
-    taskItemDescriptionEl.textContent = toolbarDescriptionEl.textContent;
-    taskItemDescriptionEl.dataset.truncateText =
-      toolbarDescriptionEl.textContent;
-    appStateUi.taskObjectToEdit.description = toolbarDescriptionEl.textContent;
+    const toolbarDesText = allElements.description.textContent;
+    updateTaskDescription(allElements, toolbarDesText);
+  }
+};
+
+const updateTaskText = (allElements, text) => {
+  allElements.taskItemText.textContent = text;
+  allElements.taskTextEl.textContent = text;
+  allElements.taskItemText.dataset.truncateText = text;
+  appStateUi.taskObjectToEdit.text = text;
+  if (allElements.clonedTaskInToolbar) {
+    allElements.clonedTaskInToolbar.textContent = text;
+    allElements.clonedTaskInToolbar.dataset.truncateText = text;
   }
 };
 
 const saveEditedTask = (allElements) => {
   const inputText = elements.inputElement.textContent;
-  const isTaskEl = allElements.isTextTask;
-  const toolbarTaskEl = allElements.toolbarTaskEl;
-  const taskItemTaskEl = allElements.taskItemTaskEl;
-  // update task text if that was the last clicked el
-  if (
-    isTaskEl &&
+
+  const isTaskTextLastClicked =
+    allElements.isTextTask &&
     inputText.trim() !== "" &&
-    inputText !== PLACEHOLDERS.EDIT_TASK
+    inputText !== PLACEHOLDERS.EDIT_TASK;
+
+  const isTaskTextEmpty = allElements.isTextTask && inputText.trim() === "";
+
+  if (isTaskTextLastClicked) updateTaskText(allElements, inputText);
+  else if (isTaskTextEmpty) {
+    updateTaskText(allElements, appStateUi.taskObjectToEdit.text);
+  } else if (
+    allElements.taskTextEl.textContent.trim() === "" ||
+    allElements.taskTextEl.textContent === PLACEHOLDERS.EDIT_TASK
   ) {
-    taskItemTaskEl.textContent = inputText;
-    toolbarTaskEl.textContent = inputText;
-    taskItemTaskEl.dataset.truncateText = inputText;
-    appStateUi.taskObjectToEdit.text = inputText;
-    // restore original task text if white spaces added as task text
-  } else if (isTaskEl && inputText.trim() === "") {
-    taskItemTaskEl.textContent = appStateUi.taskObjectToEdit.text;
-    toolbarTaskEl.textContent = appStateUi.taskObjectToEdit.text;
-    taskItemTaskEl.dataset.truncateText = appStateUi.taskObjectToEdit.text;
-  } else if (toolbarTaskEl.textContent !== PLACEHOLDERS.EDIT_TASK) {
-    taskItemTaskEl.textContent = toolbarTaskEl.textContent;
-    taskItemTaskEl.dataset.truncateText = toolbarTaskEl.textContent;
-    appStateUi.taskObjectToEdit.text = toolbarTaskEl.textContent;
-  }
+    updateTaskText(allElements, allElements.taskItemText.textContent);
+  } else updateTaskText(allElements, allElements.taskTextEl.textContent);
 };

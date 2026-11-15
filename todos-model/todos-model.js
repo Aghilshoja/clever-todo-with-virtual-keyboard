@@ -9,6 +9,7 @@ export class TaskList {
     this.tasks = [];
     this.notifiedTasks = new Set();
     this.sections = [];
+    this.subtasks = [];
     this.listeners = {
       renderTask: [],
       markTaskAsDue: [],
@@ -38,10 +39,18 @@ export class TaskList {
     return this.sections.find((section) => section.id === sectionId);
   }
 
-  getTaskFromlists(sectionId, taskId) {
+  getTaskFromlists(sectionId, taskId, isSubtaskList) {
     let sectionList = null;
     let foundTask = null;
-    if (sectionId) {
+
+    if (!isSubtaskList)
+      isSubtaskList = this.subtasks.some((task) => task.id === taskId);
+
+    if (isSubtaskList) {
+      foundTask = this.subtasks.find((task) => task.id === taskId);
+      if (!foundTask) return null;
+      return { foundTask };
+    } else if (sectionId) {
       sectionList = this.getSectionList(sectionId);
       if (!sectionList) return null;
       foundTask = sectionList.tasks.find((task) => task.id === taskId);
@@ -57,7 +66,7 @@ export class TaskList {
     }
   }
 
-  deleteSection(sectionId) {
+  deleteSection(sectionId, subTaskIds) {
     const section = this.sections.find((section) => section.id === sectionId);
 
     if (!section) throw new Error("section object was not found");
@@ -66,16 +75,25 @@ export class TaskList {
 
     const ids = section.tasks.map((t) => t.id);
 
-    this.removeNotifications(ids);
+    this.subtasks = this.subtasks.filter(
+      (subtask) => !subTaskIds.includes(subtask.id),
+    );
+
+    this.removeNotifications([...ids, ...subTaskIds]);
   }
 
   deleteTask(taskId, sectionId) {
-    const result = this.getTaskFromlists(sectionId, taskId);
+    const isSubTaskList = this.subtasks.some((task) => task.id === taskId);
+
+    const result = this.getTaskFromlists(sectionId, taskId, isSubTaskList);
+
     if (!result) throw new Error("task object was not found");
 
     const { sectionList, foundTask } = result;
 
-    this.removeNotifications(taskId);
+    const descendantIds = this.getAllDescendants(taskId).map((task) => task.id);
+
+    this.removeNotifications([taskId, ...descendantIds]);
 
     const deletedTask = {
       id: this.generateId(),
@@ -85,9 +103,16 @@ export class TaskList {
       isCompleted: foundTask.isCompleted,
       deletedAt: Date.now(),
     };
+
     this.taskHistory.deletedTasks.push(deletedTask);
 
-    if (sectionList) {
+    const idsToRemove = new Set(descendantIds);
+
+    this.subtasks = this.subtasks.filter((task) => !idsToRemove.has(task.id));
+
+    if (isSubTaskList) {
+      this.subtasks = this.subtasks.filter((task) => task.id !== taskId);
+    } else if (sectionList) {
       sectionList.tasks = sectionList.tasks.filter(
         (task) => task.id !== taskId,
       );
@@ -104,10 +129,15 @@ export class TaskList {
     }
   }
 
-  getSeveralTasksFromList(sectionId, taskIds) {
+  getSeveralTasksFromList(sectionId, taskIds, isSubTask) {
     let sectionList = null;
     let foundTasks = null;
-    if (sectionId) {
+
+    if (isSubTask) {
+      foundTasks = this.subtasks.filter((task) => taskIds.includes(task.id));
+      if (!foundTasks) return null;
+      return { foundTasks };
+    } else if (sectionId) {
       sectionList = this.getSectionList(sectionId);
       if (!sectionList) return null;
       foundTasks = sectionList.tasks.filter((task) =>
@@ -126,7 +156,8 @@ export class TaskList {
   }
 
   deleteSeveralTasks(taskIds, sectionId) {
-    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    const isSubTask = this.subtasks.some((task) => task.id === taskIds[0]);
+    const result = this.getSeveralTasksFromList(sectionId, taskIds, isSubTask);
     if (!result) throw new Error("no tasks to delete found ");
     const { sectionList, foundTasks } = result;
 
@@ -144,40 +175,86 @@ export class TaskList {
       this.taskHistory.deletedTasks.push(deletedTask);
     });
 
-    if (sectionList) {
+    const subtaskIdsToRemove = taskIds.flatMap((taskId) =>
+      this.getAllDescendants(taskId).map((task) => task.id),
+    );
+
+    this.removeNotifications([...taskIds, ...subtaskIdsToRemove]);
+
+    this.subtasks = this.subtasks.filter(
+      (subtask) => !subtaskIdsToRemove.includes(subtask.id),
+    );
+
+    if (isSubTask) {
+      this.subtasks = this.subtasks.filter(
+        (task) => !taskIds.includes(task.id),
+      );
+    } else if (sectionList) {
       sectionList.tasks = sectionList.tasks.filter(
         (task) => !taskIds.includes(task.id),
       );
     } else {
       this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
     }
-
-    this.removeNotifications(taskIds);
   }
 
   duplicateSection(sectionId) {
     const sectionToDuplicate = this.getSectionList(sectionId);
-    if (!sectionToDuplicate) throw new Error("no section found ");
+
+    if (!sectionToDuplicate) throw new Error("no section found");
+
+    const idMapping = new Map();
+    // 1. Generate new IDs for root tasks.
+    sectionToDuplicate.tasks.forEach((task) => {
+      idMapping.set(task.id, this.generateId());
+    });
+
+    // 2. Collect descendants and generate their new IDs.
+    sectionToDuplicate.tasks.forEach((rootTask) => {
+      const descendants = this.getAllDescendants(rootTask.id);
+
+      descendants.forEach((subtask) => {
+        if (!idMapping.has(subtask.id)) {
+          idMapping.set(subtask.id, this.generateId());
+        }
+      });
+    });
+
+    // 3. Duplicate root tasks.
+    const duplicatedTasks = sectionToDuplicate.tasks.map((task) => ({
+      ...task,
+      id: idMapping.get(task.id),
+    }));
+
+    // 4. Duplicate all subtasks belonging to those roots.
+    const duplicatedSubtasks = this.subtasks
+      .filter((subtask) => idMapping.has(subtask.id))
+      .map((subtask) => ({
+        ...subtask,
+        id: idMapping.get(subtask.id),
+        parentTaskId: idMapping.get(subtask.parentTaskId),
+      }));
+
+    // 5. Add duplicated subtasks to the model.
+    this.subtasks.push(...duplicatedSubtasks);
 
     const duplicatedSection = {
-      sectionName: sectionToDuplicate.sectionName,
-      description: sectionToDuplicate.description,
+      ...sectionToDuplicate,
       id: this.generateId(),
-      tasks: sectionToDuplicate.tasks.map((task) => ({
-        ...task,
-        id: this.generateId(),
-      })),
+      tasks: duplicatedTasks,
     };
 
     const indexOfOriginalSection = this.sections.indexOf(sectionToDuplicate);
+
     if (indexOfOriginalSection === -1) return;
 
     this.sections.splice(indexOfOriginalSection + 1, 0, duplicatedSection);
 
-    return duplicatedSection;
+    return { duplicatedSection, idMapping };
   }
 
   duplicateTask(taskId, sectionId) {
+    const isSubTaskList = this.subtasks.some((task) => task.id === taskId);
     const result = this.getTaskFromlists(sectionId, taskId);
     if (!result) throw new Error("no task to duplicate  found");
     const { sectionList, foundTask } = result;
@@ -191,7 +268,34 @@ export class TaskList {
       dueDate: foundTask.dueDate,
     };
 
-    if (sectionList) {
+    const descendants = this.getAllDescendants(taskId);
+
+    const idMapping = new Map();
+
+    idMapping.set(taskId, duplicatedTask.id);
+
+    descendants.forEach((subtask) => {
+      const duplicatedSubTask = {
+        ...subtask,
+        id: this.generateId(),
+        parentTaskId: idMapping.get(subtask.parentTaskId),
+      };
+
+      idMapping.set(subtask.id, duplicatedSubTask.id);
+
+      const index = this.subtasks.indexOf(subtask);
+      if (index !== -1) {
+        this.subtasks.splice(index, 0, duplicatedSubTask);
+      }
+    });
+
+    if (isSubTaskList) {
+      const indexOfOriginalTask = this.subtasks.indexOf(foundTask);
+      if (indexOfOriginalTask === -1) return;
+
+      duplicatedTask.parentTaskId = foundTask.parentTaskId;
+      this.subtasks.splice(indexOfOriginalTask + 1, 0, duplicatedTask);
+    } else if (sectionList) {
       const indexOfOriginalTask = sectionList.tasks.indexOf(foundTask);
       if (indexOfOriginalTask === -1) return;
 
@@ -201,63 +305,82 @@ export class TaskList {
       if (indexOfOriginalTask === -1) return;
       this.getTasks().splice(indexOfOriginalTask + 1, 0, duplicatedTask);
     }
-    return duplicatedTask;
+
+    return {
+      duplicatedTask,
+      idMapping,
+    };
   }
 
-  duplicatedTask(task) {
-    return {
-      id: this.generateId(),
-      text: task.text,
+  duplicateTaskTree(task) {
+    const descendants = this.getAllDescendants(task.id);
+
+    const idMapping = new Map();
+    idMapping.set(task.id, this.generateId());
+
+    // Generate IDs for every descendant first.
+    descendants.forEach((subtask) => {
+      idMapping.set(subtask.id, this.generateId());
+    });
+
+    const duplicatedTask = {
+      ...task,
+      id: idMapping.get(task.id),
       createdAt: Date.now(),
-      isCompleted: task.isCompleted,
-      description: task.description,
-      dueDate: task.dueDate,
       originalId: task.id,
+    };
+
+    const duplicatedSubtasks = descendants.map((subtask) => ({
+      ...subtask,
+      id: idMapping.get(subtask.id),
+      parentTaskId: idMapping.get(subtask.parentTaskId),
+    }));
+
+    return {
+      duplicatedTask,
+      duplicatedSubtasks,
+      idMapping,
     };
   }
 
   duplicateSeveralTasks(taskIds, sectionId) {
-    let copiesOfDuplicatedTasks = [];
+    const isSubtaskSelection = this.subtasks.some((task) =>
+      taskIds.includes(task.id),
+    );
 
-    let sectionList = null;
+    const sectionList = sectionId ? this.getSectionList(sectionId) : null;
 
-    if (sectionId) sectionList = this.getSectionList(sectionId);
+    const sourceTasks = isSubtaskSelection
+      ? this.subtasks
+      : sectionList
+        ? sectionList.tasks
+        : this.getTasks();
 
-    let sourceList = null;
+    const duplicatedResults = [];
 
-    if (sectionList) sourceList = this.sections;
-    else sourceList = this.getTasks();
+    taskIds.forEach((taskId) => {
+      const originalTask = sourceTasks.find((task) => task.id === taskId);
 
-    const newList = [];
+      if (!originalTask) return;
 
-    sourceList.forEach((task) => {
-      if ("sectionName" in task) {
-        for (const sectionTask of task.tasks) {
-          newList.push(sectionTask);
-          if (taskIds.includes(sectionTask.id)) {
-            const duplicatedTask = this.duplicatedTask(sectionTask);
-            copiesOfDuplicatedTasks.push(duplicatedTask);
-            newList.push(duplicatedTask);
-          }
-        }
-      } else {
-        newList.push(task);
-        if (taskIds.includes(task.id)) {
-          const duplicatedTask = this.duplicatedTask(task);
-          copiesOfDuplicatedTasks.push(duplicatedTask);
-          newList.push(duplicatedTask);
-        }
-      }
+      const result = this.duplicateTaskTree(originalTask);
+
+      const { duplicatedTask, duplicatedSubtasks } = result;
+
+      this.subtasks.push(...duplicatedSubtasks);
+
+      const originalIndex = sourceTasks.indexOf(originalTask);
+
+      sourceTasks.splice(originalIndex + 1, 0, duplicatedTask);
+
+      duplicatedResults.push(result);
     });
-
-    if (sectionList) sectionList.tasks = newList;
-    else this.tasks = newList;
-
-    return copiesOfDuplicatedTasks;
+    return duplicatedResults;
   }
 
   markTaskAsCompleted(taskId, sectionId) {
-    const result = this.getTaskFromlists(sectionId, taskId);
+    const isSubtaskList = this.subtasks.some((task) => task.id === taskId);
+    const result = this.getTaskFromlists(sectionId, taskId, isSubtaskList);
     if (!result) throw new Error("no task to complete");
 
     const { foundTask } = result;
@@ -265,6 +388,10 @@ export class TaskList {
     const taskToComplete = foundTask;
 
     taskToComplete.isCompleted = true;
+
+    const descendants = this.getAllDescendants(taskId);
+
+    descendants.forEach((subtask) => (subtask.isCompleted = true));
 
     const completedTask = {
       id: this.generateId(),
@@ -281,32 +408,75 @@ export class TaskList {
   }
 
   markSeveralTasksAsCompleted(taskIds, sectionId) {
-    const result = this.getSeveralTasksFromList(sectionId, taskIds);
-    if (!result) throw new Error("no tasks to complete");
+    const isSubTaskList = this.subtasks.some((task) =>
+      taskIds.includes(task.id),
+    );
+
+    const result = this.getSeveralTasksFromList(
+      sectionId,
+      taskIds,
+      isSubTaskList,
+    );
+
+    if (!result || result.foundTasks.length === 0) {
+      throw new Error("no tasks to complete");
+    }
+
     const { foundTasks } = result;
 
-    const tasksToComplete = foundTasks;
+    const tasksToComplete = new Map();
 
-    tasksToComplete.forEach((task) => (task.isCompleted = true));
+    foundTasks.forEach((task) => {
+      tasksToComplete.set(task.id, task);
 
+      this.getAllDescendants(task.id).forEach((subtask) => {
+        tasksToComplete.set(subtask.id, subtask);
+      });
+    });
+
+    // Find selected tasks that don't have another selected ancestor.
+    const selectedIds = new Set(taskIds);
+
+    const tasksToRebuild = foundTasks.filter((task) => {
+      let parentId = task.parentTaskId;
+
+      while (parentId) {
+        if (selectedIds.has(parentId)) return false;
+
+        const parent = this.subtasks.find((subtask) => subtask.id === parentId);
+        parentId = parent?.parentTaskId;
+      }
+
+      return true;
+    });
+
+    let completedTasksCount = 0;
+
+    // Complete tasks and record only actual state changes.
     tasksToComplete.forEach((task) => {
-      const completedTask = {
+      if (task.isCompleted) return;
+
+      task.isCompleted = true;
+      completedTasksCount++;
+      this.taskHistory.completedTasks.push({
         text: task.text,
         completedAt: Date.now(),
         id: task.id,
         isCompleted: task.isCompleted,
         description: task.description,
         dueDate: task.dueDate,
-      };
-
-      this.taskHistory.completedTasks.push(completedTask);
+      });
     });
 
-    return tasksToComplete;
+    return {
+      tasksToRebuild,
+      completedTasksCount,
+    };
   }
 
   moveTaskFromCompletedToActive(taskId, sectionId) {
-    const result = this.getTaskFromlists(sectionId, taskId);
+    const isSubtaskList = this.subtasks.some((task) => task.id === taskId);
+    const result = this.getTaskFromlists(sectionId, taskId, isSubtaskList);
     if (!result) throw new Error("no task to uncomplete");
 
     const { foundTask } = result;
@@ -319,33 +489,98 @@ export class TaskList {
   }
 
   uncompleteSeveralTasks(taskIds, sectionId) {
-    const result = this.getSeveralTasksFromList(sectionId, taskIds);
-    if (!result) throw new Error("no tasks to uncomplete ");
+    const isSubtaskList = this.subtasks.some((task) =>
+      taskIds.includes(task.id),
+    );
+
+    const result = this.getSeveralTasksFromList(
+      sectionId,
+      taskIds,
+      isSubtaskList,
+    );
+
+    if (!result || result.foundTasks.length === 0) {
+      throw new Error("no tasks to uncomplete");
+    }
+
     const { foundTasks } = result;
+    const tasksToUncomplete = new Map();
 
-    const tasksToUncomplete = foundTasks;
+    foundTasks.forEach((task) => {
+      tasksToUncomplete.set(task.id, task);
 
-    tasksToUncomplete.forEach((task) => (task.isCompleted = false));
+      let parentId = task.parentTaskId;
 
-    return tasksToUncomplete;
+      while (parentId) {
+        const parent = this.subtasks.find((subtask) => subtask.id === parentId);
+
+        if (!parent) break;
+
+        tasksToUncomplete.set(parent.id, parent);
+        parentId = parent.parentTaskId;
+      }
+    });
+
+    tasksToUncomplete.forEach((task) => {
+      task.isCompleted = false;
+    });
+
+    return foundTasks;
   }
 
-  undoCompletedTask(taskObject) {
+  undoCompletedTask(taskObject, previousCompletionStates) {
+    const descendants = this.getAllDescendants(taskObject.id);
+    descendants.forEach((subtask) => {
+      if (previousCompletionStates.has(subtask.id)) {
+        const previousStatus = previousCompletionStates.get(subtask.id);
+        if (previousStatus !== undefined) {
+          subtask.isCompleted = previousStatus;
+        }
+      }
+    });
     taskObject.isCompleted = false;
   }
 
-  undoSeveralCompletedTasks(undoneTasks, isSectionList, sectionList) {
-    if (isSectionList) sectionList.tasks = undoneTasks;
-    else this.tasks = undoneTasks;
+  undoSeveralCompletedTasks(
+    undoneTasks,
+    undoneSubtasks,
+    isSectionList,
+    sectionList,
+  ) {
+    if (isSectionList) {
+      sectionList.tasks = undoneTasks;
+    } else {
+      this.tasks = undoneTasks;
+    }
+
+    this.subtasks = undoneSubtasks;
   }
 
-  undoUncompletedTask(task) {
-    task.isCompleted = true;
+  undoUncompletedTask(taskObject, previousCompletionStates) {
+    this.subtasks.forEach((subtask) => {
+      if (previousCompletionStates.has(subtask.id)) {
+        const previousStatus = previousCompletionStates.get(subtask.id);
+        if (previousStatus !== undefined) {
+          subtask.isCompleted = previousStatus;
+        }
+      }
+    });
+    taskObject.isCompleted = true;
   }
 
-  undoSeveralUncompletedTasks(undoneTasks, isSectionList, sectionList) {
-    if (isSectionList) sectionList.tasks = undoneTasks;
-    else this.tasks = undoneTasks;
+  undoSeveralUncompletedTasks(
+    originalTasks,
+    originalSubtasks,
+    isSectionList,
+    sectionList,
+  ) {
+    if (isSectionList) {
+      sectionList.tasks = originalTasks;
+    } else {
+      this.tasks = originalTasks;
+    }
+
+    this.subtasks = originalSubtasks;
   }
 
   generateId() {
@@ -431,12 +666,20 @@ export class TaskList {
 
   getAllTasks() {
     const activeTasks = this.getTasks() ?? [];
+    const subtasks = this.subtasks ?? [];
 
     const sectionTasks = (this.sections ?? []).flatMap(
       (section) => section.tasks ?? [],
     );
 
-    return [...activeTasks, ...sectionTasks];
+    return [...activeTasks, ...sectionTasks, ...subtasks];
+  }
+
+  undoMultipleDueDates(isSection, tasks, subtasks, sectionList) {
+    if (isSection) sectionList.tasks = tasks;
+    else this.tasks = tasks;
+
+    this.subtasks = subtasks;
   }
 
   setDueDate(taskId, taskDueDate, hasTime, sectionId) {
@@ -458,7 +701,12 @@ export class TaskList {
 
   setMultipleDueDates(taskIds, dueDate, hasTime, sectionId) {
     if (!dueDate) return;
-    const result = this.getSeveralTasksFromList(sectionId, taskIds);
+    const isSubTaskList = this.subtasks.some((task) => task.id === taskIds[0]);
+    const result = this.getSeveralTasksFromList(
+      sectionId,
+      taskIds,
+      isSubTaskList,
+    );
     if (!result) throw new Error("no tasks to schedule");
 
     const { foundTasks } = result;
@@ -525,13 +773,36 @@ export class TaskList {
   }
 
   getTask(taskId, sectionId) {
-    if (sectionId) {
+    const isSubtask = this.subtasks.some((task) => task.id === taskId);
+
+    if (isSubtask) {
+      return this.subtasks.find((task) => task.id === taskId) || null;
+    } else if (sectionId) {
       const sectionList = this.sections.find((task) => task.id === sectionId);
       if (!sectionList) return null;
       return sectionList.tasks.find((task) => task.id === taskId);
     } else {
       return this.getTasks().find((task) => task.id === taskId) || null;
     }
+  }
+
+  getAllDescendants(parentId, sourceList = this.subtasks) {
+    const result = [];
+    const stack = [parentId];
+    while (stack.length > 0) {
+      const currentId = stack.pop();
+
+      const children = sourceList.filter(
+        (task) => task.parentTaskId === currentId,
+      );
+
+      for (const child of children) {
+        result.push(child);
+        stack.push(child.id);
+      }
+    }
+
+    return result;
   }
 
   addTaskToSection(sectionId, text) {
@@ -551,6 +822,73 @@ export class TaskList {
     foundSectionList.tasks.push(task);
 
     return task;
+  }
+
+  getSubtaskDepth(subtaskId) {
+    let currentId = subtaskId;
+    let depth = 1;
+
+    while (depth <= this.subtasks.length) {
+      const subtask = this.subtasks.find((t) => t.id === currentId);
+      if (!subtask) break; // reached a root task (not in subtasks)
+
+      depth++;
+      currentId = subtask.parentTaskId;
+    }
+
+    return depth;
+  }
+
+  getRootParentId(subtaskId) {
+    let currentId = subtaskId;
+    let current = this.subtasks.find((s) => s.id === currentId);
+
+    while (current) {
+      currentId = current.parentTaskId;
+      current = this.subtasks.find((s) => s.id === currentId);
+    }
+
+    return currentId;
+  }
+
+  getAncestorChain(taskObject, sectionId) {
+    let parentAncestor = null;
+    const ancestors = [];
+    let currentTask = taskObject;
+
+    while (currentTask.parentTaskId) {
+      const parent = this.getTask(currentTask.parentTaskId, sectionId);
+
+      if (!parent) break;
+
+      parentAncestor = parent;
+      ancestors.unshift(parent);
+      currentTask = parent;
+    }
+
+    return {
+      parentAncestor,
+      ancestors,
+    };
+  }
+
+  addSubTask(parentTaskId, subTaskText, sectionId) {
+    const parentTask = this.getTask(parentTaskId, sectionId);
+    if (!parentTask) throw new Error("Parent task not found");
+
+    const subTask = {
+      id: this.generateId(),
+      text: subTaskText,
+      createdAt: Date.now(),
+      isCompleted: parentTask.isCompleted,
+      description: null,
+      dueDate: null,
+      parentTaskId: parentTask.id,
+    };
+
+    this.subtasks.push(subTask);
+
+    return subTask;
   }
 
   addTask(text) {

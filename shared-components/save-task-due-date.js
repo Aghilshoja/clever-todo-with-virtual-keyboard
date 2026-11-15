@@ -6,12 +6,13 @@ import {
 } from "./costume-calendar/exit-date-picker.js";
 import { quickDateLabels } from "./costume-calendar/quick-date-options.js";
 import { virtualKeyboard } from "../keyboard-controler/keyboard-controler.js";
-import {
-  getTaskItem,
-  updateDOM,
-} from "./costume-calendar/update-task-due-date-view.js";
+
 import { saveMultipleTasksDueDate } from "./set-due-date-on-multiple-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
+import {
+  getTaskItem,
+  updateDueDate,
+} from "./costume-calendar/update-task-due-date-view.js";
 
 const saveSingleTaskDate = () => {
   const { taskItem, taskId } = getTaskItem();
@@ -22,7 +23,8 @@ const saveSingleTaskDate = () => {
     appStateUi.hasTime,
     appStateUi.sectionId,
   );
-  updateDOM(taskItem);
+
+  updateDueDate(taskItem);
   quickDateLabels.updateLabels();
 
   exitEditingDate();

@@ -18,12 +18,12 @@ import {
   quickDateLabels,
   quickDateVisibility,
 } from "./costume-calendar/quick-date-options.js";
-import { updateDOM } from "./costume-calendar/update-task-due-date-view.js";
-import { ShowUndoStatusLabel } from "./handle-several-tasks-completion-or-uncompletion.js";
+import { updateDueDate } from "./costume-calendar/update-task-due-date-view.js";
 import { exitTaskSelection } from "./select-tasks.js";
 import { appStateUi } from "./todo-states/states.js";
 import { showUndopopup } from "./undo-completed-task.js";
 import { takeSnapShotofDomForDueDates } from "./undo-multiple-due-dates.js";
+import { updateDueDateChangeUndoMessage } from "./utils/task-undo-utils.js";
 
 const getSelectedTasksToSetDateOn = () => {
   const selectedTaskItems = document.querySelectorAll(
@@ -92,11 +92,11 @@ const saveMultipleTasksDueDate = () => {
     appStateUi.sectionId,
   );
 
-  selectedTaskItems.forEach((taskEl) => updateDOM(taskEl));
+  selectedTaskItems.forEach((taskEl) => updateDueDate(taskEl));
 
   quickDateActions.closeDateEditor();
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_MULTIPLE_DUE_DATES;
-  ShowUndoStatusLabel();
+  updateDueDateChangeUndoMessage();
   showUndopopup();
   exitTaskSelection();
 };

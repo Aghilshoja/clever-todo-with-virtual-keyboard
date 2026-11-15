@@ -1,6 +1,5 @@
 import { ATTR } from "../constants/todo-constants.js";
 import { lists } from "../todos-controller/todos-controller.js";
-import { getList } from "./complete-mode.js";
 import {
   refreshUiAfterUndo,
   removeSelectedTasksHighlightedTasks,
@@ -14,27 +13,21 @@ export const undoSeveralUncompletedTasks = () => {
 
   removeSelectedTasksHighlightedTasks();
 
-  const taskIds = appStateUi.snapshots.IdsOfSelectedTasks;
-
-  const tasksToRemoveFromActiveListAfterUndo = taskIds.map((id) =>
-    document.querySelector(`[${ATTR.TASK_ITEM}][data-id='${id}']`),
-  );
-
-  tasksToRemoveFromActiveListAfterUndo.forEach((task) => task.remove());
-
   currentList.innerHTML = "";
+
   appStateUi.snapshots.domSnapshot.forEach((task) =>
     currentList.appendChild(task),
   );
 
-  const originalClonedArray = appStateUi.snapshots.dataSnapshot;
+  const originalTasks = appStateUi.snapshots.dataSnapshot;
+  const originalSubtasks = appStateUi.snapshots.subtasks;
 
   const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
-
   const sectionList = appStateUi.undoOperation.sectionList;
 
   lists.default.undoSeveralUncompletedTasks(
-    originalClonedArray,
+    originalTasks,
+    originalSubtasks,
     isSectionList,
     sectionList,
   );

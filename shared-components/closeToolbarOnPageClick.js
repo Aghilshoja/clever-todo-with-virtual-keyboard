@@ -7,7 +7,10 @@ import {
   CHECK_STATES,
   OPEN,
   CLOSED,
+  VISIBLE,
 } from "../constants/todo-constants.js";
+import { elements } from "../todos-controller/todos-controller.js";
+import { appStateUi } from "./todo-states/states.js";
 
 export const closeToolbar = (e) => {
   if (
@@ -33,6 +36,14 @@ export const closeToolbar = (e) => {
       toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = CLOSED.TASK_TOOLBAR;
       toolbarClosure.dataset[ATTR_STATES.TOOLBAR_OVERLAY] =
         INACTIVE.TOOLBAR_OVERLAY;
+
+      elements.mainPageNewTaskCon.dataset[ATTR_STATES.TASK_CREATOR_STATE] =
+        VISIBLE.TASK_CREATOR;
+
+      delete toolbar.dataset[ATTR_STATES.TOOLBAR_FULL_HEIGHT];
+
+      // when toolbar is closed sectionid is reset for the subtask addition
+      appStateUi.sectionId = null;
     }
   }
 };

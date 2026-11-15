@@ -1,48 +1,70 @@
-import { ATTR } from "../constants/todo-constants.js";
+import {
+  ATTR,
+  CHECK_STATES,
+  HIGHLIGHT_SELECTED_TASK,
+  UNDO_STATES,
+} from "../constants/todo-constants.js";
 import { lists } from "../todos-controller/todos-controller.js";
+import { showEmptyStateWhenNoVisibleTasks } from "./complete-mode.js";
+import { countTasks } from "./count-tasks.js";
+import { handleEmptyTaskStateUi } from "./delete-mode.js";
+import { exitTaskSelection } from "./select-tasks.js";
+import { appStateUi } from "./todo-states/states.js";
+import { showUndopopup } from "./undo-completed-task.js";
+import { putSubtaskAtTheEnd } from "./utils/task-dom-utils.js";
 import {
-  createTaskItem,
-  showEmptyStateWhenNoVisibleTasks,
-} from "./complete-mode.js";
-import {
-  refreshUi,
-  removeOriginallySelectedTasks,
-  takeSnapshotOfDom,
-} from "./handle-several-tasks-completion-or-uncompletion.js";
+  captureUndoSnapshot,
+  updateMultipleTasksCompletionUndoMessage,
+} from "./utils/task-undo-utils.js";
 
-const createCompletedTask = (currentList, completedTasks) => {
-  for (const task of completedTasks) {
-    const taskItem = createTaskItem(task);
-    currentList.appendChild(taskItem);
-  }
+export const refreshUi = () => {
+  countTasks();
+  handleEmptyTaskStateUi();
+  showUndopopup();
+  exitTaskSelection();
 };
 
 export const handleSeveralTasksCompletion = () => {
-  const currentList = takeSnapshotOfDom();
+  const selectedTask = document.querySelector(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+  );
 
-  const selectedTasksInfo = removeOriginallySelectedTasks();
-  const { taskIds, selectedTasksLength } = selectedTasksInfo;
+  if (!selectedTask) return;
 
-  if (!taskIds || !selectedTasksLength) return;
+  if (selectedTask.dataset.isCompleted === "true") return;
 
-  let completedTasks = null;
+  appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_SEVERAL_COMPLETED;
+  const currentList = captureUndoSnapshot();
+  if (!currentList) return;
+
+  const taskIds = Array.from(
+    document.querySelectorAll(
+      `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+    ),
+  ).map((el) => el.dataset.id);
+
+  appStateUi.snapshots.IdsOfSelectedTasks = taskIds;
+
+  let sectionId;
 
   if (currentList.hasAttribute(ATTR.SECTION_LIST)) {
     const sectionItem = currentList.closest(`[${ATTR.SECTION_ITEM}]`);
     if (!sectionItem) return;
-    const sectionId = sectionItem.dataset.id;
-    if (sectionId) {
-      completedTasks = lists.default.markSeveralTasksAsCompleted(
-        taskIds,
-        sectionId,
-      );
-    }
 
-    createCompletedTask(currentList, completedTasks);
-  } else {
-    completedTasks = lists.default.markSeveralTasksAsCompleted(taskIds);
-    createCompletedTask(currentList, completedTasks);
+    sectionId = sectionItem.dataset.id;
   }
+
+  const { tasksToRebuild, completedTasksCount } =
+    lists.default.markSeveralTasksAsCompleted(taskIds, sectionId);
+
+  tasksToRebuild.forEach((task) => {
+    putSubtaskAtTheEnd(task, currentList);
+  });
+
+  updateMultipleTasksCompletionUndoMessage(
+    "several-completion",
+    completedTasksCount,
+  );
 
   refreshUi();
   showEmptyStateWhenNoVisibleTasks();

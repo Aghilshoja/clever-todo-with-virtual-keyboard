@@ -4,8 +4,44 @@ import {
   HIGHLIGHT_SELECTED_TASK,
 } from "../constants/todo-constants.js";
 import { lists } from "../todos-controller/todos-controller.js";
+import { getList } from "./complete-mode.js";
 import { countTasks } from "./count-tasks.js";
 import { exitTaskSelection } from "./select-tasks.js";
+import { updateDOM } from "./utils/task-dom-utils.js";
+
+const buildDuplicatedTaskTree = (targetContainer, result) => {
+  const { duplicatedTask, idMapping } = result;
+
+  const originalElements = [
+    ...targetContainer.querySelectorAll(
+      `[${ATTR.TASK_ITEM}]:not([${ATTR.SUBTASKS_CONTAINER}] *)`,
+    ),
+  ].filter((el) => idMapping.has(el.dataset.id));
+
+  // Mark original elements for updateDOM's ordering logic.
+  idMapping.forEach((newId, originalId) => {
+    const originalEl = originalElements.find(
+      (el) => el.dataset.id === originalId,
+    );
+
+    if (originalEl) {
+      originalEl.dataset.duplicatedId = newId;
+    }
+  });
+
+  const fragment = updateDOM(duplicatedTask, "duplication");
+
+  const lastOriginalElement = originalElements.at(-1);
+
+  // Clean up temporary attributes.
+  originalElements.forEach((el) => {
+    delete el.dataset.duplicatedId;
+  });
+
+  if (lastOriginalElement) {
+    lastOriginalElement.after(fragment);
+  }
+};
 
 export const duplicateSeveralTasks = () => {
   const selectedTaskElements = document.querySelectorAll(
@@ -18,32 +54,23 @@ export const duplicateSeveralTasks = () => {
     (task) => task.dataset.id,
   );
 
-  let duplicatedTasks;
+  const sectionItem = selectedTaskElements[0].closest(`[${ATTR.SECTION_ITEM}]`);
 
-  const sectioniTEM = selectedTaskElements[0].closest(`[${ATTR.SECTION_ITEM}]`);
+  const sectionId = sectionItem?.dataset.id;
 
-  if (sectioniTEM) {
-    const sectionId = sectioniTEM.dataset.id;
-    if (sectionId)
-      duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds, sectionId);
-  } else {
-    duplicatedTasks = lists.default.duplicateSeveralTasks(taskIds);
-  }
+  const targetContainer = sectionItem
+    ? sectionItem.querySelector(`[${ATTR.SECTION_LIST}]`)
+    : getList();
 
-  selectedTaskElements.forEach((selectedTask) => {
-    const originalId = selectedTask.dataset.id;
+  if (!targetContainer) return;
 
-    const duplicated = duplicatedTasks.find((t) => t.originalId === originalId);
+  const duplicatedResults = lists.default.duplicateSeveralTasks(
+    taskIds,
+    sectionId,
+  );
 
-    const clone = selectedTask.cloneNode(true);
-
-    clone.dataset.id = duplicated.id;
-
-    clone.querySelectorAll("[data-id]").forEach((el) => {
-      el.dataset.id = duplicated.id;
-    });
-
-    selectedTask.after(clone);
+  duplicatedResults.forEach((result) => {
+    buildDuplicatedTaskTree(targetContainer, result);
   });
 
   exitTaskSelection();

@@ -21,13 +21,17 @@ const takeSnapShotofDomForDueDates = () => {
 
   if (!currentList) return;
 
-  const taskElements = currentList.querySelectorAll(`[${ATTR.TASK_ITEM}]`);
+  const taskElements = currentList.querySelectorAll(
+    `[${ATTR.TASK_ITEM}]:not([${ATTR.SUBTASKS_CONTAINER}] *)`,
+  );
   if (taskElements.length === 0) return;
 
   const cloneTaskElements = Array.from(taskElements).map((task) =>
     task.cloneNode(true),
   );
-  appStateUi.snapshots.domSnapshot = { cloneTaskElements, currentList };
+
+  appStateUi.snapshots.domSnapshot = cloneTaskElements;
+  appStateUi.undoOperation.currentList = currentList;
 
   const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
 
@@ -40,32 +44,37 @@ const takeSnapShotofDomForDueDates = () => {
   } else {
     appStateUi.snapshots.dataSnapshot = structuredClone(lists.default.tasks);
   }
+
+  appStateUi.snapshots.subtasks = structuredClone(lists.default.subtasks);
 };
 
-const undoMultipleActiveTasks = (currentList) => {
+const undoMultipleDueDates = () => {
+  const currentList = appStateUi.undoOperation.currentList;
+
   currentList.textContent = "";
-  appStateUi.snapshots.domSnapshot.cloneTaskElements.forEach((task) =>
+  appStateUi.snapshots.domSnapshot.forEach((task) =>
     currentList.appendChild(task),
   );
 
-  if (currentList.hasAttribute(ATTR.SECTION_LIST)) {
-    appStateUi.undoOperation.sectionList.tasks =
-      appStateUi.snapshots.dataSnapshot;
-  } else {
-    lists.default.tasks = appStateUi.snapshots.dataSnapshot;
-  }
+  const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
+
+  const tasks = appStateUi.snapshots.dataSnapshot;
+  const subtasks = appStateUi.snapshots.subtasks;
+  const sectionList = appStateUi.undoOperation.sectionList;
+
+  lists.default.undoMultipleDueDates(
+    isSectionList,
+    tasks,
+    subtasks,
+    sectionList,
+  );
+
   refreshUiAfterUndo();
   exitTaskSelection();
 };
 
-const capturePreviousTaskState = () => {
-  const currentList = appStateUi.snapshots.domSnapshot.currentList;
-
-  undoMultipleActiveTasks(currentList);
-};
-
 const undoMultipleTaskDueDates = () => {
-  capturePreviousTaskState();
+  undoMultipleDueDates();
 };
 
 export { undoMultipleTaskDueDates, takeSnapShotofDomForDueDates };

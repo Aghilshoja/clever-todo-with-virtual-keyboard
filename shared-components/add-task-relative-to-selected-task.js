@@ -13,6 +13,7 @@ const performDOMOperationOfAddingNewTask = (selectedTask, newTask) => {
   const template = document.createElement("ul");
   template.innerHTML = renderTask(newTask);
   const taskItem = template.firstElementChild;
+
   if (selectedTask.hasAttribute("data-section-id")) {
     taskItem.dataset.sectionId = selectedTask.dataset.sectionId;
   }
@@ -23,6 +24,24 @@ const getSelectedTask = () => {
   return document.querySelector(
     `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
   );
+};
+
+const getLastTaskElementInTree = (selectedTaskId) => {
+  const rootTaskId = lists.default.getRootParentId(selectedTaskId);
+
+  const rootId = rootTaskId || selectedTaskId;
+
+  const descendants = lists.default.getAllDescendants(rootId);
+
+  const taskIds = new Set([rootId, ...descendants.map((task) => task.id)]);
+
+  const taskElements = Array.from(
+    document.querySelectorAll(
+      `[${ATTR.TASK_ITEM}]:not([${ATTR.SUBTASKS_CONTAINER}] *)`,
+    ),
+  );
+
+  return taskElements.filter((task) => taskIds.has(task.dataset.id)).at(-1);
 };
 
 export const addTaskAboveSelectedTask = (text) => {
@@ -52,8 +71,17 @@ export const addTaskAboveSelectedTask = (text) => {
     selectedTask,
     newTask,
   );
+
   if (!newTaskAboveSelectedTask) return;
-  selectedTask.before(newTaskAboveSelectedTask);
+  const rootParentId = lists.default.getRootParentId(selectedTask.dataset.id);
+  if (rootParentId) {
+    const rootParentEl = document.querySelector(
+      `[${ATTR.TASK_ITEM}][data-id="${rootParentId}"]`,
+    );
+    if (rootParentEl) {
+      rootParentEl.before(newTaskAboveSelectedTask);
+    }
+  }
 };
 
 export const addTaskBelowSelectedTask = (text) => {
@@ -84,7 +112,9 @@ export const addTaskBelowSelectedTask = (text) => {
     newTask,
   );
 
-  selectedTask.after(newTaskBelowSelectedTask);
+  const lastTaskElement = getLastTaskElementInTree(selectedTask.dataset.id);
+
+  if (lastTaskElement) lastTaskElement.after(newTaskBelowSelectedTask);
 };
 
 export const openKeyboardToAddATask = (e) => {

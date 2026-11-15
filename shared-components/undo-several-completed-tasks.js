@@ -7,7 +7,12 @@ import {
 import { appStateUi } from "./todo-states/states.js";
 
 export const undoSeveralCompletedTasks = () => {
+  const sectionList = appStateUi.undoOperation.sectionList;
   const currentList = appStateUi.undoOperation.currentList;
+  const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
+
+  const originalSubtasks = appStateUi.snapshots.subtasks;
+  const originalClonedArray = appStateUi.snapshots.dataSnapshot;
 
   if (!currentList) return;
 
@@ -25,14 +30,9 @@ export const undoSeveralCompletedTasks = () => {
     currentList.appendChild(task),
   );
 
-  const originalClonedArray = appStateUi.snapshots.dataSnapshot;
-
-  const isSectionList = currentList.hasAttribute(ATTR.SECTION_LIST);
-
-  const sectionList = appStateUi.undoOperation.sectionList;
-
   lists.default.undoSeveralCompletedTasks(
     originalClonedArray,
+    originalSubtasks,
     isSectionList,
     sectionList,
   );

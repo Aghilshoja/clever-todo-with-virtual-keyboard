@@ -1,5 +1,4 @@
 import { elements, lists } from "../todos-controller/todos-controller.js";
-import { renderTask } from "./render-tasks.js";
 import { activeUlId } from "./render-tasks.js";
 import { countTasks } from "./count-tasks.js";
 import { createTaskEmptyState, handleEmptyTaskStateUi } from "./delete-mode.js";
@@ -9,13 +8,13 @@ import {
   updateCounterAfterCompletingOrUncompletingATask,
   updateLabelsOfOperationalButtonsForSelectedTasks,
 } from "./select-tasks.js";
-import {
-  ACTIONS,
-  ATTR,
-  ATTR_STATES,
-  UNDO_STATES,
-} from "../constants/todo-constants.js";
+import { ACTIONS, ATTR, UNDO_STATES } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
+import { putSubtaskAtTheEnd } from "./utils/task-dom-utils.js";
+import {
+  storeUndoInfo,
+  updateSingleTaskCompletionUndoMessage,
+} from "./utils/task-undo-utils.js";
 
 export const showEmptyStateWhenNoVisibleTasks = () => {
   const tasksContainer = getList();
@@ -39,22 +38,6 @@ export const showEmptyStateWhenNoVisibleTasks = () => {
   }
 };
 
-export const captureAndRemoveTaskItem = (taskId, currentlist) => {
-  if (!currentlist) return;
-  const taskItem = currentlist.querySelector(
-    `[${ATTR.TASK_ITEM}][data-id="${taskId}"]`,
-  );
-  if (!taskItem) return;
-  if (currentlist.hasAttribute(ATTR.SECTION_LIST)) {
-    taskItem.dataset[ATTR_STATES.SECTION_ID] = currentlist.dataset.id;
-  }
-
-  appStateUi.undoOperation.removedEl = taskItem;
-  appStateUi.undoOperation.previousEl = taskItem.previousElementSibling;
-  appStateUi.undoOperation.nextEl = taskItem.nextElementSibling;
-  taskItem.remove();
-};
-
 export const getList = () => {
   return (
     document.querySelector(
@@ -63,40 +46,25 @@ export const getList = () => {
   );
 };
 
-export const updateCompletionStatusLabel = (e) => {
-  const completionStatus = elements.completionStatusLabel;
-  const activeListCheckbox = e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`);
-  const completedListCheckbox = e.target.closest(
-    `[${ACTIONS.UNCOMPLETE_TASK}]`,
-  );
-  if (activeListCheckbox) completionStatus.textContent = "Completed";
-  else if (completedListCheckbox) completionStatus.textContent = "Uncompleted";
-};
-
-export const createTaskItem = (task) => {
-  const template = document.createElement("div");
-  template.innerHTML = renderTask(task);
-  const taskItem = template.firstElementChild;
-  taskItem.dataset.isCompleted = true;
-
-  const shouldCompletedTasksBeVisible =
-    elements.showCompletedTasksBtn.dataset.isVisible === "true";
-
-  if (shouldCompletedTasksBeVisible)
-    taskItem.dataset.completedTaskVisiblity = false;
-  else taskItem.dataset.completedTaskVisiblity = true;
-
-  return taskItem;
-};
-
 export const completeTask = (e) => {
   const clickedCheckbox = e.target.closest(`[${ACTIONS.COMPLETE_TASK}]`);
   if (!clickedCheckbox) return;
+
   const taskId = clickedCheckbox.dataset.id;
   if (!taskId) return;
-  const tasksContainer = getList();
 
+  const tasksContainer = getList();
   if (!tasksContainer) return;
+
+  const descendants = lists.default.getAllDescendants(taskId);
+  appStateUi.undoOperation.previousCompletionStates = new Map();
+
+  descendants.forEach((subtask) => {
+    appStateUi.undoOperation.previousCompletionStates.set(
+      subtask.id,
+      subtask.isCompleted,
+    );
+  });
 
   const sectionItem = clickedCheckbox.closest(`[${ATTR.SECTION_ITEM}]`);
 
@@ -104,17 +72,24 @@ export const completeTask = (e) => {
 
   if (sectionItem) {
     const sectionId = sectionItem.dataset.id;
-    if (sectionId)
+
+    if (sectionId) {
       taskObject = lists.default.markTaskAsCompleted(taskId, sectionId);
-    const completedTask = createTaskItem(taskObject);
+    }
+
     const sectionList = sectionItem.querySelector(`[${ATTR.SECTION_LIST}]`);
-    captureAndRemoveTaskItem(taskId, sectionList);
-    if (sectionList) sectionList.appendChild(completedTask);
+
+    storeUndoInfo(taskId, sectionList);
+
+    if (sectionList) {
+      putSubtaskAtTheEnd(taskObject, sectionList);
+    }
   } else {
     taskObject = lists.default.markTaskAsCompleted(taskId);
-    captureAndRemoveTaskItem(taskId, tasksContainer);
-    const completedTask = createTaskItem(taskObject);
-    tasksContainer.appendChild(completedTask);
+
+    storeUndoInfo(taskId, tasksContainer);
+
+    putSubtaskAtTheEnd(taskObject, tasksContainer);
   }
 
   appStateUi.undoOperation.originalTaskObject = taskObject;
@@ -122,13 +97,17 @@ export const completeTask = (e) => {
   handleEmptyTaskStateUi();
   countTasks();
 
-  updateCompletionStatusLabel(e);
+  const numberOfCompletedTasks =
+    lists.default.getAllDescendants(taskId).length + 1;
+
+  updateSingleTaskCompletionUndoMessage(e, numberOfCompletedTasks);
   appStateUi.undoOperation.undoType = UNDO_STATES.UNDO_COMPLETED;
   showUndopopup();
   updateLabelsOfOperationalButtonsForSelectedTasks();
 
   /* update number of tasks selected after completing them in task selection mode */
   updateCounterAfterCompletingOrUncompletingATask();
+
   /* disable or enable delete, complete, duplicate operation on tasks when in tasks selection */
   disableOrEnableButtons();
   showEmptyStateWhenNoVisibleTasks();

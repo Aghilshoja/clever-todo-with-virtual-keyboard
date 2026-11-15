@@ -56,20 +56,34 @@ const checkOverdueDate = (dueDateEls) => {
   }
 };
 
-const updateDOM = (taskItem) => {
+const updateDueDate = (taskItem) => {
   if (!appStateUi.draftedDate) return;
   const dueDateEls = taskItem.querySelectorAll(
     `[${ACTIONS.TASK_DATE}], [${ATTR.VISIBLE_DUE_DATE}]`,
   );
 
-  checkOverdueDate(dueDateEls);
+  const subTaskCloneInToolbar = document.querySelector(
+    `[${ATTR.TASK_ITEM}][data-id="${taskItem.dataset.id}"]`,
+  );
+
+  const visibleDueDate = subTaskCloneInToolbar
+    ? subTaskCloneInToolbar.querySelector(`[${ATTR.VISIBLE_DUE_DATE}]`)
+    : null;
+
+  const allDueDateEls = [visibleDueDate, ...dueDateEls];
+
+  checkOverdueDate(allDueDateEls);
 
   const currentYear = new Date().getFullYear();
 
   const taskDueDate = `${daysOfWeek[appStateUi.draftedDate.getDay()]}, ${months[appStateUi.draftedDate.getMonth()]} ${appStateUi.draftedDate.getDate()} ${appStateUi.draftedDate.getFullYear() === currentYear ? "" : appStateUi.draftedDate.getFullYear()} ${appStateUi.hasTime === false ? "" : format24HourTime(appStateUi.draftedDate.getHours(), appStateUi.draftedDate.getMinutes())}`;
+
   dueDateEls.forEach((dateEl) => {
     dateEl.innerHTML = `<i class="fa fa-calendar" aria-hidden="true"></i>  ${taskDueDate}`;
   });
+
+  if (visibleDueDate)
+    visibleDueDate.innerHTML = `<i class="fa fa-calendar" aria-hidden="true"></i>  ${taskDueDate}`;
 };
 
-export { updateDOM, getTaskItem };
+export { updateDueDate, getTaskItem };

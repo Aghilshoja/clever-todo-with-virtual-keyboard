@@ -8,6 +8,7 @@ import {
   ATTR,
   ATTR_STATES,
   DELETION_MODES,
+  HIDDEN,
   INACTIVE,
 } from "../constants/todo-constants.js";
 import { appStateUi } from "./todo-states/states.js";
@@ -40,6 +41,36 @@ export const handleEmptyTaskStateUi = () => {
   }
 };
 
+export const removeTogglerBtn = (taskToRemove) => {
+  if (taskToRemove && taskToRemove.parentTaskId) {
+    const parentOfRemovedTask = document.querySelector(
+      `[${ATTR.TASK_ITEM}][data-id="${taskToRemove?.parentTaskId}"]:not([${ATTR.SUBTASKS_CONTAINER}] *)`,
+    );
+
+    if (parentOfRemovedTask) {
+      const descendants = lists.default.getAllDescendants(
+        taskToRemove?.parentTaskId,
+      );
+      if (descendants.length === 0) {
+        const subTaskTogglerBtn = parentOfRemovedTask.querySelector(
+          `[${ACTIONS.SUBTASK_TOGGLER}]`,
+        );
+        if (subTaskTogglerBtn)
+          subTaskTogglerBtn.dataset[ATTR_STATES.MAIN_SUBTASK_TOGGLER] =
+            HIDDEN.SUBTASK_TOGGLER;
+
+        const toolbarsubTaskTogglerEl = parentOfRemovedTask.querySelector(
+          `[${ACTIONS.TOOLBAR_SUBTASKS_TOGGLER}]`,
+        );
+
+        if (toolbarsubTaskTogglerEl)
+          toolbarsubTaskTogglerEl.dataset[ATTR_STATES.TOOLBAR_SUBTASK_TOGGLER] =
+            HIDDEN.SUBTASK_TOGGLER;
+      }
+    }
+  }
+};
+
 export const deleteTask = (e) => {
   const isSingleTaskDeletion =
     appStateUi.deletionMode === DELETION_MODES.SINGLE;
@@ -47,13 +78,22 @@ export const deleteTask = (e) => {
     e.target.closest(`[${ACTIONS.CONFIRM_DELETION}]`) &&
     isSingleTaskDeletion
   ) {
-    const taskItem = document.querySelector(
+    const taskItems = document.querySelectorAll(
       `[${ATTR.TASK_ITEM}][data-id="${appStateUi.taskId}"]`,
     );
 
-    if (!taskItem) return;
+    if (taskItems.length === 0) return;
 
-    const sectionItem = taskItem.closest(`[${ATTR.SECTION_ITEM}]`);
+    const sectionItem = taskItems[0].closest(`[${ATTR.SECTION_ITEM}]`);
+
+    const taskToRemove = lists.default.getTask(
+      appStateUi.taskId,
+      sectionItem?.dataset.id,
+    );
+
+    const descendantIds = lists.default
+      .getAllDescendants(appStateUi.taskId)
+      .map((task) => task.id);
 
     if (sectionItem) {
       const sectionId = sectionItem.dataset.id;
@@ -65,7 +105,15 @@ export const deleteTask = (e) => {
     elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = INACTIVE.POPUP;
     appStateUi.deletionMode = DELETION_MODES.NONE;
 
-    taskItem.remove();
+    descendantIds.forEach((id) => {
+      const subtasks = document.querySelectorAll(
+        `[${ATTR.TASK_ITEM}][data-id="${id}"]`,
+      );
+      subtasks.forEach((el) => el.remove());
+    });
+    taskItems.forEach((taskEl) => taskEl.remove());
+
+    removeTogglerBtn(taskToRemove);
   }
 
   handleEmptyTaskStateUi();

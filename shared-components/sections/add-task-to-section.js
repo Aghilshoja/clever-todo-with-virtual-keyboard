@@ -24,6 +24,7 @@ const addTaskToSection = (value) => {
   template.innerHTML = taskItem;
 
   const taskItemEl = template.firstElementChild;
+  taskItemEl.dataset.sectionId = appStateUi.sectionId;
 
   const list = document.querySelector(
     `[${ATTR.SECTION_LIST}][data-id="${appStateUi.sectionId}"]`,

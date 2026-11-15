@@ -13,7 +13,20 @@ import { appStateUi } from "../todo-states/states.js";
 const deleteSection = (e) => {
   const isSectionDeletion = appStateUi.deletionMode === DELETION_MODES.SECTION;
   if (e.target.closest(`[${ACTIONS.CONFIRM_DELETION}]`) && isSectionDeletion) {
-    lists.default.deleteSection(appStateUi.sectionId);
+    const sectionList = document.querySelector(
+      `[${ATTR.SECTION_LIST}][data-id="${appStateUi.sectionId}"]`,
+    );
+
+    const allSubTasks = sectionList.querySelectorAll(
+      `[${ATTR.TASK_ITEM}][data-parent-task-id]`,
+    );
+
+    const subTaskIds = Array.from(allSubTasks).map(
+      (subtask) => subtask.dataset.id,
+    );
+
+    allSubTasks.forEach((subTaskEl) => subTaskEl.remove());
+    lists.default.deleteSection(appStateUi.sectionId, subTaskIds);
 
     const sectionEl = document.querySelector(
       `[${ATTR.SECTION_ITEM}][data-id="${appStateUi.sectionId}"`,
@@ -45,7 +58,7 @@ const warnSectionDeletion = (e) => {
 
   elements.warningPopup.dataset[ATTR_STATES.POPUP_STATE] = ACTIVE.POPUP;
 
-  elements.warningMessage.innerHTML = `This will permanently delete "${sectionNameEl.textContent}" and can't be undone`;
+  elements.warningMessage.innerHTML = `This will permanently delete "${sectionNameEl.textContent}" with its tasks and can't be undone`;
   elements.deleteHeading.textContent = "Delete section?";
 };
 

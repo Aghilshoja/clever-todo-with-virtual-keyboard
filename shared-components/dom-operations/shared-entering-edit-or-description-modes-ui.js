@@ -21,14 +21,23 @@ import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 
 export const getRepetitiveElements = (toolbar) => {
   const taskItem = toolbar.closest(`[${ATTR.TASK_ITEM}]`);
-  // main visible task and description  that is not in the toolbar
+  const isSubTask = taskItem.hasAttribute(ATTR.PARENT_TASK_ID);
+
+  const clonedTaskInToolbar = isSubTask
+    ? document
+        .querySelector(`[${ATTR.TASK_ITEM}][data-id="${taskItem.dataset.id}"]`)
+        ?.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`)
+    : null;
+
   const taskItemText = taskItem.querySelector(`[${ATTR.MAIN_TASK_TEXT}]`);
+  const taskTextEl = toolbar.querySelector(`[${ATTR.TASK_TEXT}]`);
+
   const taskItemDescription = taskItem.querySelector(
     `[${ATTR.MAIN_TASK_DESCRIPTION}]`,
   );
   // task and description is in the toolbar and is hidden initially
   const description = toolbar.querySelector(`[${ATTR.TASK_DESCRIPTION}]`);
-  const taskTextEl = toolbar.querySelector(`[${ATTR.TASK_TEXT}]`);
+
   const actionButtonsContainer = toolbar.querySelector(
     `[${ATTR.ACTION_BUTTONS_CON}]`,
   );
@@ -43,6 +52,7 @@ export const getRepetitiveElements = (toolbar) => {
     activeManu,
     taskItemText,
     taskItemDescription,
+    clonedTaskInToolbar,
   };
 };
 
@@ -86,14 +96,15 @@ const hideUnrelatedElements = (toolbar) => {
         (fade.dataset[ATTR_STATES.UNRELATED_ELS] = HIDDEN.UNRELATED_ELS),
     );
   const hideUnrelatedElements = toolbar.querySelectorAll(
-    `[${ATTR.OTHER_ACTIONS}], [${ATTR.TASK_INBOX_CON}], [${ATTR.SUB_TASK_CON}], [${ATTR.TASK_DATE_BTN_CON}], [${ATTR.TASK_COMMENT_CON}]`,
+    `[${ATTR.OTHER_ACTIONS}], [${ATTR.TASK_INBOX_CON}], [${ACTIONS.TOOLBAR_SUBTASKS_TOGGLER}], [${ATTR.SUB_TASK_CON}], [${ATTR.TASK_DATE_BTN_CON}], [${ATTR.TASK_COMMENT_CON}]`,
   );
 
-  if (hideUnrelatedElements)
-    hideUnrelatedElements.forEach(
-      (fade) =>
-        (fade.dataset[ATTR_STATES.UNRELATED_ELS] = HIDDEN.UNRELATED_ELS),
-    );
+  hideUnrelatedElements.forEach((el) => {
+    if (el.hasAttribute("data-toolbar-subtask-toggler-state")) {
+      el.dataset[ATTR_STATES.TOOLBAR_SUBTASK_TOGGLER] = HIDDEN.SUBTASK_TOGGLER;
+    }
+    el.dataset[ATTR_STATES.UNRELATED_ELS] = HIDDEN.UNRELATED_ELS;
+  });
 };
 
 const activiateToolbar = (toolbar) => {

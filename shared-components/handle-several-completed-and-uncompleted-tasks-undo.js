@@ -1,6 +1,5 @@
 import {
   ATTR_STATES,
-  CHECK_STATES,
   HIGHLIGHT_SELECTED_TASK,
   UNDO_STATES,
 } from "../constants/todo-constants.js";
@@ -30,12 +29,7 @@ export const handleMultipleTasksUndo = () => {
     undoMultipleTaskDueDates();
   }
 };
-
 export const removeSelectedTasksHighlightedTasks = () => {
-  const selectedTasks = document.querySelectorAll(
-    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
-  );
-
   appStateUi.snapshots.domSnapshot.forEach((task) => {
     if (
       task.dataset[ATTR_STATES.HIGHLIGHT_SELECTED_TASK] ===

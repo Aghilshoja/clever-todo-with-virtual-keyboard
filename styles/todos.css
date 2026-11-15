@@ -462,10 +462,6 @@ details[open] summary::after {
   text-decoration-color: rgba(107, 114, 128, 0.5);
 }
 
-[data-completed-task-visiblity="true"] {
-  display: none;
-}
-
 /* ===================================
    timeComponents
 =================================== */
@@ -809,10 +805,6 @@ details[open] summary::after {
 
 [data-selected-tasks="true"] {
   background-color: rgba(211, 211, 211, 0.119);
-}
-
-[data-selected-tasks="false"] {
-  background-color: var(--PRIMARY-COLOR);
 }
 
 [data-date-state="active"] {
@@ -1309,4 +1301,45 @@ button.bold-section-des {
 .section-item__menu-item[data-action="delete-section"]:focus-visible {
   background-color: #fef2f2;
   color: #991b1b;
+}
+
+/* === subtasks ==== */
+
+.task__actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+[data-sub-tasks-visibility="visible"] {
+  display: block;
+}
+
+[data-sub-tasks-visibility="hidden"] {
+  display: none;
+}
+
+[data-main-subtask-toggler-state="hidden"],
+[data-toolbar-subtask-toggler-state="hidden"] {
+  display: none;
+}
+
+[data-main-subtask-toggler-state="visible"],
+[data-toolbar-subtask-toggler-state="visible"] {
+  display: block;
+}
+
+[data-toolbar-subtask-toggler-state="visible"] {
+  padding: 0.5rem;
+}
+
+[data-completed-task-visiblity="true"] {
+  display: none;
+}
+
+/* Show expanded subtasks only if they are not hidden as completed tasks. */
+[data-sub-tasks-visibility="visible"]:not(
+  [data-completed-task-visiblity="true"]
+) {
+  display: block;
 }

@@ -40,7 +40,6 @@ import {
   saveEditedTask,
 } from "../handle-edit-and-description-modes.js";
 import { handleMultipleTasksUndo } from "../handle-several-completed-and-uncompleted-tasks-undo.js";
-import { handleSeveralTasksCompletionOrUncompletion } from "../handle-several-tasks-completion-or-uncompletion.js";
 import { moveTaskFromCompletedToActive } from "../move-task-rrom-completed-to-active.js";
 import { revealManu, revealToolbar } from "../reveal-toolbar.js";
 import {
@@ -74,6 +73,10 @@ import {
 } from "../sections/delete-section.js";
 import { editSection } from "../sections/edit-section.js";
 import { duplicateSection } from "../sections/duplicate-section.js";
+import { enterSubTaskModeUi } from "../subtask/enter-subtask-mode.js";
+import { toggleSubTasksVisibility } from "../subtask/toggle-subtask-visibility.js";
+import { handleSeveralTasksCompletion } from "../handle-several-tasks-completion.js";
+import { handleSeveralTasksUncompletion } from "../handle-several-tasks-uncompletion.js";
 
 export const registerTodoListeners = () => {
   elements.warningPopup.addEventListener("click", deleteTask);
@@ -94,10 +97,10 @@ export const registerTodoListeners = () => {
   elements.selectionBar.addEventListener("click", handleExitSelectionClick);
   elements.batchDeleteTasks.addEventListener("click", showSeveralTasksWarning);
   elements.batchDuplicateTasks.addEventListener("click", duplicateSeveralTasks);
-  elements.batchCompletedTasks.addEventListener(
-    "click",
-    handleSeveralTasksCompletionOrUncompletion,
-  );
+  elements.batchCompletedTasks.addEventListener("click", (e) => {
+    handleSeveralTasksCompletion(e);
+    handleSeveralTasksUncompletion(e);
+  });
   elements.warningPopup.addEventListener("click", deleteSeveralTasks);
   elements.warningPopup.addEventListener("click", closeWarningDeletionPopup);
 
@@ -148,6 +151,8 @@ export const addTaskListeners = (list) => {
   list.addEventListener("click", moveTaskFromCompletedToActive);
   list.addEventListener("click", selectTasks);
   list.addEventListener("click", showCostumeCalendar);
+  list.addEventListener("click", enterSubTaskModeUi);
+  list.addEventListener("click", toggleSubTasksVisibility);
 };
 
 export const addDragAndDropListeners = (list) => {
