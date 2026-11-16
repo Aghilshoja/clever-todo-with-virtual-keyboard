@@ -53,7 +53,7 @@ export const showUndopopup = () => {
     appStateUi.undoOperation.undoType = UNDO_STATES.NO_UNDO;
     // Reset the timer variable once it's done
     undoPopupTimer = null;
-  }, 10000);
+  }, 4000);
 };
 
 export const removeTaskItemForUndo = () => {

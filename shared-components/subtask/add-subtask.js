@@ -2,6 +2,9 @@ import {
   ACTIONS,
   ATTR,
   ATTR_STATES,
+  CHECK_STATES,
+  HIDDEN,
+  HIGHLIGHT_SELECTED_TASK,
   VISIBLE,
 } from "../../constants/todo-constants.js";
 import { lists } from "../../todos-controller/todos-controller.js";
@@ -14,6 +17,7 @@ export const renderSubtaskInItsParentToolbar = (
   operationType,
 ) => {
   const subTaskElCopy = subtaskEl.cloneNode(true);
+  delete subTaskElCopy.dataset[ATTR_STATES.SUBTASKS];
   const nestingIndentEl = subTaskElCopy.querySelector(
     `[${ATTR.SUBTASK_INDENT}]`,
   );
@@ -81,7 +85,17 @@ const renderSubtask = (subTaskOb) => {
   }
 };
 
+const getSelectedTask = () =>
+  document.querySelector(
+    `[${CHECK_STATES.SELECTED_TASK}='${HIGHLIGHT_SELECTED_TASK.SELECTED}']`,
+  );
+
 export const addSubtask = (taskText) => {
+  const COLLAPSED = "collapsed";
+  // Override the parent task ID when adding a subtask to a selected task.
+  const selectedTask = getSelectedTask();
+  if (selectedTask) appStateUi.taskId = selectedTask.dataset.id;
+
   const subtask = lists.default.addSubTask(
     appStateUi.taskId,
     taskText,
@@ -89,6 +103,10 @@ export const addSubtask = (taskText) => {
   );
 
   const { parentTaskEl, taskItem } = renderSubtask(subtask);
+  if (parentTaskEl.getAttribute("data-sub-tasks-expanded") === COLLAPSED) {
+    taskItem.dataset[ATTR_STATES.SUBTASKS] = HIDDEN.SUBTASKS;
+  } else taskItem.dataset[ATTR_STATES.SUBTASKS] = VISIBLE.SUBTASKS;
+
   parentTaskEl.after(taskItem);
   renderSubtaskInItsParentToolbar(parentTaskEl, taskItem);
 };

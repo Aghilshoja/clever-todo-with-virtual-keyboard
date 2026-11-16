@@ -120,9 +120,9 @@ export const addTaskBelowSelectedTask = (text) => {
 export const openKeyboardToAddATask = (e) => {
   if (e.target.dataset.action === CHECK_STATES.ADD_TASK_ABOVE) {
     appStateUi.addTaskModes = ADD_TASK_MODE.ADD_ABOVE;
-    toggleKeyboard();
   } else if (e.target.dataset.action === CHECK_STATES.ADD_TASK_BELOW) {
     appStateUi.addTaskModes = ADD_TASK_MODE.ADD_BELOW;
-    toggleKeyboard();
-  }
+  } else appStateUi.addTaskModes = ADD_TASK_MODE.SUBTASK;
+
+  toggleKeyboard();
 };

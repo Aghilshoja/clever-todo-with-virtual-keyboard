@@ -176,6 +176,7 @@ export const ACTIONS = {
   DUPLICATE_SECTION: 'data-action="duplicate-section"',
   SUBTASK_TOGGLER: 'data-action="subtask-toggler"',
   TOOLBAR_SUBTASKS_TOGGLER: "data-action='toolbar-subtasks-toggler'",
+  SUBTASK_OF_SELECTED_TASK: 'data-action="selected-task-subtask"',
 };
 
 // check states using selectors
