@@ -23,4 +23,14 @@ export const keyboardUiState = {
     btnIndex: null,
   },
   activePlaceholder: PLACEHOLDERS.ENTER_TASK,
+
+  kbDragState: {
+    offsetX: 0,
+    offsetY: 0,
+    pressTimer: null,
+    holdThreshold: 500,
+    minVisible: 40,
+    activePointerId: null,
+    isDragging: false,
+  },
 };

@@ -19,13 +19,13 @@ import {
   EDIT_MODES,
   HIDDEN,
   INACTIVE,
-  VISIBLE,
 } from "../../constants/todo-constants.js";
 import { getRepetitiveElements } from "./shared-entering-edit-or-description-modes-ui.js";
 import { closeKeyboard } from "../../keyboard-view/closeKeyboardOnBodyClick.js";
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
+import { loadKeyBoardPosition } from "../../keyboard-view/reposition-keyboard.js";
 
 const renderUnrelatedElements = () => {
   const unrelatedEls = document.querySelectorAll(
@@ -124,6 +124,8 @@ const restoreDraftBackupAfterEditMode = () => {
   }
   updateEditorState("appState", null);
   virtualKeyboard.updateAutoCaps();
+
+  loadKeyBoardPosition();
 };
 
 const resetOtherPartsAsWell = (event) => {

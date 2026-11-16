@@ -12,6 +12,7 @@ export const ATTRIBUTES = {
   KEYBOARD_CONTAINER: "data-keyboard-container",
   CHARACTER_LIMIT_COUNT: "data-character-limit-counter",
   CARET: "data-caret",
+  KEYBOARD_WIDGET: "data-keyboard-widget",
 };
 
 // action-oriented buttons
@@ -80,4 +81,5 @@ export const KEYBOARD_INACTIVE = {
 
 export const LOCAL_STORAGE_KEY = {
   TEXT_EDITOR: "text-editor-states",
+  KEYBOARD_POSITION: "kb-position",
 };

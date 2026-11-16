@@ -21,6 +21,7 @@ import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
 import { disableSaveDateBtn } from "./show-date-suggestion.js";
+import { loadKeyBoardPosition } from "../../keyboard-view/reposition-keyboard.js";
 
 const resetModesAndEnsurePlaceholder = () => {
   appStateUi.activeMode = EDIT_MODES.NO_MODES;
@@ -51,6 +52,8 @@ const hideDateMode = () => {
 
   resetModesAndEnsurePlaceholder();
   disableSaveDateBtn();
+  hideEditTaskDateUI();
+  loadKeyBoardPosition();
 };
 
 const hideEditTaskDateUI = () => {

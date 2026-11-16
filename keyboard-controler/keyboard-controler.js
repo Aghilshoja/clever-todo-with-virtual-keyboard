@@ -12,6 +12,7 @@ import {
   registerKeyboardListeners,
   registerKeyboardPointerListeners,
 } from "../keyboard-view/keyboard-listeners/keyboard-listeners.js";
+import { loadKeyBoardPosition } from "../keyboard-view/reposition-keyboard.js";
 
 export const virtualKeyboard = new KeyboardApp();
 
@@ -32,7 +33,10 @@ const initApp = () => {
   registerKeyboardListeners();
   registerKeyboardPointerListeners();
 
-  document.addEventListener("DOMContentLoaded", loadDraftedInputText);
+  document.addEventListener("DOMContentLoaded", () => {
+    loadDraftedInputText();
+    loadKeyBoardPosition();
+  });
 };
 
 initApp();

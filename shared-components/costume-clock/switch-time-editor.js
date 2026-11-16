@@ -13,7 +13,14 @@ const hideKeyboardUnrelatedOptions = () => {
   );
 };
 
+const resetPreviousKbPosition = () => {
+  elements.keyboardSection.style.left = "";
+  elements.keyboardSection.style.top = "";
+  elements.keyboardSection.style.bottom = "0";
+};
+
 const activateNumberKeyboard = () => {
+  resetPreviousKbPosition();
   virtualKeyboard.setLang("keyboardNumber");
   toggleKeyboard();
 };
@@ -63,4 +70,5 @@ export {
   hideKeyboardUnrelatedOptions,
   activateNumberKeyboard,
   updateInputElement,
+  resetPreviousKbPosition,
 };

@@ -254,6 +254,19 @@
   border-radius: 50%;
 }
 
+.keyboard-section.dragging-keyboard {
+  outline: 2px solid #007aff;
+  transition:
+    outline 0.1s,
+    transform 0.15s ease;
+  transform: scale(0.85);
+  transform-origin: center center;
+}
+
+.keyboard-section__task-input {
+  touch-action: none;
+}
+
 @keyframes blink {
   50% {
     opacity: 0;

@@ -10,6 +10,7 @@ import { elements } from "../../todos-controller/todos-controller.js";
 import { appStateUi } from "../todo-states/states.js";
 import { showDateSuggestion } from "./show-date-suggestion.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
+import { resetPreviousKbPosition } from "../costume-clock/switch-time-editor.js";
 
 const showDateKeyboard = () => {
   if (
@@ -18,6 +19,8 @@ const showDateKeyboard = () => {
     appStateUi.activeMode !== EDIT_MODES.EDIT_MULTIPLE_TASK
   )
     return;
+
+  resetPreviousKbPosition();
 
   if (keyboardUiState.activePlaceholder === PLACEHOLDERS.EDIT_TIME) {
     //toggle number keyboard

@@ -29,6 +29,11 @@ import {
   renderKeyPreviewPopup,
   updatePreviewOnPointerMove,
 } from "../keyboard-feedback-overlay.js";
+import {
+  handleKeyboardDragEnd,
+  handleKeyboardDragStart,
+  handleKeyboardMove,
+} from "../reposition-keyboard.js";
 
 const registerDragAndDropListeners = () => {
   elements.keyboardContainer.addEventListener("dragenter", handledragEnter);
@@ -125,6 +130,20 @@ const registerKeyboardPointerListeners = () => {
   elements.keyboardContainer.addEventListener(
     "pointermove",
     moveBackspacePointer,
+  );
+
+  elements.inputElement.addEventListener(
+    "pointerdown",
+    handleKeyboardDragStart,
+  );
+
+  elements.inputElement.addEventListener("pointermove", handleKeyboardMove);
+
+  elements.inputElement.addEventListener("pointerup", handleKeyboardDragEnd);
+
+  elements.inputElement.addEventListener(
+    "pointercancel",
+    handleKeyboardDragEnd,
   );
 };
 

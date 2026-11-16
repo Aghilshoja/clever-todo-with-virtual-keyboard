@@ -13,6 +13,7 @@ import {
   getTaskItem,
   updateDueDate,
 } from "./costume-calendar/update-task-due-date-view.js";
+import { loadKeyBoardPosition } from "../keyboard-view/reposition-keyboard.js";
 
 const saveSingleTaskDate = () => {
   const { taskItem, taskId } = getTaskItem();
@@ -47,6 +48,8 @@ const saveTaskDueDate = () => {
   if (multipleDateMode) {
     saveMultipleTasksDueDate();
   }
+
+  loadKeyBoardPosition();
 };
 
 export { saveTaskDueDate };

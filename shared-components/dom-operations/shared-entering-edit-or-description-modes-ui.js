@@ -18,6 +18,7 @@ import { updateEditorState } from "../save-drafted-text-input-to-local-storage.j
 import { updateTextEditor } from "../../keyboard-view/keyboard-caret-positioning.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
+import { resetPreviousKbPosition } from "../costume-clock/switch-time-editor.js";
 
 export const getRepetitiveElements = (toolbar) => {
   const taskItem = toolbar.closest(`[${ATTR.TASK_ITEM}]`);
@@ -109,7 +110,6 @@ const hideUnrelatedElements = (toolbar) => {
 
 const activiateToolbar = (toolbar) => {
   if (!toolbar) return;
-  // Open toolbar
   toolbar.dataset[ATTR_STATES.TASK_TOOLBAR] = OPEN.TASK_TOOLBAR;
   // Set full height for edit mode
   toolbar.dataset[ATTR_STATES.TOOLBAR_FULL_HEIGHT] = "";
@@ -123,6 +123,9 @@ const activiateToolbar = (toolbar) => {
       virtualKeyboard.caretManeger.caretPosition,
     );
   }
+
+  resetPreviousKbPosition();
+
   const repetitiveElements = getRepetitiveElements(toolbar);
   const actionBtnsContainer = repetitiveElements.actionButtonsContainer;
   const description = repetitiveElements.description;
@@ -185,18 +188,6 @@ const moveInputAndHideTaskDescription = (toolbar, task) => {
     virtualKeyboard.updateAutoCaps();
   }
 };
-
-/* export const detectClickedElementAndGetTaskObject = (event) => {
-  const eventTarget = checkWhatIsClicked(event);
-  if (!eventTarget) return;
-  const taskObject = findTaskToEdit(eventTarget.dataset.id);
-  const taskItem = getTaskItem(event);
-  return {
-    eventTarget,
-    taskObject,
-    taskItem,
-  };
-}; */
 
 export const detectClickedElementAndGetTaskObject = (event) => {
   const eventTarget = checkWhatIsClicked(event);

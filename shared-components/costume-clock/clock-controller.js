@@ -24,6 +24,7 @@ import {
 import { restoreDateEditorAfterCancel } from "./exit-clock-mode.js";
 import { appStateUi } from "../todo-states/states.js";
 import { keyboardUiState } from "../../keyboard-view/keyboard-states/states.js";
+import { resetPreviousKbPosition } from "./switch-time-editor.js";
 
 const buildClockUI = () => {
   elements.clockBackdrop.dataset[ATTR_STATES.CLOCK_BACKDROP] = "";
@@ -95,6 +96,8 @@ const saveTime = () => {
     updateTimeByClock();
   }
   keyboardUiState.activePlaceholder = PLACEHOLDERS.EDIT_TASK_DATE;
+
+  resetPreviousKbPosition();
 };
 
 export {
